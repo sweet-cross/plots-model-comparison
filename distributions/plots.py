@@ -144,9 +144,10 @@ class Plots:
                                 total = data_t
                             else:
                                 total = total + data_t
-                self.annualData.loc[(s,2050,'Electricity-supply|Total'),m] = total-self.annualData.loc[(s,2050,'Electricity-consumption|Exports'),m]-self.annualData.loc[(s,2050,'Electricity-consumption|Battery-In'),m]-self.annualData.loc[(s,2050,'Electricity-consumption|PHS-In'),m]
-
-                
+                battery_in = self.annualData.loc[(s,2050,'Electricity-consumption|Battery-In'),m] if np.isnan(self.annualData.loc[(s,2050,'Electricity-consumption|Battery-In'),m])==False else 0
+                phs_in = self.annualData.loc[(s,2050,'Electricity-consumption|PHS-In'),m] if np.isnan(self.annualData.loc[(s,2050,'Electricity-consumption|PHS-In'),m])==False else 0 
+                self.annualData.loc[(s,2050,'Electricity-supply|Total'),m] = total-self.annualData.loc[(s,2050,'Electricity-consumption|Exports'),m]-battery_in-phs_in
+               
     def calculateNetImports(self):
         """ 
         Calculate net imports and exports for all the models
