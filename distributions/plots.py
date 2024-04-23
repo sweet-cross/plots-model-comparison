@@ -42,7 +42,6 @@ class Plots:
         self.annualData = reduce(lambda left, right: pd.merge(left , right, left_index=True, right_index=True, how="outer"), df_from_each_file)
         
         # Read the two days of the hourly data
-        self.annualData.to_csv('after.csv')
         self.seasons = ["summer","winter"]  
         self.hourlyData = {}
         for s in self.seasons:
@@ -161,10 +160,10 @@ class Plots:
         # This avoids performance warnings
         new_vars = ['Electricity-supply|Net-imports','Electricity-consumption|Net-exports']
         df_imports = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,[2050],new_vars] ,names=('scenario', 'year','index')),columns=self.models)
-        df_imports.loc[(self.sce,2050,'Electricity-supply|Net-imports'),self.models] = np.nan
-        df_imports.loc[(self.sce,2050,'Electricity-consumption|Net-exports'),self.models] = np.nan
+        df_imports.loc[(self.sce,2050,'Electricity-supply|Net-imports'),self.models] = 0
+        df_imports.loc[(self.sce,2050,'Electricity-consumption|Net-exports'),self.models] = 0
         
-        self.annualData = pd.concat([self.annualData.append,df_imports])
+        self.annualData = pd.concat([self.annualData,df_imports])
         self.annualData.sort_index(inplace=True)
        
         
@@ -571,7 +570,7 @@ class Plots:
                 else:
                     subplot.set_yticklabels([])
                 
-            g.savefig(self.folder_plots+'/'+fileName+"_"+season+"_stacked_"+s+".pdf")
+            g.savefig(self.folder_plots+'/'+fileName+"_"+season+"_stacked_"+s+".pdf",bbox_inches='tight')
             print(season+"-"+s)
             plt.show()
             
