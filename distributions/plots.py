@@ -44,7 +44,6 @@ class Plots:
         # This avoids performance warnings
         self.annualData.sort_index(inplace=True)
         # Read the two days of the hourly data
-        pdb.set_trace()
         self.seasons = ["summer","winter"]  
         self.hourlyData = {}
         for s in self.seasons:
@@ -163,9 +162,13 @@ class Plots:
             for m in self.models:
                 net = self.annualData.loc[(s,2050,'Electricity-supply|Imports'),m] - self.annualData.loc[(s,2050,'Electricity-consumption|Exports'),m] 
                 if net>0:
+                    self.annualData.sort_index(inplace=False)
                     self.annualData.loc[(s,2050,'Electricity-supply|Net-imports'),m] = net
+                    self.annualData.sort_index(inplace=True)
                 else:
+                    self.annualData.sort_index(inplace=False)
                     self.annualData.loc[(s,2050,'Electricity-consumption|Net-exports'),m] = -1*net
+                    self.annualData.sort_index(inplace=True)
                     
                 # Calculate net imports and exports for all the models at hourly levels
                 for season in self.seasons:
