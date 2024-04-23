@@ -41,9 +41,8 @@ class Plots:
         # Merge all files
         self.annualData = reduce(lambda left, right: pd.merge(left , right, left_index=True, right_index=True, how="outer"), df_from_each_file)
         
-        # This avoids performance warnings
-        self.annualData.sort_index(inplace=True)
         # Read the two days of the hourly data
+        self.annualData.to_csv('after.csv')
         self.seasons = ["summer","winter"]  
         self.hourlyData = {}
         for s in self.seasons:
@@ -158,17 +157,24 @@ class Plots:
         """ 
         Calculate net imports and exports for all the models
         """ 
+        
+        # This avoids performance warnings
+        new_vars = ['Electricity-supply|Net-imports','Electricity-consumption|Net-exports']
+        df_imports = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,[2050],new_vars] ,names=('scenario', 'year','index')),columns=self.models)
+        df_imports.loc[(self.sce,2050,'Electricity-supply|Net-imports'),self.models] = np.nan
+        df_imports.loc[(self.sce,2050,'Electricity-consumption|Net-exports'),self.models] = np.nan
+        
+        self.annualData = self.annualData.append(df_imports)
+        self.annualData.sort_index(inplace=True)
+       
+        
         for s in self.sce:
             for m in self.models:
                 net = self.annualData.loc[(s,2050,'Electricity-supply|Imports'),m] - self.annualData.loc[(s,2050,'Electricity-consumption|Exports'),m] 
                 if net>0:
-                    self.annualData.sort_index(inplace=False)
                     self.annualData.loc[(s,2050,'Electricity-supply|Net-imports'),m] = net
-                    self.annualData.sort_index(inplace=True)
                 else:
-                    self.annualData.sort_index(inplace=False)
                     self.annualData.loc[(s,2050,'Electricity-consumption|Net-exports'),m] = -1*net
-                    self.annualData.sort_index(inplace=True)
                     
                 # Calculate net imports and exports for all the models at hourly levels
                 for season in self.seasons:
