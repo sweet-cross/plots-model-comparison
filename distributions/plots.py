@@ -164,7 +164,7 @@ class Plots:
         df_imports.loc[(self.sce,2050,'Electricity-supply|Net-imports'),self.models] = np.nan
         df_imports.loc[(self.sce,2050,'Electricity-consumption|Net-exports'),self.models] = np.nan
         
-        self.annualData = self.annualData.append(df_imports)
+        self.annualData = pd.concat([self.annualData.append,df_imports])
         self.annualData.sort_index(inplace=True)
        
         
@@ -571,7 +571,7 @@ class Plots:
                 else:
                     subplot.set_yticklabels([])
                 
-            g.savefig(self.folder_plots+'/'+fileName+"_"+season+"_stacked_"+s+".pdf",bbox_inches='tight')
+            g.savefig(self.folder_plots+'/'+fileName+"_"+season+"_stacked_"+s+".pdf")
             print(season+"-"+s)
             plt.show()
             
