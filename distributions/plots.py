@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from functools import reduce      
 import numpy as np
+import pdb 
 import seaborn as sb
 from scipy import stats
 
@@ -38,10 +39,12 @@ class Plots:
         # Read all the files in data_list
         df_from_each_file = [self.readAnnualData(f) for f in data_list]
         # Merge all files
-        self.annualData = reduce(lambda left, right:     # Merge DataFrames in list
-                     pd.merge(left , right, left_index=True, right_index=True, how="outer"),
-                     df_from_each_file)
-
+        self.annualData = reduce(lambda left, right: pd.merge(left , right, left_index=True, right_index=True, how="outer"), df_from_each_file)
+        
+        # This avoids performance warnings
+        self.annualData.sort_index(inplace=True)
+        # Read the two days of the hourly data
+        pdb.set_trace()
         self.seasons = ["summer","winter"]  
         self.hourlyData = {}
         for s in self.seasons:
@@ -49,7 +52,11 @@ class Plots:
             df_from_each_file_h = [self.readHourlyData(f,s) for f in data_list]
             # Merge all files
             allData_h= pd.concat(df_from_each_file_h, axis=0)  
+            # This avoids performance warnings
+            allData_h.sort_index(inplace=True)
             self.hourlyData[s] = allData_h   
+        
+
             
         self.posNegData = {}
        
