@@ -37,68 +37,78 @@ class Plots:
         self.folder_plots = folder_plots
         
         # Read all the files in data_list
-        df_from_each_file = [self.readAnnualData(f) for f in data_list]
+        df_from_each_file = [self.readData(f) for f in data_list]
         # Merge all files
-        self.annualData = reduce(lambda left, right: pd.merge(left , right, left_index=True, right_index=True, how="outer"), df_from_each_file)
+        self.allData = pd.concat(df_from_each_file).unstack(level=1).droplevel(level=0,axis=1).sort_index()
+        
+        #Calculate net imports and exports
+        self.calculateNetImports()
+        
+        
+        self.annualData = self.allData.loc[:,:,:,'annual',:]
+        
+        # Unstack the dataframe so the columns are the models
+        self.annualData = self.annualData
+        
         
         # Read the two days of the hourly data
         self.seasons = ["summer","winter"]  
         self.hourlyData = {}
         for s in self.seasons:
-            # Read all the files in data_list
-            df_from_each_file_h = [self.readHourlyData(f,s) for f in data_list]
-            # Merge all files
-            allData_h= pd.concat(df_from_each_file_h, axis=0)  
-            # This avoids performance warnings
-            allData_h.sort_index(inplace=True)
-            self.hourlyData[s] = allData_h   
+            season_data =  self.allData.loc[:,:,:,'typical-day-'+s,:]
+            self.hourlyData[s] =  season_data.unstack(level=1).droplevel(level=0,axis=1).sort_index()
         
-
-            
+                
         self.posNegData = {}
        
     #  Reads the annual data from the csv files listed in dictFile
     #  returns a dataFrame with all the data
-    def readAnnualData(self,dictFile):
+    def readData(self,dictFile):
         
-        data = pd.read_csv(self.folder_results+'/'+dictFile['file']+'.csv', index_col=[0,1,2],header=[0])
+        data = pd.read_csv(self.folder_results+'/'+dictFile['file']+'.csv', index_col=[0,1,5],header=[0])
         data = data.fillna(0)
-        # Get the annual values and chnage the name of the column to the model name
-        data['Annual']=pd.to_numeric(data['Annual'])
-        annualData = pd.to_numeric(data.loc[:,'Annual']).to_frame()
-        annualData.rename(columns={"Annual":dictFile['name']},inplace=True)
+        # Get the annual values and make them numeric instead of text
+        data['value']=pd.to_numeric(data['value'])
+        #Remove all rows with hourly data that are not elec
+        data.loc[:,'remove'] = data.apply(lambda x: self.remove(x.variable, x.timeResolution), axis=1)
+        data = data[data.remove != 1]
+        data = data.drop(['remove'], axis=1)
+        # Correct the unit
+        data['value']=data.apply(lambda x: x.value * self.correctUnit(x.timeResolution,x.unit),axis=1)
+        data = data.drop(['unit'], axis=1)
         
-        return annualData
+        data = data.reset_index().set_index(['scenario','model','variable', 'timeResolution','timestep'])
+        return data
     
-    def readHourlyData(self,dictFile,season):
+    
+    def remove(self,var_name,time_resolution):
         """ 
-        Reads the hourly data from the csv files listed in dictFile for the season
-        returns a dataFrame with all the data
+        Checks for hourly variables that are not electricity
         """ 
-  
-        if season == "summer":
-            col_name = "sd-" 
+        
+        matches = ["Electricity-consumption|", "Electricity-supply|"]
+        if time_resolution != "annual":
+            if any(x in var_name for x in matches):
+                return 0
+            else:
+                return 1
         else:
-            col_name = "wd-" 
+            return 0   
 
+    def correctUnit(self,timeResolution,unit):
+        annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000}
+        hourly_factors = {'gw':1,'gwh/h':1, 'mw':1/1000,'mwh/h':1/1000}
+        if timeResolution == 'annual':
+            if unit.lower() in annual_factors.keys():
+                return annual_factors[unit.lower()]
+            else:
+                return 0
+        elif timeResolution == 'typical-day-winter' or timeResolution == 'typical-day-summer':
+            if unit.lower() in hourly_factors.keys():
+                return hourly_factors[unit.lower()]
+            else: 
+                return 0
 
-        data = pd.read_csv(self.folder_results+'/'+dictFile['file']+'.csv', index_col=[0,1,2], header=[0])
-
-        #Drop the year from the index
-        data.index=data.index.droplevel([1])
-        data = data.fillna(0)
-
-        spike_cols = [col for col in data.columns if col_name in col]
-        hourlyData = data.loc[:,spike_cols]
-
-        #Replace the column name
-        hourlyData.columns = hourlyData.columns.str.replace(col_name, "", regex=True)
-
-        #Add model name
-        hourlyData['model'] = dictFile['name']
-
-        hourlyData=hourlyData.set_index(['model'], append=True)
-        return hourlyData
     
     def extractPositiveNegative(self,positive_variables,negative_variables):
         
@@ -157,35 +167,42 @@ class Plots:
         Calculate net imports and exports for all the models
         """ 
         
+        
         # This avoids performance warnings
         new_vars = ['Electricity-supply|Net-imports','Electricity-consumption|Net-exports']
-        df_imports = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,[2050],new_vars] ,names=('scenario', 'year','index')),columns=self.models)
-        df_imports.loc[(self.sce,2050,'Electricity-supply|Net-imports'),self.models] = 0
-        df_imports.loc[(self.sce,2050,'Electricity-consumption|Net-exports'),self.models] = 0
+        df_imports_annual = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,new_vars,['annual'], ['2050']] ,names=('scenario', 'model','variable','timeResolution','timestep')),columns=self.models)
+        df_imports_annual.loc[:,:]=0
         
-        self.annualData = pd.concat([self.annualData,df_imports])
-        self.annualData.sort_index(inplace=True)
-       
+        timeSteps_h = self.allData.loc[(slice(None),slice(None),'typical-day-winter',slice(None))].index.unique(level=2)
+        df_imports_h = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,new_vars,['typical-day-winter','typical-day-summer'], timeSteps_h] ,names=('scenario', 'model','variable','timeResolution','timestep')),columns=self.models)
         
-        for s in self.sce:
-            for m in self.models:
-                net = self.annualData.loc[(s,2050,'Electricity-supply|Imports'),m] - self.annualData.loc[(s,2050,'Electricity-consumption|Exports'),m] 
-                if net>0:
-                    self.annualData.loc[(s,2050,'Electricity-supply|Net-imports'),m] = net
-                else:
-                    self.annualData.loc[(s,2050,'Electricity-consumption|Net-exports'),m] = -1*net
+        self.allData = pd.concat([self.allData,df_imports_annual,df_imports_h])
+        self.allData.sort_index(inplace=True)
+        
+        # for s in self.sce:
+        #     for m in self.models:
+        #         for r in timeResolution:
+        #             for t in timeSteps:
+                        
+                
+                
+                
+        #         net = self.annualData.loc[(s,m,'Electricity-supply|Imports','TWh','2050'),'value'] - self.annualData.loc[(s,m,'Electricity-consumption|Exports','TWh','2050'),'value'] 
+        #         if net>0:
+        #             self.annualData.loc[(s,2050,'Electricity-supply|Net-imports'),m] = net
+        #         else:
+        #             self.annualData.loc[(s,2050,'Electricity-consumption|Net-exports'),m] = -1*net
                     
-                # Calculate net imports and exports for all the models at hourly levels
-                for season in self.seasons:
-                    allData_h = self.hourlyData[season].copy()
-                    allData_h = allData_h.unstack(2)
-                    for h in allData_h.columns.get_level_values(0).unique():
-                        net_h = allData_h.loc[(s,'Electricity-supply|Imports'),(h,m)] - allData_h.loc[(s,'Electricity-consumption|Exports'),(h,m)]
-                        if net_h>0:
-                            allData_h.loc[(s,'Electricity-supply|Net-imports'),(h,m)] = net_h
-                        else:
-                            allData_h.loc[(s,'Electricity-consumption|Net-exports'),(h,m)] = -1*net_h
-                    self.hourlyData[season] = allData_h.stack()
+        #         # Calculate net imports and exports for all the models at hourly levels
+        #             allData_h = self.hourlyData[season].copy()
+        #             allData_h = allData_h.unstack(2)
+        #             for h in allData_h.columns.get_level_values(0).unique():
+        #                 net_h = allData_h.loc[(s,'Electricity-supply|Imports'),(h,m)] - allData_h.loc[(s,'Electricity-consumption|Exports'),(h,m)]
+        #                 if net_h>0:
+        #                     allData_h.loc[(s,'Electricity-supply|Net-imports'),(h,m)] = net_h
+        #                 else:
+        #                     allData_h.loc[(s,'Electricity-consumption|Net-exports'),(h,m)] = -1*net_h
+        #             self.hourlyData[season] = allData_h.stack()
 
     def plotScatter(self,listModels, varName,sceColors,scale,xlabel,xmax,fileName):
         """ 
