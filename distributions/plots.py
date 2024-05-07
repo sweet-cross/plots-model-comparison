@@ -40,23 +40,19 @@ class Plots:
         df_from_each_file = [self.readData(f) for f in data_list]
         # Merge all files
         self.allData = pd.concat(df_from_each_file).unstack(level=1).droplevel(level=0,axis=1).sort_index()
-        
+        #Make all index lower case, to avoid capital and lower cases problems
+        self.allData.index = self.allData.index.set_levels(self.allData.index.levels[1].str.lower(), level=1)
         #Calculate net imports and exports
         self.calculateNetImports()
         
         
-        self.annualData = self.allData.loc[:,:,:,'annual',:]
-        
-        # Unstack the dataframe so the columns are the models
-        self.annualData = self.annualData
-        
+        self.annualData = self.allData.loc[:,:,'annual',:]
         
         # Read the two days of the hourly data
         self.seasons = ["summer","winter"]  
         self.hourlyData = {}
         for s in self.seasons:
-            season_data =  self.allData.loc[:,:,:,'typical-day-'+s,:]
-            self.hourlyData[s] =  season_data.unstack(level=1).droplevel(level=0,axis=1).sort_index()
+            self.hourlyData[s] =  self.allData.loc[:,:,'typical-day-'+s,:]
         
                 
         self.posNegData = {}
@@ -115,29 +111,31 @@ class Plots:
         positive_labels = [d['name'] for d in positive_variables]
         negative_labels=[d['name'] for d in negative_variables]
         
+        timesteps = self.hourlyData['summer'].index.get_level_values(level=2)
+        
         for season in self.seasons:
             allData_h = self.hourlyData[season].copy()
             
-            posNegData=pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,self.models,positive_labels+negative_labels] ,names=('scenario', 'model','index')),columns=allData_h.columns)
-                       
+            posNegData=pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,positive_labels+negative_labels,timesteps] ,names=('scenario','index','timestep')),columns=self.models)
+            posNegData.sort_index(inplace=True)
             posNegData.loc[(slice(None),slice(None),slice(None)),:] = 0
             
             for v in positive_variables:
                 for s in self.sce:
-                    for m in self.models:
+                    for t in timesteps:
                         for subv in v['data']:
                             try:
-                                posNegData.loc[(s,m,v['name']),:] += allData_h.loc[(s,subv,m),:]
+                                posNegData.loc[(s,v['name'],t),:] += allData_h.loc[(s,subv.lower(),t),:]
                             except KeyError:
-                                posNegData.loc[(s,m,v['name']),:] = posNegData.loc[(s,m,v['name']),:] 
+                                posNegData.loc[(s,v['name'],t),:] = posNegData.loc[(s,v['name'],t),:] 
             for v in negative_variables:
                 for s in self.sce:
-                    for m in self.models:
+                    for t in timesteps:
                         for subv in v['data']:
                             try:
-                                posNegData.loc[(s,m,v['name']),:] -= allData_h.loc[(s,subv,m),:]
+                                posNegData.loc[(s,v['name'],t),:] -= allData_h.loc[(s,subv.lower(),t),:]
                             except KeyError:
-                                posNegData.loc[(s,m,v['name']),:] = posNegData.loc[(s,m,v['name']),:] 
+                                posNegData.loc[(s,v['name'],t),:] = posNegData.loc[(s,v['name'],t),:] 
 
             self.posNegData[season] = posNegData
                             
@@ -152,15 +150,15 @@ class Plots:
                 for v in varList_supply:
                     subv = v['data']
                     for t in subv:
-                        data_t = self.annualData.loc[(s,2050,t),m]  
+                        data_t = self.annualData.loc[(s,t.lower(),'2050'),m]  
                         if not np.isnan(data_t):
                             if np.isnan(total):
                                 total = data_t
                             else:
                                 total = total + data_t
-                battery_in = self.annualData.loc[(s,2050,'Electricity-consumption|Battery-In'),m] if np.isnan(self.annualData.loc[(s,2050,'Electricity-consumption|Battery-In'),m])==False else 0
-                phs_in = self.annualData.loc[(s,2050,'Electricity-consumption|PHS-In'),m] if np.isnan(self.annualData.loc[(s,2050,'Electricity-consumption|PHS-In'),m])==False else 0 
-                self.annualData.loc[(s,2050,'Electricity-supply|Total'),m] = total-self.annualData.loc[(s,2050,'Electricity-consumption|Exports'),m]-battery_in-phs_in
+                battery_in = self.annualData.loc[(s,'electricity-consumption|battery-in','2050'),m] if np.isnan(self.annualData.loc[(s,'electricity-consumption|battery-in','2050'),m])==False else 0
+                phs_in = self.annualData.loc[(s,'electricity-consumption|phs-in','2050'),m] if np.isnan(self.annualData.loc[(s,'electricity-consumption|phs-in','2050'),m])==False else 0 
+                self.annualData.loc[(s,'electricity-supply|total','2050'),m] = total-self.annualData.loc[(s,'electricity-consumption|exports','2050'),m]-battery_in-phs_in
                
     def calculateNetImports(self):
         """ 
@@ -169,40 +167,36 @@ class Plots:
         
         
         # This avoids performance warnings
-        new_vars = ['Electricity-supply|Net-imports','Electricity-consumption|Net-exports']
-        df_imports_annual = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,new_vars,['annual'], ['2050']] ,names=('scenario', 'model','variable','timeResolution','timestep')),columns=self.models)
+        new_vars = ['electricity-supply|net-imports','electricity-consumption|net-exports']
+        df_imports_annual = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,new_vars,['annual'], ['2050']] ,names=('scenario', 'variable','timeResolution','timestep')),columns=self.models)
         df_imports_annual.loc[:,:]=0
         
+        timeResolution_h = ['typical-day-winter','typical-day-summer']
         timeSteps_h = self.allData.loc[(slice(None),slice(None),'typical-day-winter',slice(None))].index.unique(level=2)
-        df_imports_h = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,new_vars,['typical-day-winter','typical-day-summer'], timeSteps_h] ,names=('scenario', 'model','variable','timeResolution','timestep')),columns=self.models)
+        df_imports_h = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,new_vars,timeResolution_h, timeSteps_h] ,names=('scenario', 'variable','timeResolution','timestep')),columns=self.models)
         
         self.allData = pd.concat([self.allData,df_imports_annual,df_imports_h])
         self.allData.sort_index(inplace=True)
         
-        # for s in self.sce:
-        #     for m in self.models:
-        #         for r in timeResolution:
-        #             for t in timeSteps:
-                        
+        for s in self.sce:
+            for m in self.models:
+                #Annual net imports
                 
-                
-                
-        #         net = self.annualData.loc[(s,m,'Electricity-supply|Imports','TWh','2050'),'value'] - self.annualData.loc[(s,m,'Electricity-consumption|Exports','TWh','2050'),'value'] 
-        #         if net>0:
-        #             self.annualData.loc[(s,2050,'Electricity-supply|Net-imports'),m] = net
-        #         else:
-        #             self.annualData.loc[(s,2050,'Electricity-consumption|Net-exports'),m] = -1*net
+                net = self.allData.loc[(s,'electricity-supply|imports','annual','2050'),m] - self.allData.loc[(s,'electricity-consumption|exports','annual','2050'),m] 
+                if net>0:
+                    self.allData.loc[(s,'electricity-supply|net-imports','annual','2050'),m] = net
+                else:
+                    self.allData.loc[(s,'electricity-consumption|net-exports','annual','2050'),m]  = -1*net
                     
-        #         # Calculate net imports and exports for all the models at hourly levels
-        #             allData_h = self.hourlyData[season].copy()
-        #             allData_h = allData_h.unstack(2)
-        #             for h in allData_h.columns.get_level_values(0).unique():
-        #                 net_h = allData_h.loc[(s,'Electricity-supply|Imports'),(h,m)] - allData_h.loc[(s,'Electricity-consumption|Exports'),(h,m)]
-        #                 if net_h>0:
-        #                     allData_h.loc[(s,'Electricity-supply|Net-imports'),(h,m)] = net_h
-        #                 else:
-        #                     allData_h.loc[(s,'Electricity-consumption|Net-exports'),(h,m)] = -1*net_h
-        #             self.hourlyData[season] = allData_h.stack()
+                # Calculate net imports and exports for all the models at hourly levels
+                for season in timeResolution_h:
+                    for h in timeSteps_h:
+                        net_h = self.allData.loc[(s,'electricity-supply|imports',season,h),m] - self.allData.loc[(s,'electricity-consumption|exports',season,h),m] 
+                        if net_h>0:
+                            self.allData.loc[(s,'electricity-supply|net-imports',season,h),m] = net_h
+                        else:
+                            self.allData.loc[(s,'electricity-consumption|net-exports',season,h),m]  = -1*net_h
+                    
 
     def plotScatter(self,listModels, varName,sceColors,scale,xlabel,xmax,fileName):
         """ 
@@ -240,7 +234,7 @@ class Plots:
             ypos_cols.append(y_ini-numSce/4-0.25)
             for i in np.arange(numSce):
                 y = y_ini - i * 0.5 - 0.5
-                plt.scatter(self.annualData.loc[(self.sce[i],2050,varName),m]/scale,y,c=sceColors[i])
+                plt.scatter(self.annualData.loc[(self.sce[i],varName.lower(),'2050'),m]/scale,y,c=sceColors[i])
 
         # y axis. Minor ticks are the lines and major ticks the model names
 
@@ -307,7 +301,10 @@ class Plots:
             for index, m in enumerate(listModels):
                 for i in np.arange(numSce):
                     for subv in v['data']:
-                        datasubv = self.annualData.loc[(self.sce[i],2050,subv),m]
+                        try:
+                            datasubv = self.annualData.loc[(self.sce[i],subv.lower(),'2050'),m] 
+                        except KeyError:
+                            datasubv = 0
                         if not np.isnan(datasubv):
                             datav[index*(numSce) + i] = datav[index*(numSce) + i] + datasubv/scale 
             dataPlot[v['name']]= datav  
@@ -363,7 +360,7 @@ class Plots:
                 for i in np.arange(numSce):
                     y = y_ini - i * 0.5 - 0.5
                     ax.autoscale(False) # To avoid that the scatter changes limits
-                    ax.scatter(self.annualData.loc[(self.sce[i],2050,onTopVarName),m]/scale,y,
+                    ax.scatter(self.annualData.loc[(self.sce[i],onTopVarName.lower(),'2050'),m]/scale,y,
                                c='#000000',marker=r'x',s=12,zorder=2,linewidths=1)
 
 
@@ -416,7 +413,7 @@ class Plots:
                 for m in listModels:
                     dataNew.loc[(s,var),m] = np. nan
                     for subv in v['data']:
-                        datasubv = self.annualData.loc[(s,2050,subv),m]
+                        datasubv = self.annualData.loc[(s,subv.lower(),'2050'),m]
                         if not np.isnan(datasubv):
                             if not np.isnan(dataNew.loc[(s,var),m]):    
                                 dataNew.loc[(s,var),m] = dataNew.loc[(s,var),m] + datasubv

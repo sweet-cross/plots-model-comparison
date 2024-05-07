@@ -128,7 +128,7 @@ fileName = 'elecDist_tech.pdf'
 cross_plots.plotTechDist(listModels,varList_wopot,order,ylabel,ymax,fileName)
 
 
-# Electricity consumption by use with total exports
+# Electricity consumption by use with net exports
 
 varList_use = [
     {'name':'Total','data':['Electricity-consumption|Total demand'],'color':'#8E8900'},
@@ -140,13 +140,13 @@ varList_use = [
     {'name':'Electrolysis','data':['Electricity-consumption|Electrolysis'],'color':'#F5DD1B'},
     {'name':'Others','data':['Electricity-consumption|New processes'],'color':'#9751CB'},
     {'name':'Storage','data':['Electricity-consumption|Battery-In','Electricity-consumption|PHS-In'],'color':'#939CAC'},
-    {'name':'Exports','data':['Electricity-consumption|Exports'],'color':'#CCCCCC'}
+    {'name':'Exports','data':['Electricity-consumption|Net-exports'],'color':'#CCCCCC'}
     ]
 
 listModels = cross_plots.models
 scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 160
+xmax = 120
 fileName = 'elecUse.pdf'
 right = True #True if model names have to go on the right
 legend = False # True if legend has to be displayed
