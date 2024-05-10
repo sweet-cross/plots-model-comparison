@@ -9,6 +9,8 @@ import numpy as np
 import pdb 
 import seaborn as sb
 from scipy import stats
+from datetime import datetime
+
 
 
 class Plots:
@@ -111,7 +113,7 @@ class Plots:
         positive_labels = [d['name'] for d in positive_variables]
         negative_labels=[d['name'] for d in negative_variables]
         
-        timesteps = self.hourlyData['summer'].index.get_level_values(level=2)
+        timesteps = self.hourlyData['summer'].index.get_level_values(level=2).unique()
         
         for season in self.seasons:
             allData_h = self.hourlyData[season].copy()
@@ -136,8 +138,11 @@ class Plots:
                                 posNegData.loc[(s,v['name'],t),:] -= allData_h.loc[(s,subv.lower(),t),:]
                             except KeyError:
                                 posNegData.loc[(s,v['name'],t),:] = posNegData.loc[(s,v['name'],t),:] 
-
-            self.posNegData[season] = posNegData
+            
+            posNegData = posNegData.reset_index().melt(id_vars=["scenario",'index','timestep'])
+            posNegData.rename(columns={'variable':'model','value':'Electricity (GW)'},inplace=True)
+            self.posNegData[season] = posNegData.set_index(["scenario",'index','timestep','model'])
+            
                             
     
     def recalculateTotalSupply(self,varList_supply):
@@ -501,46 +506,32 @@ class Plots:
         labels_pos= [d['name'] for d in positive_variables]
         labels_neg= [d['name'] for d in negative_variables]
 
-        if season == "summer":
-            col_name = "sd-" 
-        else:
-            col_name = "wd-" 
-    
-
         # Add the typical day info to the model names
         dic_names = {m:m+'\n'+self.typicalDays[season][self.models.index(m)] for m in listModels }
         order_col = [m+'\n'+self.typicalDays[season][self.models.index(m)] for m in listModels ]    
 
-        positive_data = self.posNegData[season].loc[(slice(None),listModels,labels_pos),:]
-        negative_data = abs(self.posNegData[season].loc[(slice(None),listModels,labels_neg),:])
+                
+        positive_data = self.posNegData[season].loc[(slice(None),labels_pos,slice(None),listModels),:].reset_index()
+        negative_data = abs(self.posNegData[season].loc[(slice(None),labels_neg,slice(None),listModels),:]).reset_index()
 
-        # Melt the dataFrame so it can be plotted with seaborn
-        positive_Melted = positive_data.reset_index().melt(id_vars=["scenario","model","index"])
-        # Change the names of the columns to the name of the axes in the plot
-        positive_Melted.rename(columns={'variable':'hour','value':'Electricity (GW)'}, inplace=True)
-        # Remove text from hour
-        positive_Melted['hour'] = positive_Melted['hour'].str.replace(col_name, '')
+        # Remove text year and :00 from hour
+        positive_data['timestep'] = positive_data['timestep'].apply(lambda x: datetime.strptime(str(x),'%Y %H:%M').strftime('%H'))
         # Make all columns numeric
-        positive_Melted =  positive_Melted.astype({'hour': 'int32','Electricity (GW)': 'float64'})
-        positive_Melted['model'] = positive_Melted['model'].replace(dic_names)
+        positive_data =  positive_data.astype({'timestep': 'int32','Electricity (GW)': 'float64'})
+        positive_data['model'] = positive_data['model'].replace(dic_names)
 
 
-         # Melt the dataFrame so it can be plotted with seaborn
-        negative_Melted = negative_data.reset_index().melt(id_vars=["scenario","model","index"])
-        # Change the names of the columns to the name of the axes in the plot
-        negative_Melted.rename(columns={'variable':'hour','value':'Electricity (GW)'}, inplace=True)
-        # Remove text from hour
-        negative_Melted['hour'] = negative_Melted['hour'].str.replace(col_name, '')
+        # Remove text year and :00 from hour
+        negative_data['timestep'] = negative_data['timestep'].apply(lambda x: datetime.strptime(str(x),'%Y %H:%M').strftime('%H'))
         # Make all columns numeric
-        negative_Melted =  negative_Melted.astype({'hour': 'int32','Electricity (GW)': 'float64'})
-        negative_Melted['model'] = negative_Melted['model'].replace(dic_names)
-
+        negative_data =  negative_data.astype({'timestep': 'int32','Electricity (GW)': 'float64'})
+        negative_data['model'] = negative_data['model'].replace(dic_names)
 
    
-        positive_Melted['type'] = ylabel_pos 
-        negative_Melted['type'] = ylabel_neg 
+        positive_data['type'] = ylabel_pos 
+        negative_data['type'] = ylabel_neg 
         
-        all_data = pd.concat([positive_Melted, negative_Melted], ignore_index=True, axis=0)
+        all_data = pd.concat([positive_data, negative_data], ignore_index=True, axis=0)
         colors_tech= colors_pos+colors_neg
     
         for s in self.sce:
@@ -548,7 +539,7 @@ class Plots:
             
             g = sb.displot(kind='hist', 
                            data=data_sce, 
-                           x='hour', 
+                           x='timestep', 
                            weights='Electricity (GW)', 
                            hue='index', 
                            col='model', 
