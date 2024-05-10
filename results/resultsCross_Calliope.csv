@@ -10,16 +10,16 @@ abroad-together,Calliope,CO2-consumption|Utilization,TWh,annual,2050,1.575473968
 abroad-together,Calliope,Coal-consumption|Electricity generation,TWh,annual,2050,0.000141826
 abroad-together,Calliope,Coal-production|Fossil production,TWh,annual,2050,0.000141826
 abroad-together,Calliope,Electricity-consumption|Base,TWh,annual,2050,50.98170995
-abroad-together,Calliope,Electricity-consumption|Battery-in,TWh,annual,2050,0.025762406
+abroad-together,Calliope,Electricity-consumption|Battery-IN,TWh,annual,2050,0.025762406
 abroad-together,Calliope,Electricity-consumption|Battery-vehicles,TWh,annual,2050,26.55048304
 abroad-together,Calliope,Electricity-consumption|Electric heaters,TWh,annual,2050,0.031728358
 abroad-together,Calliope,Electricity-consumption|Electrolysis,TWh,annual,2050,0.013751154
 abroad-together,Calliope,Electricity-consumption|Exports,TWh,annual,2050,21.34802125
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,TWh,annual,2050,2.10458642
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,TWh,annual,2050,2.10458642
 abroad-together,Calliope,Electricity-consumption|Grid-losses,TWh,annual,2050,0.886632488
 abroad-together,Calliope,Electricity-consumption|Heat pumps,TWh,annual,2050,16.56723331
 abroad-together,Calliope,Electricity-consumption|New processes,TWh,annual,2050,0.024549528
-abroad-together,Calliope,Electricity-consumption|PHS-in,TWh,annual,2050,7.935908775
+abroad-together,Calliope,Electricity-consumption|PHS-IN,TWh,annual,2050,7.935908775
 abroad-together,Calliope,Electricity-consumption|Syn-fuel production,TWh,annual,2050,0.000794918
 abroad-together,Calliope,Electricity-consumption|Total,TWh,annual,2050,127.7710378
 abroad-together,Calliope,Electricity-consumption|Trains,TWh,annual,2050,3.04522844
@@ -43,8 +43,8 @@ abroad-together,Calliope,Hydrogen-consumption|CHP,TWh,annual,2050,0.037479931
 abroad-together,Calliope,Hydrogen-consumption|Exports,TWh,annual,2050,0.059057809
 abroad-together,Calliope,Hydrogen-consumption|Fuel synthesis,TWh,annual,2050,9.623994451
 abroad-together,Calliope,Hydrogen-consumption|H2 industry demand,TWh,annual,2050,1.394007339
-abroad-together,Calliope,Hydrogen-consumption|H2 storage-in,TWh,annual,2050,0.003708819
-abroad-together,Calliope,Hydrogen-consumption|H2 underground storage-in,TWh,annual,2050,0.011520464
+abroad-together,Calliope,Hydrogen-consumption|H2 storage-IN,TWh,annual,2050,0.003708819
+abroad-together,Calliope,Hydrogen-consumption|H2 underground storage-IN,TWh,annual,2050,0.011520464
 abroad-together,Calliope,Hydrogen-production|Electrolysis,TWh,annual,2050,0.009864161
 abroad-together,Calliope,Hydrogen-production|H2 storage-Out,TWh,annual,2050,0.002433361
 abroad-together,Calliope,Hydrogen-production|H2 underground storage-Out,TWh,annual,2050,0.011520464
@@ -52,7 +52,7 @@ abroad-together,Calliope,Hydrogen-production|Imports,TWh,annual,2050,11.11109669
 abroad-together,Calliope,Hydrogen-production|Total,TWh,annual,2050,11.13248132
 abroad-together,Calliope,Other demands|Cooking,TWh,annual,2050,1.64147986
 abroad-together,Calliope,Other demands|Heat,TWh,annual,2050,57.04126643
-abroad-together,Calliope,"Space heating, DHW|Big storage-in",TWh,annual,2050,12.46627827
+abroad-together,Calliope,"Space heating, DHW|Big storage-IN",TWh,annual,2050,12.46627827
 abroad-together,Calliope,"Space heating, DHW|Big storage-out",TWh,annual,2050,12.43496294
 abroad-together,Calliope,"Space heating, DHW|Boiler-Gas",TWh,annual,2050,0.014759207
 abroad-together,Calliope,"Space heating, DHW|Boiler-Wood",TWh,annual,2050,0.038783379
@@ -61,10 +61,10 @@ abroad-together,Calliope,"Space heating, DHW|CHP-Hydrogen",TWh,annual,2050,0.014
 abroad-together,Calliope,"Space heating, DHW|CHP-Waste",TWh,annual,2050,3.309356966
 abroad-together,Calliope,"Space heating, DHW|CHP-Wood",TWh,annual,2050,15.19813423
 abroad-together,Calliope,"Space heating, DHW|Electric heater",TWh,annual,2050,0.031728358
-abroad-together,Calliope,"Space heating, DHW|Flexibility-in",TWh,annual,2050,0.007376652
+abroad-together,Calliope,"Space heating, DHW|Flexibility-IN",TWh,annual,2050,0.007376652
 abroad-together,Calliope,"Space heating, DHW|Flexibility-out",TWh,annual,2050,0.002051657
 abroad-together,Calliope,"Space heating, DHW|Heat pumps",TWh,annual,2050,40.71131995
-abroad-together,Calliope,"Space heating, DHW|Small storage-in",TWh,annual,2050,92.64564655
+abroad-together,Calliope,"Space heating, DHW|Small storage-IN",TWh,annual,2050,92.64564655
 abroad-together,Calliope,"Space heating, DHW|Small storage-out",TWh,annual,2050,92.54309605
 abroad-together,Calliope,"Space heating, DHW|Total",TWh,annual,2050,269.6170804
 abroad-together,Calliope,Syn-diesel-consumption|Industry,TWh,annual,2050,0.308889446
@@ -81,7 +81,7 @@ abroad-together,Calliope,Syn-kerosene-production|Imports,TWh,annual,2050,22.2972
 abroad-together,Calliope,Syn-methane-consumption|Base,TWh,annual,2050,0.003902737
 abroad-together,Calliope,Syn-methane-consumption|Exports,TWh,annual,2050,25.72383932
 abroad-together,Calliope,Syn-methane-consumption|Industry,TWh,annual,2050,6.052434113
-abroad-together,Calliope,Syn-methane-consumption|Methane storage-in,TWh,annual,2050,0.000976271
+abroad-together,Calliope,Syn-methane-consumption|Methane storage-IN,TWh,annual,2050,0.000976271
 abroad-together,Calliope,Syn-methane-production|Biomethane,TWh,annual,2050,11.63686486
 abroad-together,Calliope,Syn-methane-production|Fischer-Tropsch,TWh,annual,2050,7.709245263
 abroad-together,Calliope,Syn-methane-production|Fossil Production,TWh,annual,2050,6.25E-05
@@ -122,30 +122,30 @@ abroad-together,Calliope,Electricity-consumption|Base,GW,typical-day-summer,2050
 abroad-together,Calliope,Electricity-consumption|Base,GW,typical-day-summer,2050 21:00,4.649341887
 abroad-together,Calliope,Electricity-consumption|Base,GW,typical-day-summer,2050 22:00,4.59115873
 abroad-together,Calliope,Electricity-consumption|Base,GW,typical-day-summer,2050 23:00,4.396417033
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 00:00,0.001921594
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 01:00,0.001887751
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 02:00,0.001833514
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 03:00,0.00175472
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 04:00,0.001631836
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 05:00,0.001412651
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 06:00,0.005189166
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 07:00,0.005608227
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 08:00,0.004750867
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 09:00,0.004569688
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 10:00,0.004461254
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 11:00,0.004413465
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 12:00,0.004535273
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 13:00,0.004711318
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 14:00,0.00520775
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 15:00,0.007370135
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 16:00,0.002126074
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 17:00,0.001491168
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 18:00,0.001651087
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 19:00,0.001752462
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 20:00,0.00182346
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 21:00,0.00187105
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 22:00,0.00189543
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 23:00,0.001899582
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 00:00,0.001921594
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 01:00,0.001887751
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 02:00,0.001833514
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 03:00,0.00175472
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 04:00,0.001631836
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 05:00,0.001412651
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 06:00,0.005189166
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 07:00,0.005608227
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 08:00,0.004750867
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 09:00,0.004569688
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 10:00,0.004461254
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 11:00,0.004413465
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 12:00,0.004535273
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 13:00,0.004711318
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 14:00,0.00520775
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 15:00,0.007370135
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 16:00,0.002126074
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 17:00,0.001491168
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 18:00,0.001651087
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 19:00,0.001752462
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 20:00,0.00182346
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 21:00,0.00187105
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 22:00,0.00189543
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 23:00,0.001899582
 abroad-together,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-summer,2050 00:00,0.001211135
 abroad-together,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-summer,2050 01:00,0.001210761
 abroad-together,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-summer,2050 02:00,0.001210346
@@ -242,30 +242,30 @@ abroad-together,Calliope,Electricity-consumption|Exports,GW,typical-day-summer,2
 abroad-together,Calliope,Electricity-consumption|Exports,GW,typical-day-summer,2050 21:00,6.076744583
 abroad-together,Calliope,Electricity-consumption|Exports,GW,typical-day-summer,2050 22:00,6.077737122
 abroad-together,Calliope,Electricity-consumption|Exports,GW,typical-day-summer,2050 23:00,6.070688188
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 00:00,0.000232674
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 01:00,0.000231545
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 02:00,0.000229291
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 03:00,0.000228887
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 04:00,0.000230824
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 05:00,0
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 06:00,0.000516037
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 07:00,0.000385095
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 08:00,0.000318688
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 09:00,0.000329584
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 10:00,0.000353608
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 11:00,0.000363593
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 12:00,0.000356742
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 13:00,0.00034393
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 14:00,0.000312367
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 15:00,0.001866005
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 16:00,0
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 17:00,2.77E-05
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 18:00,0.000242974
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 19:00,0.000237515
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 20:00,0.000235181
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 21:00,0.000233287
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 22:00,0.00023103
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 23:00,0.000231333
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 00:00,0.000232674
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 01:00,0.000231545
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 02:00,0.000229291
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 03:00,0.000228887
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 04:00,0.000230824
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 05:00,0
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 06:00,0.000516037
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 07:00,0.000385095
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 08:00,0.000318688
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 09:00,0.000329584
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 10:00,0.000353608
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 11:00,0.000363593
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 12:00,0.000356742
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 13:00,0.00034393
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 14:00,0.000312367
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 15:00,0.001866005
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 16:00,0
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 17:00,2.77E-05
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 18:00,0.000242974
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 19:00,0.000237515
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 20:00,0.000235181
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 21:00,0.000233287
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 22:00,0.00023103
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 23:00,0.000231333
 abroad-together,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-summer,2050 00:00,0.23918252
 abroad-together,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-summer,2050 01:00,0.232302873
 abroad-together,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-summer,2050 02:00,0.260790394
@@ -314,30 +314,30 @@ abroad-together,Calliope,Electricity-consumption|New processes,GW,typical-day-su
 abroad-together,Calliope,Electricity-consumption|New processes,GW,typical-day-summer,2050 21:00,6.34E-05
 abroad-together,Calliope,Electricity-consumption|New processes,GW,typical-day-summer,2050 22:00,6.33E-05
 abroad-together,Calliope,Electricity-consumption|New processes,GW,typical-day-summer,2050 23:00,6.32E-05
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 00:00,0.000752119
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 01:00,0.000750332
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 02:00,0.000748412
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 03:00,0.000745337
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 04:00,0.000733931
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 05:00,0.000690513
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 06:00,4.246347182
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 07:00,4.246599662
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 08:00,4.246615787
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 09:00,4.246630096
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 10:00,4.246635103
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 11:00,4.24663639
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 12:00,4.246636414
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 13:00,4.246632144
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 14:00,4.24663219
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 15:00,4.246676756
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 16:00,0.001253764
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 17:00,0.000750948
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 18:00,0.000768892
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 19:00,0.000768502
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 20:00,0.000765194
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 21:00,0.000761148
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 22:00,0.000756866
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 23:00,0.000752773
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 00:00,0.000752119
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 01:00,0.000750332
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 02:00,0.000748412
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 03:00,0.000745337
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 04:00,0.000733931
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 05:00,0.000690513
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 06:00,4.246347182
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 07:00,4.246599662
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 08:00,4.246615787
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 09:00,4.246630096
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 10:00,4.246635103
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 11:00,4.24663639
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 12:00,4.246636414
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 13:00,4.246632144
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 14:00,4.24663219
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 15:00,4.246676756
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 16:00,0.001253764
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 17:00,0.000750948
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 18:00,0.000768892
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 19:00,0.000768502
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 20:00,0.000765194
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 21:00,0.000761148
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 22:00,0.000756866
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 23:00,0.000752773
 abroad-together,Calliope,Electricity-consumption|Trains,GW,typical-day-summer,2050 00:00,0.242
 abroad-together,Calliope,Electricity-consumption|Trains,GW,typical-day-summer,2050 01:00,0.0597
 abroad-together,Calliope,Electricity-consumption|Trains,GW,typical-day-summer,2050 02:00,0.0417
@@ -698,30 +698,30 @@ abroad-together,Calliope,Electricity-consumption|Base,GW,typical-day-winter,2050
 abroad-together,Calliope,Electricity-consumption|Base,GW,typical-day-winter,2050 21:00,5.386548172
 abroad-together,Calliope,Electricity-consumption|Base,GW,typical-day-winter,2050 22:00,5.666555481
 abroad-together,Calliope,Electricity-consumption|Base,GW,typical-day-winter,2050 23:00,5.789845708
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 00:00,0.004375525
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 01:00,0.007291798
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 02:00,0.005253703
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 03:00,0.003970173
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 04:00,0.000869192
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 05:00,0.000729612
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 06:00,0.000708616
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 07:00,0.000672693
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 08:00,0.006767696
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 09:00,0.004488923
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 10:00,0.00411089
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 11:00,0.00409036
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 12:00,0.004295048
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 13:00,0.004964598
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 14:00,0.007745856
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 15:00,0.001559581
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 16:00,0.000468436
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 17:00,0.000180758
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 18:00,0.000152134
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 19:00,0.000141665
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 20:00,0.00172365
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 21:00,0.002098049
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 22:00,0.006250341
-abroad-together,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 23:00,0.003279511
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 00:00,0.004375525
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 01:00,0.007291798
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 02:00,0.005253703
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 03:00,0.003970173
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 04:00,0.000869192
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 05:00,0.000729612
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 06:00,0.000708616
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 07:00,0.000672693
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 08:00,0.006767696
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 09:00,0.004488923
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 10:00,0.00411089
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 11:00,0.00409036
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 12:00,0.004295048
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 13:00,0.004964598
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 14:00,0.007745856
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 15:00,0.001559581
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 16:00,0.000468436
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 17:00,0.000180758
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 18:00,0.000152134
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 19:00,0.000141665
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 20:00,0.00172365
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 21:00,0.002098049
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 22:00,0.006250341
+abroad-together,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 23:00,0.003279511
 abroad-together,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-winter,2050 00:00,0.007923704
 abroad-together,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-winter,2050 01:00,0.013338773
 abroad-together,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-winter,2050 02:00,0.006758255
@@ -818,30 +818,30 @@ abroad-together,Calliope,Electricity-consumption|Exports,GW,typical-day-winter,2
 abroad-together,Calliope,Electricity-consumption|Exports,GW,typical-day-winter,2050 21:00,8.799751742
 abroad-together,Calliope,Electricity-consumption|Exports,GW,typical-day-winter,2050 22:00,0.696235448
 abroad-together,Calliope,Electricity-consumption|Exports,GW,typical-day-winter,2050 23:00,0
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 00:00,0.000126135
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 01:00,0.000154883
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 02:00,0.000130929
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 03:00,0.000264669
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 04:00,1.98E-06
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 05:00,8.67E-05
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 06:00,0.000104885
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 07:00,8.83E-06
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 08:00,0.000251882
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 09:00,0.000132494
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 10:00,0.000132794
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 11:00,0.000133191
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 12:00,0.00013353
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 13:00,0.000132668
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 14:00,0.001577571
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 15:00,15.97846204
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 16:00,1.629127821
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 17:00,0
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 18:00,1.98E-05
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 19:00,0
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 20:00,0.00021615
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 21:00,0.000135472
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 22:00,0.000207881
-abroad-together,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 23:00,0.000132108
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 00:00,0.000126135
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 01:00,0.000154883
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 02:00,0.000130929
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 03:00,0.000264669
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 04:00,1.98E-06
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 05:00,8.67E-05
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 06:00,0.000104885
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 07:00,8.83E-06
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 08:00,0.000251882
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 09:00,0.000132494
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 10:00,0.000132794
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 11:00,0.000133191
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 12:00,0.00013353
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 13:00,0.000132668
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 14:00,0.001577571
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 15:00,15.97846204
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 16:00,1.629127821
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 17:00,0
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 18:00,1.98E-05
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 19:00,0
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 20:00,0.00021615
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 21:00,0.000135472
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 22:00,0.000207881
+abroad-together,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 23:00,0.000132108
 abroad-together,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-winter,2050 00:00,3.048535873
 abroad-together,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-winter,2050 01:00,3.125904205
 abroad-together,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-winter,2050 02:00,3.328715339
@@ -890,30 +890,30 @@ abroad-together,Calliope,Electricity-consumption|New processes,GW,typical-day-wi
 abroad-together,Calliope,Electricity-consumption|New processes,GW,typical-day-winter,2050 21:00,0.003895949
 abroad-together,Calliope,Electricity-consumption|New processes,GW,typical-day-winter,2050 22:00,0.003896949
 abroad-together,Calliope,Electricity-consumption|New processes,GW,typical-day-winter,2050 23:00,0.003896863
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 00:00,0.002193941
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 01:00,0.002747057
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 02:00,0.001989747
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 03:00,0.001524893
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 04:00,0.000557132
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 05:00,0.000468325
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 06:00,0.000452666
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 07:00,0.000445068
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 08:00,0.002664743
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 09:00,0.00229573
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 10:00,0.002200432
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 11:00,0.002143296
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 12:00,0.002176721
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 13:00,0.002238702
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 14:00,0.002516566
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 15:00,0.000362659
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 16:00,4.86E-05
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 17:00,2.98E-05
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 18:00,2.86E-05
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 19:00,2.82E-05
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 20:00,0.00036727
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 21:00,0.000790277
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 22:00,0.003033622
-abroad-together,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 23:00,0.002656773
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 00:00,0.002193941
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 01:00,0.002747057
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 02:00,0.001989747
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 03:00,0.001524893
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 04:00,0.000557132
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 05:00,0.000468325
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 06:00,0.000452666
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 07:00,0.000445068
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 08:00,0.002664743
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 09:00,0.00229573
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 10:00,0.002200432
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 11:00,0.002143296
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 12:00,0.002176721
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 13:00,0.002238702
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 14:00,0.002516566
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 15:00,0.000362659
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 16:00,4.86E-05
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 17:00,2.98E-05
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 18:00,2.86E-05
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 19:00,2.82E-05
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 20:00,0.00036727
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 21:00,0.000790277
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 22:00,0.003033622
+abroad-together,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 23:00,0.002656773
 abroad-together,Calliope,Electricity-consumption|Trains,GW,typical-day-winter,2050 00:00,0.189
 abroad-together,Calliope,Electricity-consumption|Trains,GW,typical-day-winter,2050 01:00,0.111
 abroad-together,Calliope,Electricity-consumption|Trains,GW,typical-day-winter,2050 02:00,0.0188
@@ -1261,16 +1261,16 @@ domestic-alone,Calliope,CO2-consumption|Utilization,TWh,annual,2050,0.01369989
 domestic-alone,Calliope,Coal-consumption|Electricity generation,TWh,annual,2050,0.000158215
 domestic-alone,Calliope,Coal-production|Fossil production,TWh,annual,2050,0.000158215
 domestic-alone,Calliope,Electricity-consumption|Base,TWh,annual,2050,50.12724447
-domestic-alone,Calliope,Electricity-consumption|Battery-in,TWh,annual,2050,0.017185353
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,TWh,annual,2050,0.017185353
 domestic-alone,Calliope,Electricity-consumption|Battery-vehicles,TWh,annual,2050,26.55229981
 domestic-alone,Calliope,Electricity-consumption|Electric heaters,TWh,annual,2050,0.013555068
 domestic-alone,Calliope,Electricity-consumption|Electrolysis,TWh,annual,2050,2.075762579
 domestic-alone,Calliope,Electricity-consumption|Exports,TWh,annual,2050,3.846742035
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,TWh,annual,2050,0.007339446
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,TWh,annual,2050,0.007339446
 domestic-alone,Calliope,Electricity-consumption|Grid-losses,TWh,annual,2050,0.441083209
 domestic-alone,Calliope,Electricity-consumption|Heat pumps,TWh,annual,2050,14.36620029
 domestic-alone,Calliope,Electricity-consumption|New processes,TWh,annual,2050,0.85186335
-domestic-alone,Calliope,Electricity-consumption|PHS-in,TWh,annual,2050,0.330480653
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,TWh,annual,2050,0.330480653
 domestic-alone,Calliope,Electricity-consumption|Syn-fuel production,TWh,annual,2050,6.35E-05
 domestic-alone,Calliope,Electricity-consumption|Total,TWh,annual,2050,101.2301002
 domestic-alone,Calliope,Electricity-consumption|Trains,TWh,annual,2050,3.04522844
@@ -1293,15 +1293,15 @@ domestic-alone,Calliope,Electricity-supply|Wood,TWh,annual,2050,6.810778313
 domestic-alone,Calliope,Hydrogen-consumption|CHP,TWh,annual,2050,0.023958088
 domestic-alone,Calliope,Hydrogen-consumption|Fuel synthesis,TWh,annual,2050,0.066586496
 domestic-alone,Calliope,Hydrogen-consumption|H2 industry demand,TWh,annual,2050,1.393875241
-domestic-alone,Calliope,Hydrogen-consumption|H2 storage-in,TWh,annual,2050,0.003988522
-domestic-alone,Calliope,Hydrogen-consumption|H2 underground storage-in,TWh,annual,2050,0.020980346
+domestic-alone,Calliope,Hydrogen-consumption|H2 storage-IN,TWh,annual,2050,0.003988522
+domestic-alone,Calliope,Hydrogen-consumption|H2 underground storage-IN,TWh,annual,2050,0.020980346
 domestic-alone,Calliope,Hydrogen-production|Electrolysis,TWh,annual,2050,1.48901369
 domestic-alone,Calliope,Hydrogen-production|H2 storage-Out,TWh,annual,2050,0.002616885
 domestic-alone,Calliope,Hydrogen-production|H2 underground storage-Out,TWh,annual,2050,0.020980346
 domestic-alone,Calliope,Hydrogen-production|Total,TWh,annual,2050,1.509994036
 domestic-alone,Calliope,Other demands|Cooking,TWh,annual,2050,1.64147986
 domestic-alone,Calliope,Other demands|Heat,TWh,annual,2050,57.04126643
-domestic-alone,Calliope,"Space heating, DHW|Big storage-in",TWh,annual,2050,14.99514516
+domestic-alone,Calliope,"Space heating, DHW|Big storage-IN",TWh,annual,2050,14.99514516
 domestic-alone,Calliope,"Space heating, DHW|Big storage-out",TWh,annual,2050,14.96071139
 domestic-alone,Calliope,"Space heating, DHW|Boiler-Gas",TWh,annual,2050,0.00852346
 domestic-alone,Calliope,"Space heating, DHW|Boiler-Wood",TWh,annual,2050,0.006843878
@@ -1310,10 +1310,10 @@ domestic-alone,Calliope,"Space heating, DHW|CHP-Hydrogen",TWh,annual,2050,0.0088
 domestic-alone,Calliope,"Space heating, DHW|CHP-Waste",TWh,annual,2050,4.274754993
 domestic-alone,Calliope,"Space heating, DHW|CHP-Wood",TWh,annual,2050,14.80268981
 domestic-alone,Calliope,"Space heating, DHW|Electric heater",TWh,annual,2050,0.013555068
-domestic-alone,Calliope,"Space heating, DHW|Flexibility-in",TWh,annual,2050,0.004541341
+domestic-alone,Calliope,"Space heating, DHW|Flexibility-IN",TWh,annual,2050,0.004541341
 domestic-alone,Calliope,"Space heating, DHW|Flexibility-out",TWh,annual,2050,0.001097632
 domestic-alone,Calliope,"Space heating, DHW|Heat pumps",TWh,annual,2050,35.33250095
-domestic-alone,Calliope,"Space heating, DHW|Small storage-in",TWh,annual,2050,80.52469839
+domestic-alone,Calliope,"Space heating, DHW|Small storage-IN",TWh,annual,2050,80.52469839
 domestic-alone,Calliope,"Space heating, DHW|Small storage-out",TWh,annual,2050,80.47630406
 domestic-alone,Calliope,"Space heating, DHW|Total",TWh,annual,2050,250.4283408
 domestic-alone,Calliope,Syn-diesel-consumption|Industry,TWh,annual,2050,0.308886443
@@ -1328,7 +1328,7 @@ domestic-alone,Calliope,Syn-kerosene-production|Fossil Production,TWh,annual,205
 domestic-alone,Calliope,Syn-kerosene-production|Imports,TWh,annual,2050,22.29807616
 domestic-alone,Calliope,Syn-methane-consumption|Base,TWh,annual,2050,0.003207216
 domestic-alone,Calliope,Syn-methane-consumption|Industry,TWh,annual,2050,6.052325801
-domestic-alone,Calliope,Syn-methane-consumption|Methane storage-in,TWh,annual,2050,0.001269297
+domestic-alone,Calliope,Syn-methane-consumption|Methane storage-IN,TWh,annual,2050,0.001269297
 domestic-alone,Calliope,Syn-methane-production|Biomethane,TWh,annual,2050,6.055808195
 domestic-alone,Calliope,Syn-methane-production|Fischer-Tropsch,TWh,annual,2050,0.042217373
 domestic-alone,Calliope,Syn-methane-production|Fossil Production,TWh,annual,2050,7.11E-05
@@ -1368,30 +1368,30 @@ domestic-alone,Calliope,Electricity-consumption|Base,GW,typical-day-summer,2050 
 domestic-alone,Calliope,Electricity-consumption|Base,GW,typical-day-summer,2050 21:00,4.649255665
 domestic-alone,Calliope,Electricity-consumption|Base,GW,typical-day-summer,2050 22:00,4.591072826
 domestic-alone,Calliope,Electricity-consumption|Base,GW,typical-day-summer,2050 23:00,4.396332112
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 00:00,0.002324794
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 01:00,0.002330427
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 02:00,0.002343347
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 03:00,0.002374401
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 04:00,0.002426556
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 05:00,0.002240495
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 06:00,0.002212522
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 07:00,0.002496814
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 08:00,0.002530088
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 09:00,0.002520651
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 10:00,0.002504072
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 11:00,0.002484914
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 12:00,0.002536865
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 13:00,0.002704698
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 14:00,0.002337381
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 15:00,0.002371831
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 16:00,0.002155125
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 17:00,0.002462835
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 18:00,0.002359828
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 19:00,0.002291409
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 20:00,0.002416633
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 21:00,0.002380644
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 22:00,0.002361459
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-summer,2050 23:00,0.002348464
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 00:00,0.002324794
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 01:00,0.002330427
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 02:00,0.002343347
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 03:00,0.002374401
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 04:00,0.002426556
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 05:00,0.002240495
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 06:00,0.002212522
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 07:00,0.002496814
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 08:00,0.002530088
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 09:00,0.002520651
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 10:00,0.002504072
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 11:00,0.002484914
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 12:00,0.002536865
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 13:00,0.002704698
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 14:00,0.002337381
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 15:00,0.002371831
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 16:00,0.002155125
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 17:00,0.002462835
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 18:00,0.002359828
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 19:00,0.002291409
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 20:00,0.002416633
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 21:00,0.002380644
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 22:00,0.002361459
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-summer,2050 23:00,0.002348464
 domestic-alone,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-summer,2050 00:00,0.096094019
 domestic-alone,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-summer,2050 01:00,0.096008486
 domestic-alone,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-summer,2050 02:00,0.095935516
@@ -1488,30 +1488,30 @@ domestic-alone,Calliope,Electricity-consumption|Exports,GW,typical-day-summer,20
 domestic-alone,Calliope,Electricity-consumption|Exports,GW,typical-day-summer,2050 21:00,0.315948789
 domestic-alone,Calliope,Electricity-consumption|Exports,GW,typical-day-summer,2050 22:00,0.313274668
 domestic-alone,Calliope,Electricity-consumption|Exports,GW,typical-day-summer,2050 23:00,0.310965405
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 00:00,0.000147847
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 01:00,0.000146236
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 02:00,0.000142433
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 03:00,0.000139672
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 04:00,0.000144287
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 05:00,0.000124687
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 06:00,0.000129588
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 07:00,0.000174193
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 08:00,0.000197509
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 09:00,0.000178057
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 10:00,0.000194454
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 11:00,0.000211281
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 12:00,0.000209431
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 13:00,0.000249238
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 14:00,0.000572831
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 15:00,0.000354868
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 16:00,0
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 17:00,0.000148387
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 18:00,0.000149963
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 19:00,0.000144423
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 20:00,0.000153605
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 21:00,0.000147065
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 22:00,0.000145126
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-summer,2050 23:00,0.000146412
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 00:00,0.000147847
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 01:00,0.000146236
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 02:00,0.000142433
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 03:00,0.000139672
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 04:00,0.000144287
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 05:00,0.000124687
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 06:00,0.000129588
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 07:00,0.000174193
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 08:00,0.000197509
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 09:00,0.000178057
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 10:00,0.000194454
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 11:00,0.000211281
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 12:00,0.000209431
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 13:00,0.000249238
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 14:00,0.000572831
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 15:00,0.000354868
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 16:00,0
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 17:00,0.000148387
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 18:00,0.000149963
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 19:00,0.000144423
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 20:00,0.000153605
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 21:00,0.000147065
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 22:00,0.000145126
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-summer,2050 23:00,0.000146412
 domestic-alone,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-summer,2050 00:00,0.20995427
 domestic-alone,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-summer,2050 01:00,0.20451677
 domestic-alone,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-summer,2050 02:00,0.230377812
@@ -1560,30 +1560,30 @@ domestic-alone,Calliope,Electricity-consumption|New processes,GW,typical-day-sum
 domestic-alone,Calliope,Electricity-consumption|New processes,GW,typical-day-summer,2050 21:00,0.086552776
 domestic-alone,Calliope,Electricity-consumption|New processes,GW,typical-day-summer,2050 22:00,0.086081493
 domestic-alone,Calliope,Electricity-consumption|New processes,GW,typical-day-summer,2050 23:00,0.085896411
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 00:00,0.002191811
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 01:00,0.002192951
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 02:00,0.002193519
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 03:00,0.002193318
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 04:00,0.002197705
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 05:00,0.00209903
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 06:00,0.004368189
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 07:00,0.003715468
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 08:00,0.004226626
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 09:00,0.003933952
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 10:00,0.003876353
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 11:00,0.003903014
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 12:00,0.003950341
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 13:00,0.00408294
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 14:00,0.004361729
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 15:00,0.003454216
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 16:00,0.003083701
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 17:00,0.002220621
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 18:00,0.002194419
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 19:00,0.002185261
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 20:00,0.002218922
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 21:00,0.00221824
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 22:00,0.00221563
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-summer,2050 23:00,0.00221473
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 00:00,0.002191811
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 01:00,0.002192951
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 02:00,0.002193519
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 03:00,0.002193318
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 04:00,0.002197705
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 05:00,0.00209903
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 06:00,0.004368189
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 07:00,0.003715468
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 08:00,0.004226626
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 09:00,0.003933952
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 10:00,0.003876353
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 11:00,0.003903014
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 12:00,0.003950341
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 13:00,0.00408294
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 14:00,0.004361729
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 15:00,0.003454216
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 16:00,0.003083701
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 17:00,0.002220621
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 18:00,0.002194419
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 19:00,0.002185261
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 20:00,0.002218922
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 21:00,0.00221824
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 22:00,0.00221563
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-summer,2050 23:00,0.00221473
 domestic-alone,Calliope,Electricity-consumption|Trains,GW,typical-day-summer,2050 00:00,0.242
 domestic-alone,Calliope,Electricity-consumption|Trains,GW,typical-day-summer,2050 01:00,0.0597
 domestic-alone,Calliope,Electricity-consumption|Trains,GW,typical-day-summer,2050 02:00,0.0417
@@ -1944,30 +1944,30 @@ domestic-alone,Calliope,Electricity-consumption|Base,GW,typical-day-winter,2050 
 domestic-alone,Calliope,Electricity-consumption|Base,GW,typical-day-winter,2050 21:00,5.386492319
 domestic-alone,Calliope,Electricity-consumption|Base,GW,typical-day-winter,2050 22:00,5.666408632
 domestic-alone,Calliope,Electricity-consumption|Base,GW,typical-day-winter,2050 23:00,5.789780044
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 00:00,0.001247023
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 01:00,0.001239557
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 02:00,0.001237113
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 03:00,0.001232985
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 04:00,0.001215148
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 05:00,0.001206221
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 06:00,0.001221212
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 07:00,0.001166978
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 08:00,0.000982239
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 09:00,0.001102333
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 10:00,0.001176832
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 11:00,0.001279705
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 12:00,0.001304766
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 13:00,0.00125232
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 14:00,0.001143752
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 15:00,0.001352144
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 16:00,0.001108333
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 17:00,0.001071019
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 18:00,0.001188515
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 19:00,0.001161551
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 20:00,0.001319444
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 21:00,0.001331411
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 22:00,0.001105021
-domestic-alone,Calliope,Electricity-consumption|Battery-in,GW,typical-day-winter,2050 23:00,0.001100663
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 00:00,0.001247023
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 01:00,0.001239557
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 02:00,0.001237113
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 03:00,0.001232985
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 04:00,0.001215148
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 05:00,0.001206221
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 06:00,0.001221212
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 07:00,0.001166978
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 08:00,0.000982239
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 09:00,0.001102333
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 10:00,0.001176832
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 11:00,0.001279705
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 12:00,0.001304766
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 13:00,0.00125232
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 14:00,0.001143752
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 15:00,0.001352144
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 16:00,0.001108333
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 17:00,0.001071019
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 18:00,0.001188515
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 19:00,0.001161551
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 20:00,0.001319444
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 21:00,0.001331411
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 22:00,0.001105021
+domestic-alone,Calliope,Electricity-consumption|Battery-IN,GW,typical-day-winter,2050 23:00,0.001100663
 domestic-alone,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-winter,2050 00:00,4.28869598
 domestic-alone,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-winter,2050 01:00,4.283316092
 domestic-alone,Calliope,Electricity-consumption|Battery-vehicles,GW,typical-day-winter,2050 02:00,4.45509069
@@ -2064,30 +2064,30 @@ domestic-alone,Calliope,Electricity-consumption|Exports,GW,typical-day-winter,20
 domestic-alone,Calliope,Electricity-consumption|Exports,GW,typical-day-winter,2050 21:00,3.379200725
 domestic-alone,Calliope,Electricity-consumption|Exports,GW,typical-day-winter,2050 22:00,0
 domestic-alone,Calliope,Electricity-consumption|Exports,GW,typical-day-winter,2050 23:00,0
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 00:00,6.78E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 01:00,6.89E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 02:00,6.47E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 03:00,6.22E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 04:00,6.33E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 05:00,7.06E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 06:00,7.83E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 07:00,8.44E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 08:00,6.57E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 09:00,6.70E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 10:00,6.63E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 11:00,7.03E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 12:00,7.56E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 13:00,7.34E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 14:00,5.80E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 15:00,8.17E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 16:00,6.01E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 17:00,6.20E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 18:00,7.49E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 19:00,6.27E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 20:00,7.87E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 21:00,7.96E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 22:00,6.10E-05
-domestic-alone,Calliope,Electricity-consumption|Flexibility-in,GW,typical-day-winter,2050 23:00,6.64E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 00:00,6.78E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 01:00,6.89E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 02:00,6.47E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 03:00,6.22E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 04:00,6.33E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 05:00,7.06E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 06:00,7.83E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 07:00,8.44E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 08:00,6.57E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 09:00,6.70E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 10:00,6.63E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 11:00,7.03E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 12:00,7.56E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 13:00,7.34E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 14:00,5.80E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 15:00,8.17E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 16:00,6.01E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 17:00,6.20E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 18:00,7.49E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 19:00,6.27E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 20:00,7.87E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 21:00,7.96E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 22:00,6.10E-05
+domestic-alone,Calliope,Electricity-consumption|Flexibility-IN,GW,typical-day-winter,2050 23:00,6.64E-05
 domestic-alone,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-winter,2050 00:00,2.674631024
 domestic-alone,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-winter,2050 01:00,2.721035047
 domestic-alone,Calliope,Electricity-consumption|Heat pumps,GW,typical-day-winter,2050 02:00,2.899382876
@@ -2136,30 +2136,30 @@ domestic-alone,Calliope,Electricity-consumption|New processes,GW,typical-day-win
 domestic-alone,Calliope,Electricity-consumption|New processes,GW,typical-day-winter,2050 21:00,0.125356608
 domestic-alone,Calliope,Electricity-consumption|New processes,GW,typical-day-winter,2050 22:00,0.125356513
 domestic-alone,Calliope,Electricity-consumption|New processes,GW,typical-day-winter,2050 23:00,0.125356497
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 00:00,0.000228901
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 01:00,0.000228719
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 02:00,0.000227955
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 03:00,0.00022603
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 04:00,0.000223288
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 05:00,0.000220925
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 06:00,0.000219586
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 07:00,0.000220563
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 08:00,0.000206603
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 09:00,0.000213475
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 10:00,0.000221013
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 11:00,0.000228428
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 12:00,0.000230295
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 13:00,0.000226123
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 14:00,0.000218147
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 15:00,0.000234717
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 16:00,0.000206784
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 17:00,0.000200468
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 18:00,0.000205091
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 19:00,0.00020364
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 20:00,0.000220912
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 21:00,0.000225188
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 22:00,0.000199345
-domestic-alone,Calliope,Electricity-consumption|PHS-in,GW,typical-day-winter,2050 23:00,0.000195879
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 00:00,0.000228901
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 01:00,0.000228719
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 02:00,0.000227955
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 03:00,0.00022603
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 04:00,0.000223288
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 05:00,0.000220925
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 06:00,0.000219586
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 07:00,0.000220563
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 08:00,0.000206603
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 09:00,0.000213475
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 10:00,0.000221013
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 11:00,0.000228428
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 12:00,0.000230295
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 13:00,0.000226123
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 14:00,0.000218147
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 15:00,0.000234717
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 16:00,0.000206784
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 17:00,0.000200468
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 18:00,0.000205091
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 19:00,0.00020364
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 20:00,0.000220912
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 21:00,0.000225188
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 22:00,0.000199345
+domestic-alone,Calliope,Electricity-consumption|PHS-IN,GW,typical-day-winter,2050 23:00,0.000195879
 domestic-alone,Calliope,Electricity-consumption|Trains,GW,typical-day-winter,2050 00:00,0.189
 domestic-alone,Calliope,Electricity-consumption|Trains,GW,typical-day-winter,2050 01:00,0.111
 domestic-alone,Calliope,Electricity-consumption|Trains,GW,typical-day-winter,2050 02:00,0.0188

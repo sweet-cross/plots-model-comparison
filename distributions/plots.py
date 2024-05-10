@@ -4,11 +4,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
-from functools import reduce      
-import numpy as np
-import pdb 
 import seaborn as sb
-from scipy import stats
 from datetime import datetime
 
 
@@ -42,8 +38,6 @@ class Plots:
         df_from_each_file = [self.readData(f) for f in data_list]
         # Merge all files
         self.allData = pd.concat(df_from_each_file).unstack(level=1).droplevel(level=0,axis=1).sort_index()
-        #Make all index lower case, to avoid capital and lower cases problems
-        self.allData.index = self.allData.index.set_levels(self.allData.index.levels[1].str.lower(), level=1)
         #Calculate net imports and exports
         self.calculateNetImports()
         
@@ -76,6 +70,10 @@ class Plots:
         data = data.drop(['unit'], axis=1)
         
         data = data.reset_index().set_index(['scenario','model','variable', 'timeResolution','timestep'])
+        
+        #Make the variable lower case, to avoid capital and lower cases problems
+        data.index = data.index.set_levels(data.index.levels[2].str.lower(), level=2)
+        
         return data
     
     
@@ -94,7 +92,7 @@ class Plots:
             return 0   
 
     def correctUnit(self,timeResolution,unit):
-        annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000}
+        annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000,'gw':1,'mw':1/1000}
         hourly_factors = {'gw':1,'gwh/h':1, 'mw':1/1000,'mwh/h':1/1000}
         if timeResolution == 'annual':
             if unit.lower() in annual_factors.keys():
