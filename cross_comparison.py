@@ -13,6 +13,7 @@ sce = ['abroad-together','domestic-together','abroad-alone','domestic-alone']
 files =  [
           {'name': 'Calliope', 'file': 'resultsCross_Calliope','summer':'Jul 20','winter':'Feb 08','color':'#D57CBE'},
           {'name': 'Expanse', 'file': 'resultsCross_Expanse','summer':'Jul 02','winter':'Jan 01','color':'#FF7D0D'},
+          {'name': 'FLEXECO', 'file': 'resultsCross_flexeco','summer':'Typical day','winter':'Typical day','color':'#BD21BC'},
           {'name': 'Nexus-e+\nEP2050+', 'file': 'resultsCross_Nexuse-EP','summer':'Jul 02','winter':'Feb 08','color':'#BCBD21'},
           {'name': 'SecMod', 'file': 'resultsCross_Secmod','summer':'Typical day','winter':'Typical day','color':'#9565BD'},
           {'name': 'SES', 'file': 'resultsCross_SES-epfl','summer':'Typical day','winter':'Typical day','color':'#1E75B3'},
