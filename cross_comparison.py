@@ -354,7 +354,7 @@ cross_plots.plotTechDist(listModels,varList_indHeat_dist,order,ylabel,ymax,fileN
 
 #Get the hourly data for the variables of interest
 varList_supply_h = [
-    {'name':'Net-imports','data':['Electricity-supply|Imports'],'color':'#CCCCCC'},
+    {'name':'Net-imports','data':['Electricity-supply|Net-imports'],'color':'#CCCCCC'},
     {'name':'Storage out','data':['Electricity-supply|PHS-out','Electricity-supply|Battery-out'],'color':'#939CAC'},
     {'name':'SPV-Battery','data':['Electricity-supply|SPV-battery'],'color':'#FEFF54'},
     {'name':'Solar','data':['Electricity-supply|Solar'],'color':'#FAC748'},
@@ -366,7 +366,7 @@ varList_supply_h = [
     ]
 
 varList_use_h = [
-    {'name':'Net-exports','data':['Electricity-consumption|Exports'],'color':'#CCCCCC'},
+    {'name':'Net-exports','data':['Electricity-consumption|Net-exports'],'color':'#CCCCCC'},
     {'name':'Storage in','data':['Electricity-consumption|Battery-In','Electricity-consumption|PHS-In'],'color':'#939CAC'},
     {'name':'EVs','data':['Electricity-consumption|Battery-vehicles'],'color':'#09c5c9'},
     {'name':'Heat pumps','data':['Electricity-consumption|Heat pumps'],'color':'#F2960E'},

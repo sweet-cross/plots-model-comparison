@@ -38,6 +38,7 @@ class Plots:
         df_from_each_file = [self.readData(f) for f in data_list]
         # Merge all files
         self.allData = pd.concat(df_from_each_file).unstack(level=1).droplevel(level=0,axis=1).sort_index()
+        self.allData.fillna(0,inplace=True)
         #Calculate net imports and exports
         self.calculateNetImports()
         
