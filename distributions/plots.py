@@ -514,7 +514,7 @@ class Plots:
         positive_data = self.posNegData[season].loc[(slice(None),labels_pos,slice(None),listModels),:].reset_index()
         negative_data = abs(self.posNegData[season].loc[(slice(None),labels_neg,slice(None),listModels),:]).reset_index()
 
-        # Remove text year and :00 from hour
+        # Remove text year and :00 from timestep
         positive_data['timestep'] = positive_data['timestep'].apply(lambda x: datetime.strptime(str(x),'%Y %H:%M').strftime('%H'))
         # Make all columns numeric
         positive_data =  positive_data.astype({'timestep': 'int32','Electricity (GW)': 'float64'})
@@ -595,31 +595,28 @@ class Plots:
         """
         model_colors= [self.model_colors[self.models.index(m)] for m in listModels ]    
 
-        dataNew=abs(self.posNegData[season].loc[(scenario,listModels,varList),:])
-
-        dataNew = dataNew.stack(dropna=False)
-        dataNew.index.rename(level=3,names="hour",inplace=True)
+        dataNew=abs(self.posNegData[season].loc[(scenario,varList,slice(None),listModels),:])
 
         dataPlot = dataNew.reset_index()
-
-        dataPlot.rename(columns={0:'value'},inplace=True)
+        # Remove text year and :00 from timestep
+        dataPlot['timestep'] = dataPlot['timestep'].apply(lambda x: datetime.strptime(str(x),'%Y %H:%M').strftime('%H'))
 
         sb.set_style("whitegrid")
 
         g = sb.FacetGrid(dataPlot,  col="index",hue="model",hue_kws={'color': model_colors},col_order=varList
                          ,col_wrap=ncols
                          ,height=2.5,aspect=0.8)
-        g = (g.map(plt.plot, "hour", "value")).set(xlim=(0, 24),ylim=(0, ymax),xticks=[0, 6, 12, 18, 24]).set_titles("{col_name}").set_xlabels("")
+        g = (g.map(plt.plot, "timestep", "Electricity (GW)")).set(xlim=(0, 24),ylim=(0, ymax),xticks=[0, 6, 12, 18, 24]).set_titles("{col_name}").set_xlabels("")
 
         if ncols==1:
             for axis in g.axes:
                 for subplot in axis:
-                    if subplot.get_ylabel()=="value":
+                    if subplot.get_ylabel()=="Electricity (GW)":
                         subplot.set_ylabel(ylabel)
 
         else:
             for subplot in g.axes:
-                if subplot.get_ylabel()=="value":
+                if subplot.get_ylabel()=="Electricity (GW)":
                     subplot.set_ylabel(ylabel)
         
         
