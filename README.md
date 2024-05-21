@@ -3,9 +3,14 @@
 
 ## Files and folders
 - distributions/plots.py contains all the functions to upload the data and plot
+- cross_comparison.py is the python code that interacts with distributions/plots.py and creates the plots
 - results/ is the folder from where the results are uploaded
-- plots is the folder where the plots are saved
-- cross_comparison.ipynb is the jupyter notebook that interects with plots.py and creates the plots
+- plots/ is the folder where the plots are saved
+
+
+# Dependencies
+
+* See requirements.txt.  
 
 
 ## Usage with python virtual environment without Conda
@@ -18,9 +23,6 @@
 	* `pip install -r requirements.txt` (This command installs all the required python packages.)
 * Run/edit cross_comparison.py.
 
-# Dependencies
-
-* See requirements.txt.  
 
 ## Usage with python virtual environment with Conda
    
@@ -31,9 +33,7 @@
 	* `pip install -r requirements.txt` (This command installs all the required python packages.)
 * Run/edit cross_comparison.py.
 
-# Dependencies
 
-* See requirements.txt.  
 
 
 
