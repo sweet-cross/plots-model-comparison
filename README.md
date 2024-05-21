@@ -1,5 +1,6 @@
-# This is the library to plot the results for the CROSS model comparison 
+# CROSS model comparison plots
 
+This is the library to plot the results for the CROSS model comparison 
 
 ## Files and folders
 - distributions/plots.py contains all the functions to upload the data and plot
@@ -34,7 +35,24 @@
 * Run/edit cross_comparison.py.
 
 
+# Copyright and license
 
+&copy 2024 ETH Zürich, Adriana Marcucci
+
+Licensed under the Apache License, Version 2.0 (the "LICENSE"); you may not use this file except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+
+# Acknowledging authorship
+
+In the academic spirit of collaboration, the source code should be appropriately acknowledged in the resulting scientific disseminations.
+You may cite it as follows:
+
+[1], for general reference to the EnergyScope project and the EnergyScope modeling framework
+[2], for reference to the origins of the EnergyScope project or to the first online version of the calculator energyscope.ch
+[3], for reference to the energyscope MILP modeling framework
+[4], for reference to the current code
+You are welcome to report any bugs related to the code or its documentation through a git Issue or by emailing:
+moret.stefano@gmail.com or gauthierLimpens@gmail.com
 
 
 
