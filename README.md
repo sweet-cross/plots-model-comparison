@@ -39,6 +39,8 @@ This is the library to plot the results for the CROSS model comparison
 
 &copy; 2024 ETH Zürich, Adriana Marcucci
 
+This code was developed by the SWEET CoSI consortium, which is sponsored by the Swiss Federal Office of Energy’s SWEET programme.
+
 Licensed under the Apache License, Version 2.0 (the "LICENSE"); you may not use this file except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 
