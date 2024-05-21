@@ -13,20 +13,19 @@ sce = ['abroad-together','domestic-together','abroad-alone','domestic-alone']
 files =  [
           {'name': 'Calliope', 'file': 'resultsCross_Calliope','summer':'Jul 20','winter':'Feb 08','color':'#D57CBE'},
           {'name': 'Expanse', 'file': 'resultsCross_Expanse','summer':'Jul 02','winter':'Jan 01','color':'#FF7D0D'},
-          {'name': 'FlexEco', 'file': 'resultsCross_flexeco','summer':'min resudial\nload','winter':'max resudial\nload','color':'#FF0D7D'},
+          {'name': 'FLEXECO', 'file': 'resultsCross_flexeco','summer':'Typical day','winter':'Typical day','color':'#BD21BC'},
           {'name': 'Nexus-e+\nEP2050+', 'file': 'resultsCross_Nexuse-EP','summer':'Jul 02','winter':'Feb 08','color':'#BCBD21'},
           {'name': 'SecMod', 'file': 'resultsCross_Secmod','summer':'Typical day','winter':'Typical day','color':'#9565BD'},
           {'name': 'SES', 'file': 'resultsCross_SES-epfl','summer':'Typical day','winter':'Typical day','color':'#1E75B3'},
           {'name': 'SES-ETH', 'file': 'resultsCross_SES','summer':'Typical day','winter':'Typical day','color':'#2A9E2A'},
           {'name': 'STEM', 'file': 'resultsCross_STEM','summer':'Week day','winter':'Week day','color':'#D52426'},
-          {'name': 'Empa', 'file': 'Data_ehubli_final','summer':'Jul 11','winter':'Feb 15','color':'#8B5349'},
+          {'name': 'Empa', 'file': 'resultsCross_VSE','summer':'Jul 11','winter':'Feb 15','color':'#8B5349'},
           {'name': 'EP2050+\nZero Basis', 'file': 'resultsCross_EP','summer':'avg. Aug. 13-19','winter':'avg. Feb. 7-13','color':'#7F7F7F'}
           ]
 
 cross_plots = plots.Plots(files,sce,'results','plots') 
 
-#Calculate net imports and exports
-cross_plots.calculateNetImports()
+
 
 
 # Annual electricity supply with total imports and exports
@@ -130,7 +129,7 @@ fileName = 'elecDist_tech.pdf'
 cross_plots.plotTechDist(listModels,varList_wopot,order,ylabel,ymax,fileName)
 
 
-# Electricity consumption by use with total exports
+# Electricity consumption by use with net exports
 
 varList_use = [
     {'name':'Total','data':['Electricity-consumption|Total demand'],'color':'#8E8900'},
@@ -142,13 +141,13 @@ varList_use = [
     {'name':'Electrolysis','data':['Electricity-consumption|Electrolysis'],'color':'#F5DD1B'},
     {'name':'Others','data':['Electricity-consumption|New processes'],'color':'#9751CB'},
     {'name':'Storage','data':['Electricity-consumption|Battery-In','Electricity-consumption|PHS-In'],'color':'#939CAC'},
-    {'name':'Exports','data':['Electricity-consumption|Exports'],'color':'#CCCCCC'}
+    {'name':'Exports','data':['Electricity-consumption|Net-exports'],'color':'#CCCCCC'}
     ]
 
 listModels = cross_plots.models
 scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 160
+xmax = 120
 fileName = 'elecUse.pdf'
 right = True #True if model names have to go on the right
 legend = False # True if legend has to be displayed
@@ -168,7 +167,7 @@ varList_use_dist = [
     {'name':'Heat pumps','data':['Electricity-consumption|Heat pumps'],'color':'#F2960E'},
     {'name':'Heaters','data':['Electricity-consumption|Electric heaters'],'color':'#CF4832'},
     {'name':'Electrolysis','data':['Electricity-consumption|Electrolysis'],'color':'#F5DD1B'}
- ]
+  ]
 
 listModels = ['Calliope','Nexus-e+\nEP2050+','SecMod','SES','SES-ETH','STEM','Empa','EP2050+\nZero Basis']
 order = ["Base",'Mobility','Heat pumps','Heaters','Electrolysis']
@@ -355,7 +354,7 @@ cross_plots.plotTechDist(listModels,varList_indHeat_dist,order,ylabel,ymax,fileN
 
 #Get the hourly data for the variables of interest
 varList_supply_h = [
-    {'name':'Net-imports','data':['Electricity-supply|Imports'],'color':'#CCCCCC'},
+    {'name':'Net-imports','data':['Electricity-supply|Net-imports'],'color':'#CCCCCC'},
     {'name':'Storage out','data':['Electricity-supply|PHS-out','Electricity-supply|Battery-out'],'color':'#939CAC'},
     {'name':'SPV-Battery','data':['Electricity-supply|SPV-battery'],'color':'#FEFF54'},
     {'name':'Solar','data':['Electricity-supply|Solar'],'color':'#FAC748'},
@@ -367,7 +366,7 @@ varList_supply_h = [
     ]
 
 varList_use_h = [
-    {'name':'Net-exports','data':['Electricity-consumption|Exports'],'color':'#CCCCCC'},
+    {'name':'Net-exports','data':['Electricity-consumption|Net-exports'],'color':'#CCCCCC'},
     {'name':'Storage in','data':['Electricity-consumption|Battery-In','Electricity-consumption|PHS-In'],'color':'#939CAC'},
     {'name':'EVs','data':['Electricity-consumption|Battery-vehicles'],'color':'#09c5c9'},
     {'name':'Heat pumps','data':['Electricity-consumption|Heat pumps'],'color':'#F2960E'},

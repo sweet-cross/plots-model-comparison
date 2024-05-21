@@ -4,11 +4,9 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
-from functools import reduce      
-import numpy as np
-import pdb 
 import seaborn as sb
-from scipy import stats
+from datetime import datetime
+
 
 
 class Plots:
@@ -37,99 +35,113 @@ class Plots:
         self.folder_plots = folder_plots
         
         # Read all the files in data_list
-        df_from_each_file = [self.readAnnualData(f) for f in data_list]
+        df_from_each_file = [self.readData(f) for f in data_list]
         # Merge all files
-        self.annualData = reduce(lambda left, right: pd.merge(left , right, left_index=True, right_index=True, how="outer"), df_from_each_file)
+        self.allData = pd.concat(df_from_each_file).unstack(level=1).droplevel(level=0,axis=1).sort_index()
+        self.allData.fillna(0,inplace=True)
+        #Calculate net imports and exports
+        self.calculateNetImports()
+        
+        
+        self.annualData = self.allData.loc[:,:,'annual',:]
         
         # Read the two days of the hourly data
         self.seasons = ["summer","winter"]  
         self.hourlyData = {}
         for s in self.seasons:
-            # Read all the files in data_list
-            df_from_each_file_h = [self.readHourlyData(f,s) for f in data_list]
-            # Merge all files
-            allData_h= pd.concat(df_from_each_file_h, axis=0)  
-            # This avoids performance warnings
-            allData_h.sort_index(inplace=True)
-            self.hourlyData[s] = allData_h   
+            self.hourlyData[s] =  self.allData.loc[:,:,'typical-day-'+s,:]
         
-
-            
+                
         self.posNegData = {}
        
     #  Reads the annual data from the csv files listed in dictFile
     #  returns a dataFrame with all the data
-    def readAnnualData(self,dictFile):
+    def readData(self,dictFile):
         
-        data = pd.read_csv(self.folder_results+'/'+dictFile['file']+'.csv', index_col=[0,1,2],header=[0])
+        data = pd.read_csv(self.folder_results+'/'+dictFile['file']+'.csv', index_col=[0,1,5],header=[0])
         data = data.fillna(0)
-        # Get the annual values and chnage the name of the column to the model name
-        data['Annual']=pd.to_numeric(data['Annual'])
-        annualData = pd.to_numeric(data.loc[:,'Annual']).to_frame()
-        annualData.rename(columns={"Annual":dictFile['name']},inplace=True)
+        # Get the annual values and make them numeric instead of text
+        data['value']=pd.to_numeric(data['value'])
+        #Remove all rows with hourly data that are not elec
+        data.loc[:,'remove'] = data.apply(lambda x: self.remove(x.variable, x.timeResolution), axis=1)
+        data = data[data.remove != 1]
+        data = data.drop(['remove'], axis=1)
+        # Correct the unit
+        data['value']=data.apply(lambda x: x.value * self.correctUnit(x.timeResolution,x.unit),axis=1)
+        data = data.drop(['unit'], axis=1)
         
-        return annualData
+        data = data.reset_index().set_index(['scenario','model','variable', 'timeResolution','timestep'])
+        
+        #Make the variable lower case, to avoid capital and lower cases problems
+        data.index = data.index.set_levels(data.index.levels[2].str.lower(), level=2)
+        
+        return data
     
-    def readHourlyData(self,dictFile,season):
+    
+    def remove(self,var_name,time_resolution):
         """ 
-        Reads the hourly data from the csv files listed in dictFile for the season
-        returns a dataFrame with all the data
+        Checks for hourly variables that are not electricity
         """ 
-  
-        if season == "summer":
-            col_name = "sd-" 
+        
+        matches = ["Electricity-consumption|", "Electricity-supply|"]
+        if time_resolution != "annual":
+            if any(x in var_name for x in matches):
+                return 0
+            else:
+                return 1
         else:
-            col_name = "wd-" 
+            return 0   
 
+    def correctUnit(self,timeResolution,unit):
+        annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000,'gw':1,'mw':1/1000}
+        hourly_factors = {'gw':1,'gwh/h':1, 'mw':1/1000,'mwh/h':1/1000}
+        if timeResolution == 'annual':
+            if unit.lower() in annual_factors.keys():
+                return annual_factors[unit.lower()]
+            else:
+                return 0
+        elif timeResolution == 'typical-day-winter' or timeResolution == 'typical-day-summer':
+            if unit.lower() in hourly_factors.keys():
+                return hourly_factors[unit.lower()]
+            else: 
+                return 0
 
-        data = pd.read_csv(self.folder_results+'/'+dictFile['file']+'.csv', index_col=[0,1,2], header=[0])
-
-        #Drop the year from the index
-        data.index=data.index.droplevel([1])
-        data = data.fillna(0)
-
-        spike_cols = [col for col in data.columns if col_name in col]
-        hourlyData = data.loc[:,spike_cols]
-
-        #Replace the column name
-        hourlyData.columns = hourlyData.columns.str.replace(col_name, "", regex=True)
-
-        #Add model name
-        hourlyData['model'] = dictFile['name']
-
-        hourlyData=hourlyData.set_index(['model'], append=True)
-        return hourlyData
     
     def extractPositiveNegative(self,positive_variables,negative_variables):
         
         positive_labels = [d['name'] for d in positive_variables]
         negative_labels=[d['name'] for d in negative_variables]
         
+        timesteps = self.hourlyData['summer'].index.get_level_values(level=2).unique()
+        
         for season in self.seasons:
             allData_h = self.hourlyData[season].copy()
             
-            posNegData=pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,self.models,positive_labels+negative_labels] ,names=('scenario', 'model','index')),columns=allData_h.columns)
-                       
+            posNegData=pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,positive_labels+negative_labels,timesteps] ,names=('scenario','index','timestep')),columns=self.models)
+            posNegData.sort_index(inplace=True)
             posNegData.loc[(slice(None),slice(None),slice(None)),:] = 0
             
             for v in positive_variables:
                 for s in self.sce:
-                    for m in self.models:
+                    for t in timesteps:
                         for subv in v['data']:
                             try:
-                                posNegData.loc[(s,m,v['name']),:] += allData_h.loc[(s,subv,m),:]
+                                posNegData.loc[(s,v['name'],t),:] += allData_h.loc[(s,subv.lower(),t),:]
                             except KeyError:
-                                posNegData.loc[(s,m,v['name']),:] = posNegData.loc[(s,m,v['name']),:] 
+                                posNegData.loc[(s,v['name'],t),:] = posNegData.loc[(s,v['name'],t),:] 
             for v in negative_variables:
                 for s in self.sce:
-                    for m in self.models:
+                    for t in timesteps:
                         for subv in v['data']:
                             try:
-                                posNegData.loc[(s,m,v['name']),:] -= allData_h.loc[(s,subv,m),:]
+                                posNegData.loc[(s,v['name'],t),:] -= allData_h.loc[(s,subv.lower(),t),:]
                             except KeyError:
-                                posNegData.loc[(s,m,v['name']),:] = posNegData.loc[(s,m,v['name']),:] 
-
-            self.posNegData[season] = posNegData
+                                posNegData.loc[(s,v['name'],t),:] = posNegData.loc[(s,v['name'],t),:] 
+            
+            posNegData = posNegData.reset_index().melt(id_vars=["scenario",'index','timestep'])
+            posNegData.rename(columns={'variable':'model','value':'Electricity (GW)'},inplace=True)
+            self.posNegData[season] = posNegData.set_index(["scenario",'index','timestep','model'])
+            
                             
     
     def recalculateTotalSupply(self,varList_supply):
@@ -142,50 +154,53 @@ class Plots:
                 for v in varList_supply:
                     subv = v['data']
                     for t in subv:
-                        data_t = self.annualData.loc[(s,2050,t),m]  
+                        data_t = self.annualData.loc[(s,t.lower(),'2050'),m]  
                         if not np.isnan(data_t):
                             if np.isnan(total):
                                 total = data_t
                             else:
                                 total = total + data_t
-                battery_in = self.annualData.loc[(s,2050,'Electricity-consumption|Battery-In'),m] if np.isnan(self.annualData.loc[(s,2050,'Electricity-consumption|Battery-In'),m])==False else 0
-                phs_in = self.annualData.loc[(s,2050,'Electricity-consumption|PHS-In'),m] if np.isnan(self.annualData.loc[(s,2050,'Electricity-consumption|PHS-In'),m])==False else 0 
-                self.annualData.loc[(s,2050,'Electricity-supply|Total'),m] = total-self.annualData.loc[(s,2050,'Electricity-consumption|Exports'),m]-battery_in-phs_in
+                battery_in = self.annualData.loc[(s,'electricity-consumption|battery-in','2050'),m] if np.isnan(self.annualData.loc[(s,'electricity-consumption|battery-in','2050'),m])==False else 0
+                phs_in = self.annualData.loc[(s,'electricity-consumption|phs-in','2050'),m] if np.isnan(self.annualData.loc[(s,'electricity-consumption|phs-in','2050'),m])==False else 0 
+                self.annualData.loc[(s,'electricity-supply|total','2050'),m] = total-self.annualData.loc[(s,'electricity-consumption|exports','2050'),m]-battery_in-phs_in
                
     def calculateNetImports(self):
         """ 
         Calculate net imports and exports for all the models
         """ 
         
-        # This avoids performance warnings
-        new_vars = ['Electricity-supply|Net-imports','Electricity-consumption|Net-exports']
-        df_imports = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,[2050],new_vars] ,names=('scenario', 'year','index')),columns=self.models)
-        df_imports.loc[(self.sce,2050,'Electricity-supply|Net-imports'),self.models] = 0
-        df_imports.loc[(self.sce,2050,'Electricity-consumption|Net-exports'),self.models] = 0
         
-        self.annualData = pd.concat([self.annualData,df_imports])
-        self.annualData.sort_index(inplace=True)
-       
+        # This avoids performance warnings
+        new_vars = ['electricity-supply|net-imports','electricity-consumption|net-exports']
+        df_imports_annual = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,new_vars,['annual'], ['2050']] ,names=('scenario', 'variable','timeResolution','timestep')),columns=self.models)
+        df_imports_annual.loc[:,:]=0
+        
+        timeResolution_h = ['typical-day-winter','typical-day-summer']
+        timeSteps_h = self.allData.loc[(slice(None),slice(None),'typical-day-winter',slice(None))].index.unique(level=2)
+        df_imports_h = pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,new_vars,timeResolution_h, timeSteps_h] ,names=('scenario', 'variable','timeResolution','timestep')),columns=self.models)
+        
+        self.allData = pd.concat([self.allData,df_imports_annual,df_imports_h])
+        self.allData.sort_index(inplace=True)
         
         for s in self.sce:
             for m in self.models:
-                net = self.annualData.loc[(s,2050,'Electricity-supply|Imports'),m] - self.annualData.loc[(s,2050,'Electricity-consumption|Exports'),m] 
+                #Annual net imports
+                
+                net = self.allData.loc[(s,'electricity-supply|imports','annual','2050'),m] - self.allData.loc[(s,'electricity-consumption|exports','annual','2050'),m] 
                 if net>0:
-                    self.annualData.loc[(s,2050,'Electricity-supply|Net-imports'),m] = net
+                    self.allData.loc[(s,'electricity-supply|net-imports','annual','2050'),m] = net
                 else:
-                    self.annualData.loc[(s,2050,'Electricity-consumption|Net-exports'),m] = -1*net
+                    self.allData.loc[(s,'electricity-consumption|net-exports','annual','2050'),m]  = -1*net
                     
                 # Calculate net imports and exports for all the models at hourly levels
-                for season in self.seasons:
-                    allData_h = self.hourlyData[season].copy()
-                    allData_h = allData_h.unstack(2)
-                    for h in allData_h.columns.get_level_values(0).unique():
-                        net_h = allData_h.loc[(s,'Electricity-supply|Imports'),(h,m)] - allData_h.loc[(s,'Electricity-consumption|Exports'),(h,m)]
+                for season in timeResolution_h:
+                    for h in timeSteps_h:
+                        net_h = self.allData.loc[(s,'electricity-supply|imports',season,h),m] - self.allData.loc[(s,'electricity-consumption|exports',season,h),m] 
                         if net_h>0:
-                            allData_h.loc[(s,'Electricity-supply|Net-imports'),(h,m)] = net_h
+                            self.allData.loc[(s,'electricity-supply|net-imports',season,h),m] = net_h
                         else:
-                            allData_h.loc[(s,'Electricity-consumption|Net-exports'),(h,m)] = -1*net_h
-                    self.hourlyData[season] = allData_h.stack()
+                            self.allData.loc[(s,'electricity-consumption|net-exports',season,h),m]  = -1*net_h
+                    
 
     def plotScatter(self,listModels, varName,sceColors,scale,xlabel,xmax,fileName):
         """ 
@@ -223,7 +238,7 @@ class Plots:
             ypos_cols.append(y_ini-numSce/4-0.25)
             for i in np.arange(numSce):
                 y = y_ini - i * 0.5 - 0.5
-                plt.scatter(self.annualData.loc[(self.sce[i],2050,varName),m]/scale,y,c=sceColors[i])
+                plt.scatter(self.annualData.loc[(self.sce[i],varName.lower(),'2050'),m]/scale,y,c=sceColors[i])
 
         # y axis. Minor ticks are the lines and major ticks the model names
 
@@ -290,7 +305,10 @@ class Plots:
             for index, m in enumerate(listModels):
                 for i in np.arange(numSce):
                     for subv in v['data']:
-                        datasubv = self.annualData.loc[(self.sce[i],2050,subv),m]
+                        try:
+                            datasubv = self.annualData.loc[(self.sce[i],subv.lower(),'2050'),m] 
+                        except KeyError:
+                            datasubv = 0
                         if not np.isnan(datasubv):
                             datav[index*(numSce) + i] = datav[index*(numSce) + i] + datasubv/scale 
             dataPlot[v['name']]= datav  
@@ -346,7 +364,7 @@ class Plots:
                 for i in np.arange(numSce):
                     y = y_ini - i * 0.5 - 0.5
                     ax.autoscale(False) # To avoid that the scatter changes limits
-                    ax.scatter(self.annualData.loc[(self.sce[i],2050,onTopVarName),m]/scale,y,
+                    ax.scatter(self.annualData.loc[(self.sce[i],onTopVarName.lower(),'2050'),m]/scale,y,
                                c='#000000',marker=r'x',s=12,zorder=2,linewidths=1)
 
 
@@ -399,7 +417,7 @@ class Plots:
                 for m in listModels:
                     dataNew.loc[(s,var),m] = np. nan
                     for subv in v['data']:
-                        datasubv = self.annualData.loc[(s,2050,subv),m]
+                        datasubv = self.annualData.loc[(s,subv.lower(),'2050'),m]
                         if not np.isnan(datasubv):
                             if not np.isnan(dataNew.loc[(s,var),m]):    
                                 dataNew.loc[(s,var),m] = dataNew.loc[(s,var),m] + datasubv
@@ -487,46 +505,32 @@ class Plots:
         labels_pos= [d['name'] for d in positive_variables]
         labels_neg= [d['name'] for d in negative_variables]
 
-        if season == "summer":
-            col_name = "sd-" 
-        else:
-            col_name = "wd-" 
-    
-
         # Add the typical day info to the model names
         dic_names = {m:m+'\n'+self.typicalDays[season][self.models.index(m)] for m in listModels }
         order_col = [m+'\n'+self.typicalDays[season][self.models.index(m)] for m in listModels ]    
 
-        positive_data = self.posNegData[season].loc[(slice(None),listModels,labels_pos),:]
-        negative_data = abs(self.posNegData[season].loc[(slice(None),listModels,labels_neg),:])
+                
+        positive_data = self.posNegData[season].loc[(slice(None),labels_pos,slice(None),listModels),:].reset_index()
+        negative_data = abs(self.posNegData[season].loc[(slice(None),labels_neg,slice(None),listModels),:]).reset_index()
 
-        # Melt the dataFrame so it can be plotted with seaborn
-        positive_Melted = positive_data.reset_index().melt(id_vars=["scenario","model","index"])
-        # Change the names of the columns to the name of the axes in the plot
-        positive_Melted.rename(columns={'variable':'hour','value':'Electricity (GW)'}, inplace=True)
-        # Remove text from hour
-        positive_Melted['hour'] = positive_Melted['hour'].str.replace(col_name, '')
+        # Remove text year and :00 from timestep
+        positive_data['timestep'] = positive_data['timestep'].apply(lambda x: datetime.strptime(str(x),'%Y %H:%M').strftime('%H'))
         # Make all columns numeric
-        positive_Melted =  positive_Melted.astype({'hour': 'int32','Electricity (GW)': 'float64'})
-        positive_Melted['model'] = positive_Melted['model'].replace(dic_names)
+        positive_data =  positive_data.astype({'timestep': 'int32','Electricity (GW)': 'float64'})
+        positive_data['model'] = positive_data['model'].replace(dic_names)
 
 
-         # Melt the dataFrame so it can be plotted with seaborn
-        negative_Melted = negative_data.reset_index().melt(id_vars=["scenario","model","index"])
-        # Change the names of the columns to the name of the axes in the plot
-        negative_Melted.rename(columns={'variable':'hour','value':'Electricity (GW)'}, inplace=True)
-        # Remove text from hour
-        negative_Melted['hour'] = negative_Melted['hour'].str.replace(col_name, '')
+        # Remove text year and :00 from hour
+        negative_data['timestep'] = negative_data['timestep'].apply(lambda x: datetime.strptime(str(x),'%Y %H:%M').strftime('%H'))
         # Make all columns numeric
-        negative_Melted =  negative_Melted.astype({'hour': 'int32','Electricity (GW)': 'float64'})
-        negative_Melted['model'] = negative_Melted['model'].replace(dic_names)
-
+        negative_data =  negative_data.astype({'timestep': 'int32','Electricity (GW)': 'float64'})
+        negative_data['model'] = negative_data['model'].replace(dic_names)
 
    
-        positive_Melted['type'] = ylabel_pos 
-        negative_Melted['type'] = ylabel_neg 
+        positive_data['type'] = ylabel_pos 
+        negative_data['type'] = ylabel_neg 
         
-        all_data = pd.concat([positive_Melted, negative_Melted], ignore_index=True, axis=0)
+        all_data = pd.concat([positive_data, negative_data], ignore_index=True, axis=0)
         colors_tech= colors_pos+colors_neg
     
         for s in self.sce:
@@ -534,7 +538,7 @@ class Plots:
             
             g = sb.displot(kind='hist', 
                            data=data_sce, 
-                           x='hour', 
+                           x='timestep', 
                            weights='Electricity (GW)', 
                            hue='index', 
                            col='model', 
@@ -590,31 +594,28 @@ class Plots:
         """
         model_colors= [self.model_colors[self.models.index(m)] for m in listModels ]    
 
-        dataNew=abs(self.posNegData[season].loc[(scenario,listModels,varList),:])
-
-        dataNew = dataNew.stack(dropna=False)
-        dataNew.index.rename(level=3,names="hour",inplace=True)
+        dataNew=abs(self.posNegData[season].loc[(scenario,varList,slice(None),listModels),:])
 
         dataPlot = dataNew.reset_index()
-
-        dataPlot.rename(columns={0:'value'},inplace=True)
+        # Remove text year and :00 from timestep
+        dataPlot['timestep'] = dataPlot['timestep'].apply(lambda x: datetime.strptime(str(x),'%Y %H:%M').strftime('%H'))
 
         sb.set_style("whitegrid")
 
         g = sb.FacetGrid(dataPlot,  col="index",hue="model",hue_kws={'color': model_colors},col_order=varList
                          ,col_wrap=ncols
                          ,height=2.5,aspect=0.8)
-        g = (g.map(plt.plot, "hour", "value")).set(xlim=(0, 24),ylim=(0, ymax),xticks=[0, 6, 12, 18, 24]).set_titles("{col_name}").set_xlabels("")
+        g = (g.map(plt.plot, "timestep", "Electricity (GW)")).set(xlim=(0, 24),ylim=(0, ymax),xticks=[0, 6, 12, 18, 24]).set_titles("{col_name}").set_xlabels("")
 
         if ncols==1:
             for axis in g.axes:
                 for subplot in axis:
-                    if subplot.get_ylabel()=="value":
+                    if subplot.get_ylabel()=="Electricity (GW)":
                         subplot.set_ylabel(ylabel)
 
         else:
             for subplot in g.axes:
-                if subplot.get_ylabel()=="value":
+                if subplot.get_ylabel()=="Electricity (GW)":
                     subplot.set_ylabel(ylabel)
         
         
