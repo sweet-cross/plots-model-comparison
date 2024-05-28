@@ -37,7 +37,7 @@ This is the library to plot the results for the CROSS model comparison
 
 ## Copyright and license
 
-&copy; 2024 ETH Zürich, Adriana Marcucci
+&copy; 2024, ETH Zurich, Energy Science Center, Adriana Marcucci
 
 This code was developed by the SWEET CoSI consortium, which is sponsored by the Swiss Federal Office of Energy’s SWEET programme.
 

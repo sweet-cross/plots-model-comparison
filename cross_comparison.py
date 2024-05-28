@@ -1,3 +1,7 @@
+"""Code to produce plots for the CROSS model result comparison"""
+
+# Copyright (c) 2024, ETH Zurich, Energy Science Center, Adriana Marcucci
+# Distributed under the terms of the Apache License, Version 2.0.
 
 from distributions import plots 
 
