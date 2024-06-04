@@ -49,6 +49,6 @@ Licensed under the Apache License, Version 2.0 (the "LICENSE"); you may not use 
 In the academic spirit of collaboration, the source code should be appropriately acknowledged in the resulting scientific disseminations.
 You may cite it as follows:
 
-Marcucci, A. (2024). Code for production of CROSS model comparison plots. 
+Marcucci, A. (2024). Code for production of CROSS model comparison plots. DOI: [10.5905/ethz-1007-780] (http://doi.org/10.5905/ethz-1007-780)
 
 
