@@ -7,6 +7,7 @@ This is the library to plot the results for the CROSS model comparison
 - cross_comparison.py is the python code that interacts with distributions/plots.py and creates the plots
 - results/ is the folder where the results are uploaded
 - plots/ is the folder where the plots are saved
+- CROSS-comparison-plots-instructions.pdf describes in the detailed the use of the code and the required data format
 
 
 # Dependencies
