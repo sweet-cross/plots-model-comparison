@@ -6,7 +6,7 @@ authors:
     orcid: https://orcid.org/0000-0002-0427-9120
 title: "CROSS model comparison plots"
 version: 2024-05
-identifiers:
-  - type: doi
-    value: 10.5905/ethz-1007-780
+doi: 10.5905/ethz-1007-780
+url: "https://github.com/sweet-cross/plots-model-comparison/"
 date-released: 2024-05-29
+
