@@ -32,7 +32,7 @@ class Plots:
         
 
         # Get the models names
-        self.models = [ f['name'] for f in model_list ]
+        self.models = {f['id']: f['name'] for f in model_list}
         self.modelsid = [ f['id'] for f in model_list ]
         self.model_colors = [ f['color'] for f in model_list ]
         self.typicalDays = {}
@@ -233,15 +233,17 @@ class Plots:
 
                   
 
-    def plotScatter(self,listModels, varName,sceColors,scale,xlabel,xmax,fileName):
+    def plotScatter(self,listModelsid, varName,use_technology_fuel,year,sceColors,scale,xlabel,xmax,fileName):
         """ 
         Plot scatter of variable by model and scenario. 
         A great part of the function is only to make sure the labels are in the right place
 
         Parameters:
         ----------
-        listModels: list of models to plot
+        listModelsid: list of models id to plot
         varName: str, variable name in the data template
+        use_technology_fuel: str, name of the use, technology or fuel
+        year: year for the plot
         sceColors: list of HEX colors to use for each scenario
         scale: numeric, if needed, plot will plot var*scale, for unit changes, for example
         xlabel: str, label for x-axis
@@ -263,17 +265,23 @@ class Plots:
         numSce= len(self.sce)
         
 
-        for index, m in enumerate(listModels):
+        for index, m in enumerate(listModelsid):
             y_ini = nmodels*numSce/2 - index*numSce*0.5 + 0.5*(nmodels-index)
             ypos_grid.append(y_ini)
             ypos_cols.append(y_ini-numSce/4-0.25)
             for i in np.arange(numSce):
                 y = y_ini - i * 0.5 - 0.5
-                plt.scatter(self.annualData.loc[(self.sce[i],varName.lower(),'2050'),m]/scale,y,c=sceColors[i])
+                try:
+                    value = self.annualData.loc[(self.sce[i],m,varName,use_technology_fuel,'annual',year),'value']/scale
+                except:
+                    value = np.NaN
+                plt.scatter(value,y,c=sceColors[i])
 
         # y axis. Minor ticks are the lines and major ticks the model names
 
         ax.yaxis.set_major_locator(ticker.FixedLocator(ypos_cols))
+        
+        listModels = [self.models[k] for k in listModelsid if k in self.models]
         plt.yticks(ypos_cols, listModels)
 
         ax.yaxis.set_minor_locator(ticker.FixedLocator(ypos_grid))
@@ -300,16 +308,18 @@ class Plots:
         plt.show()
         
 
-    def plotBar(self,listModels,varList,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName):
+    def plotBar(self,listModelsid,varName ,varList,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName):
         """ 
         Bar plot by model and scenario. 
         Parameters:
         ----------
-        listModels: list of models to plot
+        listModelsid: list of models id to plot
+        varName: str, variable name in the data template
         varList: list of dictionaries with 
             name: name of the technology or group of technologies,
             data: list with the technologies that correspond to this category
             color: color to use for this category
+        year: year for the plot
         scale: numeric, if needed, plot will plot var*scale, for unit changes, for example
         xlabel: str, label for x-axis
         xmax: int, maximum level x-axis
@@ -321,7 +331,7 @@ class Plots:
         """
 
         numSce= len(self.sce)
-        nmodels = len(listModels)
+        nmodels = len(listModelsid)
 
         # Get data
         dataPlot={}
@@ -333,11 +343,11 @@ class Plots:
             datav = [0]*numSce*nmodels
             colors[v['name']] = v['color']
             names.append(v['name'])
-            for index, m in enumerate(listModels):
+            for index, m in enumerate(listModelsid):
                 for i in np.arange(numSce):
                     for subv in v['data']:
                         try:
-                            datasubv = self.annualData.loc[(self.sce[i],subv.lower(),'2050'),m] 
+                            datasubv = self.annualData.loc[(self.sce[i],m,varName,subv,'annual',year),'value'] 
                         except KeyError:
                             datasubv = 0
                         if not np.isnan(datasubv):
@@ -349,7 +359,7 @@ class Plots:
         ypos_cols = []
         ypos_bar  = []
 
-        for index, m in enumerate(listModels):
+        for index, m in enumerate(listModelsid):
             y_ini = nmodels*numSce/2 - index*numSce*0.5 + 0.5*(nmodels-index)
             ypos_grid.append(y_ini)
             ypos_cols.append(y_ini-numSce/4-0.25)
@@ -372,6 +382,7 @@ class Plots:
             x_offset = x_offset + row
 
         # Invert axis if the plot is oriented to the right
+        listModels = [self.models[k] for k in listModelsid if k in self.models]
         if right==True:
             ax.invert_xaxis() 
             ax.yaxis.set_major_locator(ticker.FixedLocator(ypos_cols))
@@ -390,12 +401,12 @@ class Plots:
 
 
         if len(onTopVarName)!=0:
-            for index, m in enumerate(listModels):
+            for index, m in enumerate(listModelsid):
                 y_ini = nmodels*numSce/2 - index*numSce*0.5 + 0.5*(nmodels-index)
                 for i in np.arange(numSce):
                     y = y_ini - i * 0.5 - 0.5
                     ax.autoscale(False) # To avoid that the scatter changes limits
-                    ax.scatter(self.annualData.loc[(self.sce[i],onTopVarName.lower(),'2050'),m]/scale,y,
+                    ax.scatter(self.annualData.loc[(self.sce[i],m,varName,onTopVarName,'annual',year),'value']/scale,y,
                                c='#000000',marker=r'x',s=12,zorder=2,linewidths=1)
 
 

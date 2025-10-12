@@ -56,29 +56,33 @@ varList_supply = [
 cross_plots.recalculateTotalSupply(varList_supply)
 
 # Scatter plot with net supply
-listModels = cross_plots.models #any model can be excluded, the list should include the model names
-varName = 'Electricity-supply|Total'
-sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD']
+listModels = cross_plots.modelsid #any model can be excluded, the list should include the model ids
+varName = 'electricity_supply'
+use_technology_fuel = 'total'
+sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
 scale = 1
 xlabel = 'Electricity (TWh)'
 xmax = 160
 fileName = 'elecSupply.pdf'
+year = '2050'
 
-cross_plots.plotScatter(listModels,varName ,sceColors,scale,xlabel,xmax,fileName)
+cross_plots.plotScatter(listModels,varName ,use_technology_fuel,year,sceColors,scale,xlabel,xmax,fileName)
 
 
 # Electricity supply bar plot
-listModels = cross_plots.models
+varName = 'electricity_supply'
+listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Electricity (TWh)'
 xmax = 160
 fileName = 'elecSupply_tech.pdf'
 right = False #True if model names have to go on the right
-legend = False # True if legend has to be displayed
+legend = True # True if legend has to be displayed
 pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = 'Electricity-supply|Total'
+onTopVarName = ''
+year = '2050'
 
-cross_plots.plotBar(listModels,varList_supply,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+cross_plots.plotBar(listModels,varName ,varList_supply,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
 
 
 # Annual electricity supply with net imports 
@@ -87,19 +91,21 @@ cross_plots.plotBar(listModels,varList_supply,scale,xlabel,xmax,fileName,right,l
 # data: list with the technologies that correspond to this category
 # color: color to use for this category
 varList_supply_net = [
-    {'name':'Hydro','data':['Electricity-supply|Hydro Dams','Electricity-supply|Hydro RoR'],'color':'#0377CA'},
-    {'name':'Solar','data':['Electricity-supply|Solar'],'color':'#FAC748'},
-    {'name':'Wind','data':['Electricity-supply|Wind'],'color':'#F2960E'},
-    {'name':'Geothermal','data':['Electricity-supply|Geothermal'],'color':'#ac79c4'},
-    {'name':'Gas and\nbiogas','data':['Electricity-supply|Biogas','Electricity-supply|Gas'],'color':'#1f6228'},
-    {'name':'Hydrogen','data':['Electricity-supply|Hydrogen'],'color':'#03CBA0'},
-    {'name':'Waste','data':['Electricity-supply|Waste'],'color':'#b82222'},
-    {'name':'Wood','data':['Electricity-supply|Wood'],'color':'#a9807c'},
-    {'name':'Storage','data':['Electricity-supply|PHS-out','Electricity-supply|Battery-out'],'color':'#939CAC'},
-    {'name':'Net-imports','data':['Electricity-supply|Net-imports'],'color':'#CCCCCC'}
-    ]
+    {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
+    {'name':'Solar','data':['spv_rooftop','spv_facade','spv_mountain'],'color':'#FAC748'},
+    {'name':'Wind','data':['wind'],'color':'#F2960E'},
+    {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
+    {'name':'Methane','data':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs",'fuel_cell_methane'],'color':'#1f6228'},
+    {'name':'Hydrogen','data':['hydrogen_chp','hydrogen_cc','fuel_cell_h2'],'color':'#03CBA0'},
+    {'name':'Liqzuds','data':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs'],'color':'#12418c'},
+    {'name':'Waste','data':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs'],'color':'#b82222'},
+    {'name':'Wood','data':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs'],'color':'#a9807c'},
+    {'name':'Storage','data':['battery_out','phs_out'],'color':'#939CAC'},
+    {'name':'Imports','data':['net_imports'],'color':'#CCCCCC'}
+   ]
 
-listModels = cross_plots.models
+varName = 'electricity_supply'
+listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Electricity (TWh)'
 xmax = 160
@@ -107,9 +113,10 @@ fileName = 'elecSupply_tech_net.pdf'
 right = False #True if model names have to go on the right
 legend = False # True if legend has to be displayed
 pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = 'Electricity-supply|Total'
+#onTopVarName = 'Electricity-supply|Total'
+onTopVarName = ''
 
-cross_plots.plotBar(listModels,varList_supply_net,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+cross_plots.plotBar(listModels,varName ,varList_supply_net,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
 
 
 # Distribution of annual electricity supply by technology
@@ -139,19 +146,20 @@ cross_plots.plotTechDist(listModels,varList_wopot,order,ylabel,ymax,fileName)
 # Electricity consumption by use with net exports
 
 varList_use = [
-    {'name':'Total','data':['Electricity-consumption|Total demand'],'color':'#8E8900'},
-    {'name':'Base','data':['Electricity-consumption|Base'],'color':'#097F6D'},
-    {'name':'Trains','data':['Electricity-consumption|Trains'],'color':'#000000'},
-    {'name':'Road transport','data':['Electricity-consumption|Battery-vehicles'],'color':'#09c5c9'},
-    {'name':'Heat pumps','data':['Electricity-consumption|Heat pumps'],'color':'#F2960E'},
-    {'name':'Heaters','data':['Electricity-consumption|Electric heaters'],'color':'#CF4832'},
-    {'name':'Electrolysis','data':['Electricity-consumption|Electrolysis'],'color':'#F5DD1B'},
-    {'name':'Others','data':['Electricity-consumption|New processes'],'color':'#9751CB'},
-    {'name':'Storage','data':['Electricity-consumption|Battery-In','Electricity-consumption|PHS-In'],'color':'#939CAC'},
-    {'name':'Exports','data':['Electricity-consumption|Net-exports'],'color':'#CCCCCC'}
+#    {'name':'Total','data':['Electricity-consumption|Total demand'],'color':'#8E8900'},
+    {'name':'Base','data':['elec_appliances'],'color':'#097F6D'},
+    {'name':'Trains','data':['passenger_rail','freight_rail'],'color':'#000000'},
+    {'name':'Road transport','data':['road_public','road_private','truck','ldv'],'color':'#09c5c9'},
+    {'name':'Space heating','data':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'],'color':'#F2960E'},
+    {'name':'Process heat','data':['Eprocess_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
+    {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
+    {'name':'Others','data':['power_to_liquid','dac','grid_losses'],'color':'#9751CB'},
+    {'name':'Storage','data':['battery_in','phs_in'],'color':'#939CAC'},
+    {'name':'Exports','data':['net-exports'],'color':'#CCCCCC'}
     ]
 
-listModels = cross_plots.models
+varName = 'electricity_consumption'
+listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Electricity (TWh)'
 xmax = 120
@@ -160,8 +168,10 @@ right = True #True if model names have to go on the right
 legend = False # True if legend has to be displayed
 pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = ''
+year = '2050'
 
-cross_plots.plotBar(listModels,varList_use,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+cross_plots.plotBar(listModels,varName ,varList_use,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+
 
 
 # Distribution of annual electricity use by use
