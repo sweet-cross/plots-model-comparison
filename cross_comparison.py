@@ -1,12 +1,13 @@
-"""Code to produce plots for the CROSS model result comparison"""
+"""Code to produce plots for the CROSS model result comparison using the format for CROSSHub"""
 
-# Copyright (c) 2024, ETH Zurich, Energy Science Center, Adriana Marcucci
+# Copyright (c) 2025, ETH Zurich, Energy Science Center, Adriana Marcucci
 # Distributed under the terms of the Apache License, Version 2.0.
 
 from distributions import plots 
 
 # Scenario names
-sce = ['abroad-together','domestic-together','abroad-alone','domestic-alone']
+sce = ['abroad-res-full','abroad-res-lim','abroad-nores-full','abroad-nores-lim','domestic-res-full','domestic-res-lim','domestic-nores-full','domestic-nores-lim',]
+
 
 #  List of files with:
 # name: name to be displayed in the plots
@@ -14,20 +15,21 @@ sce = ['abroad-together','domestic-together','abroad-alone','domestic-alone']
 # summer: name of the summer day reported by the model
 # winter: name of the winter day reported by the model
 # color: color to be used for the model in scatter plots
-files =  [
-          {'name': 'Calliope', 'file': 'resultsCross_Calliope','summer':'Jul 20','winter':'Feb 08','color':'#D57CBE'},
-          {'name': 'Expanse', 'file': 'resultsCross_Expanse','summer':'Jul 02','winter':'Jan 01','color':'#FF7D0D'},
-          {'name': 'FLEXECO', 'file': 'resultsCross_flexeco','summer':'Typical day','winter':'Typical day','color':'#BD21BC'},
-          {'name': 'Nexus-e+\nEP2050+', 'file': 'resultsCross_Nexuse-EP','summer':'Jul 02','winter':'Feb 08','color':'#BCBD21'},
-          {'name': 'SecMod', 'file': 'resultsCross_Secmod','summer':'Typical day','winter':'Typical day','color':'#9565BD'},
-          {'name': 'SES', 'file': 'resultsCross_SES-epfl','summer':'Typical day','winter':'Typical day','color':'#1E75B3'},
-          {'name': 'SES-ETH', 'file': 'resultsCross_SES','summer':'Typical day','winter':'Typical day','color':'#2A9E2A'},
-          {'name': 'STEM', 'file': 'resultsCross_STEM','summer':'Week day','winter':'Week day','color':'#D52426'},
-          {'name': 'Empa', 'file': 'resultsCross_VSE','summer':'Jul 11','winter':'Feb 15','color':'#8B5349'},
-          {'name': 'EP2050+\nZero Basis', 'file': 'resultsCross_EP','summer':'avg. Aug. 13-19','winter':'avg. Feb. 7-13','color':'#7F7F7F'}
+model_list =  [
+          #{'name': 'Calliope', 'file': 'resultsCross_Calliope','summer':'Jul 20','winter':'Feb 08','color':'#D57CBE'},
+          #{'name': 'Expanse', 'file': 'resultsCross_Expanse','summer':'Jul 02','winter':'Jan 01','color':'#FF7D0D'},
+          #{'name': 'FLEXECO', 'file': 'resultsCross_flexeco','summer':'Typical day','winter':'Typical day','color':'#BD21BC'},
+          #{'name': 'Nexus-e+\nEP2050+', 'file': 'resultsCross_Nexuse-EP','summer':'Jul 02','winter':'Feb 08','color':'#BCBD21'},
+          {'name': 'SecMod', 'id': 'secmod','summer':'Typical day','summerDay':'01.07.2050 00:00','winter':'Typical day','winterDay':'01.02.2050 00:00','color':'#9565BD'},
+          #{'name': 'SES', 'file': 'resultsCross_SES-epfl','summer':'Typical day','winter':'Typical day','color':'#1E75B3'},
+          {'name': 'SES-ETH', 'id': 'seseth','summer':'Typical day','summerDay':'01.07.2050 00:00','winter':'Typical day','winterDay':'01.02.2050 00:00','color':'#2A9E2A'},
+          #{'name': 'STEM', 'file': 'resultsCross_STEM','summer':'Week day','winter':'Week day','color':'#D52426'},
+          #{'name': 'Empa', 'file': 'resultsCross_VSE','summer':'Jul 11','winter':'Feb 15','color':'#8B5349'},
+          #{'name': 'EP2050+\nZero Basis', 'file': 'resultsCross_EP','summer':'avg. Aug. 13-19','winter':'avg. Feb. 7-13','color':'#7F7F7F'}
           ]
 
-cross_plots = plots.Plots(files,sce,'results','plots') 
+fileResults = "results_20251110"
+cross_plots = plots.Plots(fileResults,model_list,sce,'results','plots') 
 
 
 
@@ -38,16 +40,17 @@ cross_plots = plots.Plots(files,sce,'results','plots')
 # data: list with the technologies that correspond to this category
 # color: color to use for this category
 varList_supply = [
-    {'name':'Hydro','data':['Electricity-supply|Hydro Dams','Electricity-supply|Hydro RoR'],'color':'#0377CA'},
-    {'name':'Solar','data':['Electricity-supply|Solar'],'color':'#FAC748'},
-    {'name':'Wind','data':['Electricity-supply|Wind'],'color':'#F2960E'},
-    {'name':'Geothermal','data':['Electricity-supply|Geothermal'],'color':'#ac79c4'},
-    {'name':'Gas and\nbiogas','data':['Electricity-supply|Biogas','Electricity-supply|Gas'],'color':'#1f6228'},
-    {'name':'Hydrogen','data':['Electricity-supply|Hydrogen'],'color':'#03CBA0'},
-    {'name':'Waste','data':['Electricity-supply|Waste'],'color':'#b82222'},
-    {'name':'Wood','data':['Electricity-supply|Wood'],'color':'#a9807c'},
-    {'name':'Storage','data':['Electricity-supply|PHS-out','Electricity-supply|Battery-out'],'color':'#939CAC'},
-    {'name':'Imports','data':['Electricity-supply|Imports'],'color':'#CCCCCC'}
+    {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
+    {'name':'Solar','data':['spv_rooftop','spv_facade','spv_mountain'],'color':'#FAC748'},
+    {'name':'Wind','data':['wind'],'color':'#F2960E'},
+    {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
+    {'name':'Methane','data':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs",'fuel_cell_methane'],'color':'#1f6228'},
+    {'name':'Hydrogen','data':['hydrogen_chp','hydrogen_cc','fuel_cell_h2'],'color':'#03CBA0'},
+    {'name':'Liqzuds','data':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs'],'color':'#12418c'},
+    {'name':'Waste','data':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs'],'color':'#b82222'},
+    {'name':'Wood','data':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs'],'color':'#a9807c'},
+    {'name':'Storage','data':['battery_out','phs_out'],'color':'#939CAC'},
+    {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
     ]
 # Calculate net supply = sum(varList_supply)-Electricity-consumption|Exports-Electricity-consumption|Battery-in-Electricity-consumption|PHS-in
 cross_plots.recalculateTotalSupply(varList_supply)
