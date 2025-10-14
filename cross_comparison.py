@@ -6,7 +6,7 @@
 from distributions import plots 
 
 # Scenario names
-sce = ['abroad-res-full','abroad-res-lim','abroad-nores-full','abroad-nores-lim','domestic-res-full','domestic-res-lim','domestic-nores-full','domestic-nores-lim',]
+sce = ['abroad-res-full','abroad-res-lim','domestic-res-full','domestic-res-lim','abroad-nores-full','abroad-nores-lim','domestic-nores-full','domestic-nores-lim',]
 
 
 #  List of files with:
@@ -23,13 +23,14 @@ model_list =  [
           {'name': 'SecMod', 'id': 'secmod','summer':'Typical day','summerDay':'01.07.2050 00:00','winter':'Typical day','winterDay':'01.02.2050 00:00','color':'#9565BD'},
           #{'name': 'SES', 'file': 'resultsCross_SES-epfl','summer':'Typical day','winter':'Typical day','color':'#1E75B3'},
           {'name': 'SES-ETH', 'id': 'seseth','summer':'Typical day','summerDay':'01.07.2050 00:00','winter':'Typical day','winterDay':'01.02.2050 00:00','color':'#2A9E2A'},
-          #{'name': 'STEM', 'file': 'resultsCross_STEM','summer':'Week day','winter':'Week day','color':'#D52426'},
+          {'name': 'STEM', 'id': 'stem','summer':'Week day','summerDay':'01.07.2050 00:00','winter':'Week day','winterDay':'01.02.2050 00:00','color':'#D52426'},
           #{'name': 'Empa', 'file': 'resultsCross_VSE','summer':'Jul 11','winter':'Feb 15','color':'#8B5349'},
           #{'name': 'EP2050+\nZero Basis', 'file': 'resultsCross_EP','summer':'avg. Aug. 13-19','winter':'avg. Feb. 7-13','color':'#7F7F7F'}
           ]
 
-fileResults = "results_20251110"
+fileResults = "results_20251113"
 cross_plots = plots.Plots(fileResults,model_list,sce,'results','plots') 
+
 
 
 
@@ -41,19 +42,21 @@ cross_plots = plots.Plots(fileResults,model_list,sce,'results','plots')
 # color: color to use for this category
 varList_supply = [
     {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
-    {'name':'Solar','data':['spv_rooftop','spv_facade','spv_mountain'],'color':'#FAC748'},
+    {'name':'Solar','data':['spv'],'color':'#FAC748'},
     {'name':'Wind','data':['wind'],'color':'#F2960E'},
     {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
     {'name':'Methane','data':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs",'fuel_cell_methane'],'color':'#1f6228'},
     {'name':'Hydrogen','data':['hydrogen_chp','hydrogen_cc','fuel_cell_h2'],'color':'#03CBA0'},
-    {'name':'Liqzuds','data':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs'],'color':'#12418c'},
+    {'name':'Liquids','data':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs'],'color':'#4B4EFC'},
     {'name':'Waste','data':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs'],'color':'#b82222'},
     {'name':'Wood','data':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs'],'color':'#a9807c'},
     {'name':'Storage','data':['battery_out','phs_out'],'color':'#939CAC'},
     {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
-    ]
-# Calculate net supply = sum(varList_supply)-Electricity-consumption|Exports-Electricity-consumption|Battery-in-Electricity-consumption|PHS-in
-cross_plots.recalculateTotalSupply(varList_supply)
+   ]
+
+varList_consumption =['battery_in','phs_in','exports']
+# Calculate net supply = sum(varList_supply)-sum(varList_consumption)
+cross_plots.calculateTotalSupply(varList_supply,varList_consumption)
 
 # Scatter plot with net supply
 listModels = cross_plots.modelsid #any model can be excluded, the list should include the model ids
@@ -62,7 +65,7 @@ use_technology_fuel = 'total'
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
 scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 160
+xmax = 180
 fileName = 'elecSupply.pdf'
 year = '2050'
 
@@ -77,7 +80,7 @@ xlabel = 'Electricity (TWh)'
 xmax = 160
 fileName = 'elecSupply_tech.pdf'
 right = False #True if model names have to go on the right
-legend = True # True if legend has to be displayed
+legend = False # True if legend has to be displayed
 pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = ''
 year = '2050'
@@ -92,29 +95,29 @@ cross_plots.plotBar(listModels,varName ,varList_supply,year,scale,xlabel,xmax,fi
 # color: color to use for this category
 varList_supply_net = [
     {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
-    {'name':'Solar','data':['spv_rooftop','spv_facade','spv_mountain'],'color':'#FAC748'},
+    {'name':'Solar','data':['spv'],'color':'#FAC748'},
     {'name':'Wind','data':['wind'],'color':'#F2960E'},
     {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
     {'name':'Methane','data':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs",'fuel_cell_methane'],'color':'#1f6228'},
     {'name':'Hydrogen','data':['hydrogen_chp','hydrogen_cc','fuel_cell_h2'],'color':'#03CBA0'},
-    {'name':'Liqzuds','data':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs'],'color':'#12418c'},
+    {'name':'Liquids','data':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs'],'color':'#4B4EFC'},
     {'name':'Waste','data':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs'],'color':'#b82222'},
     {'name':'Wood','data':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs'],'color':'#a9807c'},
-    {'name':'Storage','data':['battery_out','phs_out'],'color':'#939CAC'},
-    {'name':'Imports','data':['net_imports'],'color':'#CCCCCC'}
+    {'name':'Storage','data':['net_storage_out'],'color':'#939CAC'},
+    {'name':'Net-imports','data':['net_imports'],'color':'#CCCCCC'}
    ]
 
 varName = 'electricity_supply'
 listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 160
+xmax = 140
 fileName = 'elecSupply_tech_net.pdf'
 right = False #True if model names have to go on the right
 legend = False # True if legend has to be displayed
 pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-#onTopVarName = 'Electricity-supply|Total'
-onTopVarName = ''
+onTopVarName = 'total'
+year = '2050'
 
 cross_plots.plotBar(listModels,varName ,varList_supply_net,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
 
@@ -124,53 +127,90 @@ cross_plots.plotBar(listModels,varName ,varList_supply_net,year,scale,xlabel,xma
 # name: name of the technology or group of technologies
 # data: list with the technologies that correspond to this category
 varList_wopot = [
-    {'name':'Hydro','data':['Electricity-supply|Hydro Dams','Electricity-supply|Hydro RoR']},
-    {'name':'Solar','data':['Electricity-supply|Solar']},
-    {'name':'Wind','data':['Electricity-supply|Wind']},
-    {'name':'Geoth.','data':['Electricity-supply|Geothermal']},
-    {'name':'Gas and\nbiogas','data':['Electricity-supply|Biogas','Electricity-supply|Gas']},
-    {'name':'Hydrogen','data':['Electricity-supply|Hydrogen']},
-    {'name':'Waste','data':['Electricity-supply|Waste']},
-    {'name':'Wood','data':['Electricity-supply|Wood']}
+    {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
+    {'name':'Solar','data':['spv'],'color':'#FAC748'},
+    {'name':'Wind','data':['wind'],'color':'#F2960E'},
+    {'name':'Geoth.','data':['geothermal_pp'],'color':'#ac79c4'},
+    {'name':'Gas','data':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs",'fuel_cell_methane'],'color':'#1f6228'},
+    {'name':'H2','data':['hydrogen_chp','hydrogen_cc','fuel_cell_h2'],'color':'#03CBA0'},
+    {'name':'Liquids','data':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs'],'color':'#4B4EFC'},
+    {'name':'Waste','data':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs'],'color':'#b82222'},
+    {'name':'Wood','data':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs'],'color':'#a9807c'},
     ]
 
-listModels = cross_plots.models
-order = ["Hydro",'Solar','Wind','Waste','Gas and\nbiogas','Wood','Geoth.','Hydrogen']
+varName = 'electricity_supply'
+listModels = cross_plots.modelsid
+order = ["Hydro",'Solar','Wind','Waste','Gas','Wood','Geoth.','H2','Liquids']
 ylabel = 'Electricity (TWh)'
-ymax = 60
+ymax = 50
 fileName = 'elecDist_tech.pdf'
+year = '2050'
 
-cross_plots.plotTechDist(listModels,varList_wopot,order,ylabel,ymax,fileName)
+cross_plots.plotTechDist(listModels,varName,varList_wopot,year,order,ylabel,ymax,fileName)
 
 
-# Electricity consumption by use with net exports
+# Electricity consumption by use with exports
 
 varList_use = [
 #    {'name':'Total','data':['Electricity-consumption|Total demand'],'color':'#8E8900'},
     {'name':'Base','data':['elec_appliances'],'color':'#097F6D'},
-    {'name':'Trains','data':['passenger_rail','freight_rail'],'color':'#000000'},
+    {'name':'Trains','data':['passenger_rail','freight_rail'],'color':'#066256'},
     {'name':'Road transport','data':['road_public','road_private','truck','ldv'],'color':'#09c5c9'},
     {'name':'Space heating','data':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'],'color':'#F2960E'},
-    {'name':'Process heat','data':['Eprocess_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
+    {'name':'Process heat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
+    {'name':'Power to liquids','data':['power_to_liquid'],'color':'#4B4EFC'},
     {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
-    {'name':'Others','data':['power_to_liquid','dac','grid_losses'],'color':'#9751CB'},
+    {'name':'CCS','data':['dac'],'color':'#9751CB'},
     {'name':'Storage','data':['battery_in','phs_in'],'color':'#939CAC'},
-    {'name':'Exports','data':['net-exports'],'color':'#CCCCCC'}
+    {'name':'Exports','data':['exports'],'color':'#CCCCCC'},
+    {'name':'Losses','data':['grid_losses'],'color':'#8B5A2B'}
     ]
 
 varName = 'electricity_consumption'
 listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 120
+xmax = 160
 fileName = 'elecUse.pdf'
 right = True #True if model names have to go on the right
 legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+pos_legend = 'lower left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = ''
 year = '2050'
 
 cross_plots.plotBar(listModels,varName ,varList_use,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+
+
+# Electricity consumption by use with net exports
+
+varList_use_net = [
+#    {'name':'Total','data':['Electricity-consumption|Total demand'],'color':'#8E8900'},
+    {'name':'Base','data':['elec_appliances'],'color':'#097F6D'},
+    {'name':'Trains','data':['passenger_rail','freight_rail'],'color':'#066256'},
+    {'name':'Road transport','data':['road_public','road_private','truck','ldv'],'color':'#09c5c9'},
+    {'name':'Space heating','data':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'],'color':'#F2960E'},
+    {'name':'Process heat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
+    {'name':'Power to liquids','data':['power_to_liquid'],'color':'#4B4EFC'},
+    {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
+    {'name':'CCS','data':['dac'],'color':'#9751CB'},
+    {'name':'Storage','data':['net_storage_in'],'color':'#939CAC'},
+    {'name':'Net-exports','data':['net_exports'],'color':'#CCCCCC'},
+    {'name':'Losses','data':['grid_losses'],'color':'#8B5A2B'}
+    ]
+
+varName = 'electricity_consumption'
+listModels = cross_plots.modelsid
+scale = 1
+xlabel = 'Electricity (TWh)'
+xmax = 140
+fileName = 'elecUse_net.pdf'
+right = True #True if model names have to go on the right
+legend = False # True if legend has to be displayed
+pos_legend = 'lower left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+onTopVarName = ''
+year = '2050'
+
+cross_plots.plotBar(listModels,varName ,varList_use_net,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
 
 
 
@@ -179,65 +219,126 @@ cross_plots.plotBar(listModels,varName ,varList_use,year,scale,xlabel,xmax,fileN
 # name: name of the technology or group of technologies
 # data: list with the technologies that correspond to this category
 varList_use_dist = [
-    {'name':'Base','data':['Electricity-consumption|Base'],'color':'#097F6D'},
-    {'name':'Mobility','data':['Electricity-consumption|Battery-vehicles','Electricity-consumption|Trains'],'color':'#09c5c9'},
-    {'name':'Heat pumps','data':['Electricity-consumption|Heat pumps'],'color':'#F2960E'},
-    {'name':'Heaters','data':['Electricity-consumption|Electric heaters'],'color':'#CF4832'},
-    {'name':'Electrolysis','data':['Electricity-consumption|Electrolysis'],'color':'#F5DD1B'}
+    {'name':'Base','data':['elec_appliances'],'color':'#097F6D'},
+    {'name':'Passenger','data':['road_public','road_private'],'color':'#09c5c9'},
+    {'name':'Freight','data':['truck','ldv'],'color':'#09c5c9'},
+    {'name':'Space\nheating','data':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'],'color':'#F2960E'},
+    {'name':'Process\nheat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
+    {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'}
   ]
 
-listModels = ['Calliope','Nexus-e+\nEP2050+','SecMod','SES','SES-ETH','STEM','Empa','EP2050+\nZero Basis']
-order = ["Base",'Mobility','Heat pumps','Heaters','Electrolysis']
+varName = 'electricity_consumption'
+listModels = cross_plots.modelsid
+order = ["Base",'Passenger','Freight','Space\nheating','Process\nheat','Electrolysis']
 ylabel = 'Electricity (TWh)'
-ymax = 70
+ymax =50
 fileName = 'elecUseDist_use.pdf'
+year = '2050'
 
-cross_plots.plotTechDist(listModels,varList_use_dist,order,ylabel,ymax,fileName)
+cross_plots.plotTechDist(listModels,varName,varList_use_dist,year,order,ylabel,ymax,fileName)
 
 # Hydrogen supply by technology
 varList_h2_supply = [
-    {'name':'Electrolysis','data':['Hydrogen-production|Electrolysis'],'color':'#FAC748'},
-    {'name':'Steam reforming','data':['Hydrogen-production|Steam-reforming'],'color':'#1f6228'},
-    {'name':'Gasification','data':['Hydrogen-production|Gasification'],'color':'#a9807c'},
-    {'name':'Imports','data':['Hydrogen-production|Imports'],'color':'#CCCCCC'}
+    {'name':'Electrolysis','data':['electrolyser'],'color':'#FAC748'},
+    {'name':'Steam reforming','data':['steam_reforming'],'color':'#1f6228'},
+    {'name':'Gasification','data':['wood_gasification_h2','waste_gasification_h2'],'color':'#a9807c'},
+    {'name':'Pyrolysis','data':['methane_pyrolysis'],'color':'#A93226'},
+    {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
     ]
 
-listModels = ['Calliope','SecMod','SES','SES-ETH','STEM','Empa','EP2050+\nZero Basis']
-scale = 1
+varName = 'h2_supply'
+listModels = cross_plots.modelsid
 xlabel = 'Hydrogen (TWh)'
 xmax = 30
 fileName = 'h2Supply_tech.pdf'
 right = False #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+legend = True # True if legend has to be displayed
+pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = ''
+year = '2050'
 
-cross_plots.plotBar(listModels,varList_h2_supply,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+cross_plots.plotBar(listModels,varName ,varList_h2_supply,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
 
 
 # Hydrogen consumption by use
 
 varList_h2_consump = [
-    {'name':'Electricity','data':['Hydrogen-consumption|CHP'],'color':'#9751CB'},
-    {'name':'Freight','data':['Hydrogen-consumption|Freight'],'color':'#8B5349'},
-    {'name':'Passengers','data':['Hydrogen-consumption|Passenger vehicles'],'color':'#09c5c9'},
-    {'name':'Industrial heating','data':['Hydrogen-consumption|High temperature heat'],'color':'#CF4832'},
-    {'name':'Fuel production','data':['Hydrogen-consumption|Fuel synthesis'],'color':'#F2960E'},
-    {'name':'Industry demand','data':['Hydrogen-consumption|H2 industry demand'],'color':'#939CAC'},
-    {'name':'Exports','data':['Hydrogen-consumption|Exports'],'color':'#CCCCCC'}
+    {'name':'Electricity','data':['hydrogen_pp','fuel_cell_h2'],'color':'#9751CB'},
+    {'name':'Freight','data':['truck','ldv'],'color':'#8B5349'},
+    {'name':'Passengers','data':['passenger_road_public','passenger_road_private'],'color':'#09c5c9'},
+    {'name':'Space heating','data':['space_heating'],'color':'#F2960E'},
+    {'name':'Process heat','data':['process_heat'],'color':'#CF4832'},
+    {'name':'Fuel syntheis','data':['fuel_synthesis'],'color':'#F2960E'},
+     {'name':'Storage','data':['storage'],'color':'#939CAC'},
+    {'name':'Exports','data':['exports'],'color':'#CCCCCC'}
     ]
 
-listModels = ['Calliope','SecMod','SES','SES-ETH','STEM','Empa','EP2050+\nZero Basis']
+varName = 'h2_fec'
+listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Hydrogen (TWh)'
 xmax = 30
 fileName = 'h2Use.pdf'
 right = True #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+legend = True # True if legend has to be displayed
+pos_legend = 'upper left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = ''
+year = '2050'
 
-cross_plots.plotBar(listModels,varList_h2_consump,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+cross_plots.plotBar(listModels,varName,varList_h2_consump,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+
+
+
+# Methane supply by technology
+varList_methane_supply = [
+    {'name':'Methanation','data':['methanation'],'color':'#1f6228'},
+    {'name':'Gasification','data':['wood_gasification_methane','waste_gasification_methane'],'color':'#a9807c'},
+    {'name':'Pyrolysis','data':['methane_pyrolysis'],'color':'#A93226'},
+    {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
+    ]
+
+varName = 'h2_supply'
+listModels = cross_plots.modelsid
+xlabel = 'Methane (TWh)'
+xmax = 30
+fileName = 'h2Supply_tech.pdf'
+right = False #True if model names have to go on the right, it invers the axis
+legend = True # True if legend has to be displayed
+pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+onTopVarName = ''
+year = '2050'
+
+cross_plots.plotBar(listModels,varName ,varList_methane_supply,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+
+
+# Methane consumption by use
+
+varList_methane_consump = [
+    {'name':'Electricity','data':['hydrogen_pp','fuel_cell_h2'],'color':'#9751CB'},
+    {'name':'Freight','data':['truck','ldv'],'color':'#8B5349'},
+    {'name':'Passengers','data':['passenger_road_public','passenger_road_private'],'color':'#09c5c9'},
+    {'name':'Space heating','data':['space_heating'],'color':'#F2960E'},
+    {'name':'Process heat','data':['process_heat'],'color':'#CF4832'},
+    {'name':'Fuel syntheis','data':['fuel_synthesis'],'color':'#F2960E'},
+     {'name':'Storage','data':['storage'],'color':'#939CAC'},
+    {'name':'Exports','data':['exports'],'color':'#CCCCCC'}
+    ]
+
+varName = 'h2_fec'
+listModels = cross_plots.modelsid
+scale = 1
+xlabel = 'Methane (TWh)'
+xmax = 30
+fileName = 'h2Use.pdf'
+right = True #True if model names have to go on the right, it invers the axis
+legend = True # True if legend has to be displayed
+pos_legend = 'upper left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+onTopVarName = ''
+year = '2050'
+
+cross_plots.plotBar(listModels,varName,varList_methane_consump,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName)
+
+
 
 # Space heating supply by technology
 

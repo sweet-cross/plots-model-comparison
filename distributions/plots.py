@@ -58,8 +58,14 @@ class Plots:
         
         
         #Calculate net imports and exports
-        self.calculateNetImports()
+        self.calculateNets()
         
+        subcats = [
+            {'varName':'electricity_supply','time_resolution':'annual','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain']},
+            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain']},
+           ]
+        
+        self.checkSubcategories(subcats)
         
         self.annualData = self.allData.loc[(slice(None),slice(None),slice(None),slice(None),'annual',slice(None)),'value'].to_frame()
         
@@ -116,7 +122,6 @@ class Plots:
     def getReportedYearsByModel(self):
         years =  {}
         for m in self.modelsid:
-            m
             data_annual_m = self.allData.loc[(slice(None),m,slice(None),slice(None),'annual',slice(None)),:].reset_index(level=[5])
             years_m = data_annual_m.timestamp.unique().tolist()
             years[m]=years_m
@@ -125,47 +130,132 @@ class Plots:
     
     
     def getReportedScenariosByModel(self):
-        sce =  {}
+        sceModel =  {}
         for m in self.modelsid:
-            m
             data_annual_m = self.allData.loc[(slice(None),m,slice(None),slice(None),'annual',slice(None)),:].reset_index(level=[0])
             sce_m = data_annual_m.scenario_name.unique().tolist()
-            sce[m]=sce_m
+            sceModel[m]=sce_m
             
-        return sce
+        return sceModel
 
-
-    def calculateNetImports(self):
+                        
+    def checkSubcategories(self,subcats):
         """ 
-        Calculate net imports and exports for all the models, scenarios and timesteps
+        Calculate cat = sum(subcats)
+        """ 
+        self.allData = self.allData.sort_index()
+        
+        for v in subcats:
+            for m in self.modelsid:
+                for s in self.sceModel[m]:
+                    time = []
+                    if  v['time_resolution'] == 'annual':
+                        time = self.yearsModel[m]
+                    elif v['time_resolution'] == 'typical-day':
+                        time = [self.typicalDays['summer']['value'][m]]+[self.typicalDays['winter']['value'][m]]
+                        # Annual data
+                    for t in time:
+                        # Check if the variable exists
+                        try:
+                            totalCat = self.allData.loc[(s,m,v['varName'],v['cat'],v['time_resolution'],t),'value'] 
+                        except:
+                            totalCat = 0
+                            flag = 0
+                            # Check if the subvariables exist
+                            for subv in v['subcats']:
+                                try:
+                                    totalCat = totalCat + self.allData.loc[(s,m,v['varName'],subv,v['time_resolution'],t),'value'] 
+                                    flag +=1
+                                except:
+                                    totalCat = totalCat 
+                            
+                            if flag>0:
+                                self.allData.loc[(s,m,v['varName'],v['cat'],'annual',t),'value']  = totalCat
+                                self.allData = self.allData.sort_index()
+                            
+                            
+    def calculateNets(self):
+        """ 
+        Calculate net imports, exports and storage for all the models, scenarios and timesteps
         """ 
         
         self.allData = self.allData.sort_index()
-        
+        variables = [
+            {'varSupply': 'electricity_supply','tech':['imports'],
+             'varDemand': 'electricity_consumption','use':['exports'], 
+             'netPositive':'net_imports',
+             'netNegative':'net_exports',
+             'time_resolution':['annual','typical_day']},
+            {'varSupply': 'electricity_supply','tech':['battery_out','phs_out'],
+             'varDemand': 'electricity_consumption','use':['battery_in','phs_in'],
+             'netPositive':'net_storage_out',
+             'netNegative':'net_storage_in',
+             'time_resolution':['annual','typical_day']}
+        ]
+        for m in self.modelsid:
+            for s in self.sceModel[m]:
+                for v in variables:
+                    for resolution in v['time_resolution']:
+                        time = []
+                        sufix = ''
+                        if  resolution == 'annual':
+                            time = self.yearsModel[m]
+                        elif resolution == 'typical-day':
+                            time = [self.typicalDays['summer']['value'][m]]+[self.typicalDays['winter']['value'][m]]
+                            sufix = '_typical_day'
+                        
+                        for t in time:
+                            net = 0
+                            for subv in v['tech']:
+                                net = net + self.allData.loc[(s,m,v['varSupply']+sufix,subv,resolution,t),'value'] 
+                            for subv in v['use']:
+                                net = net - self.allData.loc[(s,m,v['varDemand']+sufix,subv,resolution,t),'value']
+                            if net>0:
+                                self.allData.loc[(s,m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = net
+                                self.allData = self.allData.sort_index()
+                                self.allData.loc[(s,m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = 0
+                                self.allData = self.allData.sort_index()
+                            else:
+                                self.allData.loc[(s,m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = 0
+                                self.allData = self.allData.sort_index()
+                                self.allData.loc[(s,m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = -1*net
+                                self.allData = self.allData.sort_index()
+                               
+                   
+    def calculateTotalSupply(self,varList_supply,varList_consumption):
+        """ 
+        Calculate Net supply = sum(varList_supply)-sum(varList_consumption)
+        """ 
+        self.annualData = self.annualData.sort_index()
         for m in self.modelsid:
             for s in self.sceModel[m]:
                 # Annual data
                 for y in self.yearsModel[m]:
+                    total = np.nan
+                    for v in varList_supply:
+                        subv = v['data']
+                        for t in subv:
+                            data_t = self.annualData.loc[(s,m,'electricity_supply',t,'annual',y),'value']  
+                            if not np.isnan(data_t):
+                                if np.isnan(total):
+                                    total = data_t
+                                else:
+                                    total = total + data_t
                     
-                    net = self.allData.loc[(s,m,'electricity_supply','imports','annual',y),'value'] -  self.allData.loc[(s,m,'electricity_consumption','exports','annual',y),'value']
-                    if net>0:
-                        self.allData.loc[(s,m,'electricity_supply','net_imports','annual',y),'value'] = net
-                    else:
-                        self.allData.loc[(s,m,'electricity_consumption','net_exports','annual',y),'value'] = -1*net
-                       
-                    self.allData = self.allData.sort_index()
-                # Hourly data 
-                for h in [self.typicalDays['summer']['value'][m]]+[self.typicalDays['winter']['value'][m]]:
-                    try:
-                        net = self.allData.loc[(s,m,'electricity_supply_typical_day','imports','typical-day',h),'value'] -  self.allData.loc[(s,m,'electricity_supply_typical_day','exports','typical-day',h),'value']
-                        if net>0:
-                            self.allData.loc[(s,m,'electricity_supply_typical_day','net_imports','typical-day',h),'value'] = net
-                        else:
-                            self.allData.loc[(s,m,'electricity_consumption_typical_day','net_exports','typical-day',h),'value'] = -1*net
-                        self.allData = self.allData.sort_index()
-                        
-                    except:
-                        net = 0
+                    for v in varList_consumption:
+                        try:
+                            data_v = self.annualData.loc[(s,m,'electricity_consumption',v,'annual',y),'value']  
+                        except:
+                            data_v = np.nan
+                            
+                        if not np.isnan(data_v):
+                            if np.isnan(total):
+                                total = -data_v
+                            else:
+                                total = total - data_v
+                    
+                    self.annualData.loc[(s,m,'electricity_supply','total','annual',y),'value']   = total
+                    self.annualData = self.annualData.sort_index()    
     
     def extractPositiveNegative(self,positive_variables,negative_variables):
         
@@ -204,34 +294,7 @@ class Plots:
             
                             
     
-    def recalculateTotalSupply(self,varList_supply):
-        """ 
-        Calculate Net supply = sum(varList_supply)-Electricity-consumption|Exports-Electricity-consumption|Battery-in-Electricity-consumption|PHS-in
-        """ 
-        self.annualData = self.annualData.sort_index()
-        for m in self.modelsid:
-            for s in self.sceModel[m]:
-                # Annual data
-                for y in self.yearsModel[m]:
-                    total = np.nan
-                    for v in varList_supply:
-                        subv = v['data']
-                        for t in subv:
-                            data_t = self.annualData.loc[(s,m,'electricity_supply',t,'annual',y),'value']  
-                            if not np.isnan(data_t):
-                                if np.isnan(total):
-                                    total = data_t
-                                else:
-                                    total = total + data_t
-        
-                    exports = self.annualData.loc[(s,m,'electricity_consumption','exports','annual',y),'value'] if np.isnan(self.annualData.loc[(s,m,'electricity_consumption','exports','annual',y),'value'])==False else 0
-                    battery_in = self.annualData.loc[(s,m,'electricity_consumption','battery_in','annual',y),'value'] if np.isnan(self.annualData.loc[(s,m,'electricity_consumption','battery_in','annual',y),'value'])==False else 0
-                    phs_in = self.annualData.loc[(s,m,'electricity_consumption','phs_in','annual',y),'value'] if np.isnan(self.annualData.loc[(s,m,'electricity_consumption','phs_in','annual',y),'value'])==False else 0
-                    self.annualData.loc[(s,m,'electricity_supply','total','annual',y),'value']   = total-exports-battery_in-phs_in
-                    self.annualData = self.annualData.sort_index()
-                   
-
-                  
+              
 
     def plotScatter(self,listModelsid, varName,use_technology_fuel,year,sceColors,scale,xlabel,xmax,fileName):
         """ 
@@ -396,7 +459,7 @@ class Plots:
             ax.yaxis.set_major_locator(ticker.FixedLocator(ypos_cols))
             plt.yticks(ypos_cols, listModels)
             plt.xlim(0,xmax)
-            if legend=='True':
+            if legend==True:
                 plt.legend(names, loc=pos_legend, ncol = 1)
 
 
@@ -434,16 +497,18 @@ class Plots:
         plt.show()
         
          
-    def plotTechDist(self,listModels,varList,order,ylabel,ymax,fileName):
+    def plotTechDist(self,listModelsid,varName,varList,year,order,ylabel,ymax,fileName):
         """ 
         Plots the distribution by technology
         Parameters:
         ----------
-        listModels: list of models to plot
+        listModelsid: list of models id to plot
+        varName: str, variable name in the data template
         varList: list of dictionaries with 
             name: name of the technology or group of technologies,
             data: list with the technologies that correspond to this category
             color: color to use for this category
+        year: year for the plot
         order: list with the technology order 
         ylabel: str, label for y-axis
         ymax: int, maximum level y-axis
@@ -451,15 +516,19 @@ class Plots:
         """
     
         variables =[v['name'] for v in varList]
-        dataNew =pd.DataFrame (index=pd.MultiIndex.from_product([self.sce,variables] ,names=('scenario','index')), columns=self.annualData.columns)
+        dataNew =pd.DataFrame (index=pd.MultiIndex.from_product([self.sce,variables] ,names=('scenario','index')), columns=listModelsid)
 
         for v in varList:
             var =  v['name']
             for s in self.sce:
-                for m in listModels:
-                    dataNew.loc[(s,var),m] = np. nan
+                for m in listModelsid:
+                    dataNew.loc[(s,var),m] = np.nan
                     for subv in v['data']:
-                        datasubv = self.annualData.loc[(s,subv.lower(),'2050'),m]
+                        datasubv = np.nan
+                        try:
+                            datasubv = self.annualData.loc[(s,m,varName,subv,'annual',year),'value'] 
+                        except:
+                            datasubv = np.nan
                         if not np.isnan(datasubv):
                             if not np.isnan(dataNew.loc[(s,var),m]):    
                                 dataNew.loc[(s,var),m] = dataNew.loc[(s,var),m] + datasubv
@@ -477,6 +546,9 @@ class Plots:
                 var_name="Model", 
                 value_name="value")
 
+        # Rename the models using the name instead of the modelid
+        dataNew=dataNew.replace({'Model': self.models})
+        
         # Remove  non-existent scenarios
         dataNew_unmelted = dataNew.pivot(index=['scenario','Model'], columns='index')
         dataNew_unmelted=dataNew_unmelted.loc[(dataNew_unmelted!=0).any(axis=1)]
@@ -499,8 +571,11 @@ class Plots:
         }
         
         #Get the color of the models in the list
-        colors = [ self.model_colors[self.models.index(m)] for m in listModels ]
-        
+        colors = [ self.model_colors[self.modelsid.index(m)] for m in listModelsid ]
+        #Get the names from the ids
+        listModels = [self.models[x] for x in listModelsid]
+
+
         g1 = sb.catplot(x="index", y="value",hue='Model',hue_order=listModels,palette=sb.color_palette(colors), alpha=.8, data=dataPlot, 
                          order=order);
                          #,height=3.5,aspect=1.5
