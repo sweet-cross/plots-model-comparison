@@ -510,7 +510,7 @@ class Plots:
         plt.show()
         
          
-    def plotTechDist(self,listModelsid,varName,varList,year,order,ylabel,ymax,fileName,legend):
+    def plotTechDist(self,listModelsid,varName,varList,year,order,ylabel,ymax,fileName,legend,groupSce,grouping):
         """ 
         Plots the distribution by technology
         Parameters:
@@ -530,17 +530,17 @@ class Plots:
         """
     
         variables =[v['name'] for v in varList]
-        dataNew =pd.DataFrame (index=pd.MultiIndex.from_product([self.sce,variables] ,names=('scenario','index')), columns=listModelsid)
+        dataNew =pd.DataFrame (index=pd.MultiIndex.from_product([sce,variables] ,names=('scenario','index')), columns=listModelsid)
 
         for v in varList:
             var =  v['name']
-            for s in self.sce:
+            for s in sce:
                 for m in listModelsid:
                     dataNew.loc[(s,var),m] = np.nan
                     for subv in v['data']:
                         datasubv = np.nan
                         try:
-                            datasubv = self.annualData.loc[(s,m,varName,subv,'annual',year),'value'].iloc[0]
+                            datasubv = annualData.loc[(s,m,varName,subv,'annual',year),'value'].iloc[0]
                         except:
                             datasubv = np.nan
                         if not np.isnan(datasubv):
@@ -558,7 +558,7 @@ class Plots:
                 value_name="value")
 
         # Rename the models using the name instead of the modelid
-        dataNew=dataNew.replace({'Model': self.models})
+        dataNew=dataNew.replace({'Model': models})
         
         # Remove  non-existent scenarios
         dataNew_unmelted = dataNew.pivot(index=['scenario','Model'], columns='index')
@@ -568,9 +568,33 @@ class Plots:
         dataNew_unmelted.reset_index(inplace=True)
         
         
-        dataPlot=dataNew_unmelted.melt(id_vars=["scenario", "Model"], 
+        if groupSce == True:
+            # grouping = {
+            #     'Yes': ['abroad-res-full','abroad-res-lim','domestic-res-full','domestic-res-lim'],
+            #     'No': ['abroad-nores-full','abroad-nores-lim','domestic-nores-full','domestic-nores-lim']
+            # }
+            
+            grouping = {
+                'Full': ['abroad-res-full','abroad-nores-full','domestic-res-full','domestic-nores-full'],
+                'Lim': ['abroad-res-lim','abroad-nores-lim','domestic-res-lim','domestic-nores-lim']
+            }
+            
+            # Reverse mapping
+            scenario_to_group = {scenario: group for group, scenarios in grouping.items() for scenario in scenarios}
+            
+            # Add new column
+            dataNew_unmelted['group'] = dataNew_unmelted['scenario'].map(scenario_to_group)
+
+            
+            dataPlot=dataNew_unmelted.melt(id_vars=["group","scenario", "Model"], 
                     var_name="index", 
                     value_name="value")
+        else:
+            dataPlot=dataNew_unmelted.melt(id_vars=["scenario", "Model"], 
+                    var_name="index", 
+                    value_name="value")
+
+            
 
         sb.set_style("whitegrid")
 
@@ -582,11 +606,17 @@ class Plots:
         }
         
         #Get the color of the models in the list
-        colors = [ self.model_colors[self.  modelsid.index(m)] for m in listModelsid ]
+        colors = [ model_colors[modelsid.index(m)] for m in listModelsid ]
         #Get the names from the ids
-        listModels = [self.models[x] for x in listModelsid]
+        listModels = [models[x] for x in listModelsid]
 
-        g1 = sb.catplot(x="index", y="value",hue='Model',hue_order=listModels,palette=sb.color_palette(colors), alpha=.8, data=dataPlot, 
+        
+        if groupSce == True:
+            g1 = sb.catplot(x="index", y="value", col="group",hue='Model',hue_order=listModels,palette=sb.color_palette(colors), alpha=.8, data=dataPlot, 
+                             order=order);
+                             #,height=3.5,aspect=1.5
+        else:
+            g1 = sb.catplot(x="index", y="value",hue='Model',hue_order=listModels,palette=sb.color_palette(colors), alpha=.8, data=dataPlot, 
                              order=order);
         if legend==False:
             g1._legend.remove()
@@ -594,15 +624,21 @@ class Plots:
         g1.set(xlabel='', ylabel=ylabel )
         g1.set(ylim=(0, ymax))
         
-        g2 = sb.boxplot(x="index", y="value", data=dataPlot, order=order,
+        
+        if groupSce == True:
+            g2 = sb.catplot(x="group", y="value", col="index", data=dataPlot, kind="box",height=3.5,aspect=0.25)
+        else:
+            g2 = sb.boxplot(x="index", y="value", data=dataPlot, order=order,
                         showfliers=False,
                         linewidth=0.75,
                         **PROPS);
         g2.set(xlabel='', ylabel=ylabel )
-        g2.set(ylim=(0, ymax))
-        
-        plt.savefig(self.folder_plots+'/'+fileName,bbox_inches='tight')
-        plt.savefig(self.folder_plots+'/'+fileName+'.png',bbox_inches='tight', dpi=300)
+        g2.set(ylim=(0, 20))
+        g2.set_titles("{col_name}")
+
+        #plt.savefig(self.folder_plots+'/'+fileName,bbox_inches='tight')
+        #plt.savefig(self.folder_plots+'/'+fileName+'.png',bbox_inches='tight', dpi=300)
+        plt.savefig(folder_plots+'/'+'effectEV.png',bbox_inches='tight', dpi=300)
         plt.show()
     
         
