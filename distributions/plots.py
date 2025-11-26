@@ -17,7 +17,7 @@ from datetime import datetime
 
 class Plots:
 
-    def __init__(self, fileResults,model_list,scenarios,folder_results,folder_plots):
+    def __init__(self, fileResults,model_list,scenarios,folder_results,folder_plots,subcats):
 
         """ 
         Generic class to upload the data and produce the plots for the model comparison
@@ -27,6 +27,9 @@ class Plots:
             model_list: list of dictionary with model names and the color to use for each model
             scenarios: list with the scenario names
             folder_results: path to folder_results
+            folder_plots: path to folder_plots
+            subcats: categories to aggregate
+            
 
         """
         
@@ -59,19 +62,6 @@ class Plots:
         
         #Calculate net imports and exports
         self.calculateNets()
-        
-        subcats = [
-            {'varName':'electricity_supply','time_resolution':'annual','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain']},
-            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain']},
-            {'varName':'electricity_supply','time_resolution':'annual','cat':'wind','subcats':['wind_on','wind_off']},
-            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'wind','subcats':['wind_on','wind_off']},
-            {'varName':'space_heat_useful_energy_supply','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-            {'varName':'district_heat_useful_energy_supply','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-            {'varName':'process_heat_useful_energy_production','time_resolution':'annual','cat':'heat_pump','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-            {'varName':'space_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-            {'varName':'district_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-            {'varName':'process_heat_useful_energy_production','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-           ]
         
         self.checkSubcategories(subcats)
         
@@ -383,7 +373,7 @@ class Plots:
         plt.show()
         
 
-    def plotBar(self,listModelsid,varName ,varList,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName):
+    def plotBar(self,listModelsid,varName ,varList,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height):
         """ 
         Bar plot by model and scenario. 
         Parameters:
@@ -403,6 +393,8 @@ class Plots:
         legend: True if legend has to be displayed
         pos_legend: str: 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
         onTopVarName: str: name of variable to plot on top of the bar plot, '' if none
+        width: width of the plot in cm
+        height: height of the plot in cm
         """
 
         numSce= len(self.sce)
@@ -445,7 +437,8 @@ class Plots:
         # figure and axis
 
         sb.set_style("white")
-        fig, (ax)= plt.subplots(1, figsize=(5, 6))
+        cm = 1/2.54  # centimeters in inches
+        fig, (ax)= plt.subplots(1, figsize=(width*cm, height*cm))
 
 
         # Initialize the horizontal-offset for the stacked bar chart.
