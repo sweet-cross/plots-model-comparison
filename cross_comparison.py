@@ -36,7 +36,7 @@ fileResults = "results_20251125"
 sce = ['abroad-res-full','abroad-res-lim','domestic-res-full','domestic-res-lim','abroad-nores-full','abroad-nores-lim','domestic-nores-full','domestic-nores-lim',]
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
 folder_results='results'
-folder_plots='plots'
+folder_plots='presentation_latex/figures_2025_10_25'
 
 
 # For the following variables we do a pre-processing:
@@ -462,10 +462,10 @@ varName = 'space_heat_useful_energy_supply'
 listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Space heating (TWh)'
-xmax = 120
+xmax = 60
 fileName = 'spaceHeating.pdf'
 right = False #True if model names have to go on the right, it invers the axis
-legend = True # True if legend has to be displayed
+legend = False # True if legend has to be displayed
 pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = ''
 year = '2050'
@@ -520,7 +520,7 @@ xlabel = 'Process heat (TWh)'
 xmax = 40
 fileName = 'processHeating.pdf'
 right = False #True if model names have to go on the right, it invers the axis
-legend = True # True if legend has to be displayed
+legend = False # True if legend has to be displayed
 pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = ''
 year = '2050'

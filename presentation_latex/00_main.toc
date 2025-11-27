@@ -1,0 +1,4 @@
+\beamer@sectionintoc {1}{Electricity supply and demand, annual and hourly}{3}{0}{1}
+\beamer@sectionintoc {2}{Transport}{7}{0}{2}
+\beamer@sectionintoc {3}{Space heating and process heat supply}{11}{0}{3}
+\beamer@sectionintoc {4}{Hydrogen, methane and liquids supply and demand}{14}{0}{4}

@@ -1,0 +1,47 @@
+\frame{\frametitle{Switzerland}
+\framesubtitle<1>{Total emissions}
+
+\only<1>{
+\begin{center}
+\includegraphics[width=7cm]{emiWorld.eps}
+\end{center}
+}
+
+\only<2>{
+\begin{itemize}
+\item Emissions per capita
+\begin{center}
+\includegraphics[width=7cm]{emipcWorld.eps}
+\end{center}
+
+\item Example
+
+\end{itemize}
+}
+
+%\uncover<2>{
+%\begin{block}
+%\begin{itemize}
+%\footnotesize
+%\item Emissions per capita
+%\item Example
+%\end{itemize}
+%\end{block}
+%}
+}
+
+
+\frame{\frametitle{JASM}
+
+\begin{itemize}
+
+\item Soft-linking sectoral models + bottom-up energy model 
+
+\item How to reduce energy-related CO2  emissions in Switzerland?
+
+\includegraphics[width=8cm]{emissionsCH.eps}
+
+\end{itemize}
+
+}
+
