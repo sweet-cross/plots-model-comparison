@@ -3,12 +3,11 @@
 This is the library to plot the results for the CROSS model comparison 
 
 ## Files and folders
-- distributions/plots.py contains all the functions to upload the data and plot
-- cross_comparison.py is the python code that interacts with distributions/plots.py and creates the plots
-- results/ is the folder where the results are uploaded
-- plots/ is the folder where the plots are saved
-- CROSS-comparison-plots-instructions.pdf describes in the detailed the use of the code and the required data format
-
+- cross_tools/plots.py contains all the functions to read the data and plot it
+- cross_comparison.py is the python code that interacts with cross_tools/plots.py and creates the plots
+- cross_comparison.ipynb is the python notebook that shows how to use cross_tools/plots.py to create the plots
+- results/ is the folder where the results that are uploaded
+- presentation_latex/ is a folder with a template in latex to generate the plots
 
 # Dependencies
 
@@ -38,7 +37,7 @@ This is the library to plot the results for the CROSS model comparison
 
 ## Copyright and license
 
-&copy; 2024, ETH Zurich, Energy Science Center, Adriana Marcucci
+&copy; 2025, ETH Zurich, Energy Science Center, Adriana Marcucci
 
 This code was developed by the SWEET CoSI consortium, which is sponsored by the Swiss Federal Office of Energy’s SWEET programme.
 

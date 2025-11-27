@@ -12,12 +12,21 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import seaborn as sb
 from datetime import datetime
+import inspect
+import os
 
+
+import warnings
+warnings.filterwarnings(
+    "ignore",
+    "indexing past lexsort depth may impact performance.",
+    category=pd.errors.PerformanceWarning,
+)
 
 
 class Plots:
 
-    def __init__(self, fileResults,model_list,scenarios,folder_results,folder_plots,subcats):
+    def __init__(self, fileResults,model_list,scenarios,sceColors,folder_plots):
 
         """ 
         Generic class to upload the data and produce the plots for the model comparison
@@ -26,11 +35,8 @@ class Plots:
             fileResults: Name of the file with the results
             model_list: list of dictionary with model names and the color to use for each model
             scenarios: list with the scenario names
-            folder_results: path to folder_results
+            sceColors: list with the color for the scenarios
             folder_plots: path to folder_plots
-            subcats: categories to aggregate
-            
-
         """
         
 
@@ -49,23 +55,74 @@ class Plots:
                                     'value': {f['id']: f['winterDay'] for f in model_list}
                                 }
         
-        self.folder_results = folder_results
+        os.makedirs(folder_plots, exist_ok=True)
         self.folder_plots = folder_plots
         
         # Read the file with the data
-        self.allData = self.readData(fileResults) 
+        self.allData = self.__readData(fileResults) 
         
         self.yearsModel = self.getReportedYearsByModel()
         self.sce = scenarios
+        self.sceColors = sceColors
         self.sceModel = self.getReportedScenariosByModel()
         
         
         #Calculate net imports and exports
-        self.calculateNets()
+        self.__calculateNets()
         
-        self.checkSubcategories(subcats)
+        # For the following variables we do a pre-processing:
+        # We make sure that if the var 'cat' wasn't reported, we calculate it from the subcategories
+        # The variable '(varName,cat)' will be created and can be used later in the code
+        # This guarantees that we can compare even if models report different levels of aggregation 
+
+        subcats = [
+            {'varName':'electricity_supply','time_resolution':'annual','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain','spv_agriculture']},
+            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain','spv_agriculture']},
+            {'varName':'electricity_supply','time_resolution':'annual','cat':'wind','subcats':['wind_on','wind_off']},
+            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'wind','subcats':['wind_on','wind_off']},
+            {'varName':'electricity_supply','time_resolution':'annual','cat':'methane_pp','subcats':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs"]},
+            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'methane_pp','subcats':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs"]},
+            {'varName':'electricity_supply','time_resolution':'annual','cat':'liquids_pp','subcats':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs']},
+            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'liquids_pp','subcats':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs']},
+            {'varName':'electricity_supply','time_resolution':'annual','cat':'waste_pp','subcats':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs']},
+            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'waste_pp','subcats':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs']},
+            {'varName':'electricity_supply','time_resolution':'annual','cat':'wood_pp','subcats':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs']},
+            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'wood_pp','subcats':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs']},
+            {'varName':'electricity_supply','time_resolution':'annual','cat':'hydrogen_pp','subcats':['hydrogen_chp','hydrogen_cc']},
+            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'hydrogen_pp','subcats':['hydrogen_chp','hydrogen_cc']},
+            {'varName':'space_heat_useful_energy_supply','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
+            {'varName':'district_heat_useful_energy_supply','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
+            {'varName':'process_heat_useful_energy_production','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
+            {'varName':'space_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
+            {'varName':'district_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
+            {'varName':'process_heat_useful_energy_production','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
+           ]
+
+
+        self.__checkSubcategories(subcats)
         
         self.annualData = self.allData.loc[(slice(None),slice(None),slice(None),slice(None),'annual',slice(None)),'value'].to_frame()
+        
+        varList_supply_net = ['hydro_dam','hydro_ror','nuclear','spv','wind','geothermal_pp',"methane_pp",'fuel_cell_methane',
+                          'hydrogen_pp','fuel_cell_h2','liquids_pp','waste_pp','wood_pp','net_storage_out','net_imports']
+        
+        self.__calculateTotalSupply(varList_supply_net)
+        
+        # ---- Print info for the user ----
+        print("=== Plots object initialized ===\n")
+        
+        print("Attributes:")
+        for name, value in self.__dict__.items():
+            print(f"  {name}: {type(value).__name__}")
+        
+        print("\nMethods:")
+        for name, func in inspect.getmembers(self, predicate=inspect.ismethod):
+            if not name.startswith("_"):   # skip internal methods
+                print(f"  {name}()")
+        print("\n================================\n")
+        
+        
+        
         
         # # Hourly data
         # self.seasons = ["summer","winter"]  
@@ -82,9 +139,9 @@ class Plots:
        
     #  Reads the annual data from the csv file from CROSSHub
     #  returns a dataFrame with all the data
-    def readData(self,fileResults):
+    def __readData(self,fileResults):
         
-        data = pd.read_csv(self.folder_results+'/'+fileResults+'.csv', index_col=[],header=[0])
+        data = pd.read_csv(fileResults+'.csv', index_col=[],header=[0])
         
         #  remove columns that are not used 
         data.drop(columns=['scenario_group','scenario_variant','uploaded_by','uploaded_at','country'],inplace=True)
@@ -93,7 +150,7 @@ class Plots:
         data['value']=pd.to_numeric(data['value'])
         
         # Correct the unit
-        data['value']=data.apply(lambda x: x.value * self.correctUnit(x.time_resolution,x.unit),axis=1)
+        data['value']=data.apply(lambda x: x.value * self.__correctUnit(x.time_resolution,x.unit),axis=1)
         data = data.drop(['unit'], axis=1)
         
         data = data.set_index(['scenario_name','model','variable','use_technology_fuel', 'time_resolution','timestamp'])
@@ -103,7 +160,7 @@ class Plots:
         data = data.fillna(0)
         return data
     
-    def correctUnit(self,timeResolution,unit):
+    def __correctUnit(self,timeResolution,unit):
         annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000,'gw':1,'mw':1/1000}
         hourly_factors = {'gw':1,'gwh/h':1, 'mw':1/1000,'mwh/h':1/1000}
         if timeResolution == 'annual':
@@ -137,11 +194,10 @@ class Plots:
         return sceModel
 
                         
-    def checkSubcategories(self,subcats):
+    def __checkSubcategories(self,subcats):
         """ 
         Calculate cat = sum(subcats)
         """ 
-        self.allData = self.allData.sort_index()
         
         for v in subcats:
             for m in self.modelsid:
@@ -169,15 +225,13 @@ class Plots:
                             
                             if flag>0:
                                 self.allData.loc[(s,m,v['varName'],v['cat'],'annual',t),'value']  = totalCat
-                                self.allData = self.allData.sort_index()
+                                
                             
-                            
-    def calculateNets(self):
+    def __calculateNets(self):
         """ 
         Calculate net imports, exports and storage for all the models, scenarios and timesteps
         """ 
         
-        self.allData = self.allData.sort_index()
         variables = [
             {'varSupply': 'electricity_supply','tech':['imports'],
              'varDemand': 'electricity_consumption','use':['exports'], 
@@ -210,55 +264,38 @@ class Plots:
                                 net = net - self.allData.loc[(s,m,v['varDemand']+sufix,subv,resolution,t),'value'].iloc[0]
                             if net>0:
                                 self.allData.loc[(s,m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = net
-                                self.allData = self.allData.sort_index()
                                 self.allData.loc[(s,m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = 0
-                                self.allData = self.allData.sort_index()
+                                
                             else:
                                 self.allData.loc[(s,m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = 0
-                                self.allData = self.allData.sort_index()
                                 self.allData.loc[(s,m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = -1*net
-                                self.allData = self.allData.sort_index()
-                               
+                                
                    
-    def calculateTotalSupply(self,varList_supply,varList_consumption):
+    def __calculateTotalSupply(self,varList_supply):
         """ 
-        Calculate Net supply = sum(varList_supply)-sum(varList_consumption)
+        Calculate Net supply = sum(varList_supply)
         """ 
-        self.annualData = self.annualData.sort_index()
         for m in self.modelsid:
             for s in self.sceModel[m]:
                 # Annual data
                 for y in self.yearsModel[m]:
                     total = np.nan
                     for v in varList_supply:
-                        subv = v['data']
-                        for t in subv:
-                            try:
-                                data_t = self.annualData.loc[(s,m,'electricity_supply',t,'annual',y),'value'].iloc[0]
-                            except:
-                                data_t = np.nan
-                            if not np.isnan(data_t):
-                                if np.isnan(total):
-                                    total = data_t
-                                else:
-                                    total = total + data_t
-                    
-                    for v in varList_consumption:
                         try:
-                            data_v = self.annualData.loc[(s,m,'electricity_consumption',v,'annual',y),'value'].iloc[0]
+                            data_v = self.annualData.loc[(s,m,'electricity_supply',v,'annual',y),'value'].iloc[0]
                         except:
                             data_v = np.nan
                             
                         if not np.isnan(data_v):
                             if np.isnan(total):
-                                total = -data_v
+                                total = data_v
                             else:
-                                total = total - data_v
+                                total = total + data_v
                     
                     self.annualData.loc[(s,m,'electricity_supply','total','annual',y),'value']   = total
-                    self.annualData = self.annualData.sort_index()    
+                     
     
-    def extractPositiveNegative(self,positive_variables,negative_variables):
+    def __extractPositiveNegative(self,positive_variables,negative_variables):
         
         positive_labels = [d['name'] for d in positive_variables]
         negative_labels=[d['name'] for d in negative_variables]
@@ -297,7 +334,7 @@ class Plots:
     
               
 
-    def plotScatter(self,listModelsid, varName,use_technology_fuel,year,sceColors,scale,xlabel,xmax,fileName):
+    def plotScatter(self,listModelsid, varName,use_technology_fuel,year,scale,xlabel,xmax,fileName):
         """ 
         Plot scatter of variable by model and scenario. 
         A great part of the function is only to make sure the labels are in the right place
@@ -308,7 +345,6 @@ class Plots:
         varName: str, variable name in the data template
         use_technology_fuel: str, name of the use, technology or fuel
         year: year for the plot
-        sceColors: list of HEX colors to use for each scenario
         scale: numeric, if needed, plot will plot var*scale, for unit changes, for example
         xlabel: str, label for x-axis
         xmax: int, maximum level x-axis
@@ -339,7 +375,7 @@ class Plots:
                     value = self.annualData.loc[(self.sce[i],m,varName,use_technology_fuel,'annual',year),'value']/scale
                 except:
                     value = np.NaN
-                plt.scatter(value,y,c=sceColors[i])
+                plt.scatter(value,y,c=self.sceColors[i])
 
         # y axis. Minor ticks are the lines and major ticks the model names
 

@@ -3,7 +3,7 @@
 # Copyright (c) 2025, ETH Zurich, Energy Science Center, Adriana Marcucci
 # Distributed under the terms of the Apache License, Version 2.0.
 
-from distributions import plots 
+from cross_tools import plots 
 
 
 #  List of files with:
@@ -30,55 +30,40 @@ model_list =  [
           ]
 
 # Create the object that produces the plots and processes the data
-# Name of the csv file with the results
-fileResults = "results_20251125"
-# Scenario names
+# Name of the csv file with the results 
+fileResults = "results/results_20251125"
+# Scenario names and corresponding colors 
 sce = ['abroad-res-full','abroad-res-lim','domestic-res-full','domestic-res-lim','abroad-nores-full','abroad-nores-lim','domestic-nores-full','domestic-nores-lim',]
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
-folder_results='results'
-folder_plots='presentation_latex/figures_2025_10_25'
+# Folders where the plots will be created
+folder_plots='plots'
 
 
-# For the following variables we do a pre-processing:
-# We make sure that if the var 'cat' wasn't reported, we calculate it from the subcategories
-# The variable '(varName,cat)' will be created and can be used later in the code
-# This guarantees that we can compare even if models report different levels of aggregation 
-
-subcats = [
-    {'varName':'electricity_supply','time_resolution':'annual','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain','spv_agriculture']},
-    {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain','spv_agriculture']},
-    {'varName':'electricity_supply','time_resolution':'annual','cat':'wind','subcats':['wind_on','wind_off']},
-    {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'wind','subcats':['wind_on','wind_off']},
-    {'varName':'electricity_supply','time_resolution':'annual','cat':'methane_pp','subcats':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs"]},
-    {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'methane_pp','subcats':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs"]},
-    {'varName':'electricity_supply','time_resolution':'annual','cat':'liquids_pp','subcats':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs']},
-    {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'liquids_pp','subcats':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs']},
-    {'varName':'electricity_supply','time_resolution':'annual','cat':'waste_pp','subcats':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs']},
-    {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'waste_pp','subcats':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs']},
-    {'varName':'electricity_supply','time_resolution':'annual','cat':'wood_pp','subcats':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs']},
-    {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'wood_pp','subcats':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs']},
-    {'varName':'electricity_supply','time_resolution':'annual','cat':'hydrogen_pp','subcats':['hydrogen_chp','hydrogen_cc']},
-    {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'hydrogen_pp','subcats':['hydrogen_chp','hydrogen_cc']},
-    {'varName':'space_heat_useful_energy_supply','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-    {'varName':'district_heat_useful_energy_supply','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-    {'varName':'process_heat_useful_energy_production','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-    {'varName':'space_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-    {'varName':'district_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-    {'varName':'process_heat_useful_energy_production','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-   ]
-
-
-
-cross_plots = plots.Plots(fileResults,model_list,sce,folder_results,folder_plots,subcats) 
+cross_plots = plots.Plots(fileResults,model_list,sce,sceColors,folder_plots) 
 
 
 # Annual electricity supply with total imports and exports
+
+# Scatter plot with net supply
+listModels = cross_plots.modelsid #any model can be excluded, the list should include the model ids
+varName = 'electricity_supply'
+use_technology_fuel = 'total'
+scale = 1
+xlabel = 'Electricity (TWh)'
+xmax = 180
+fileName = 'elecSupply.pdf'
+year = '2050'
+
+cross_plots.plotScatter(listModels,varName ,use_technology_fuel,year,scale,xlabel,xmax,fileName)
+
+
 
 # name: name of the technology or group of technologies (valid names: https://sweet-cross.github.io/instructions-data/docs/sets/tech_generation/)
 # data: list with the technologies that correspond to this category
 # color: color to use for this category
 varList_supply = [
     {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
+    {'name':'Nuclear','data':['nuclear'],'color':'#FF007F'},
     {'name':'Solar','data':['spv'],'color':'#FAC748'},
     {'name':'Wind','data':['wind'],'color':'#F2960E'},
     {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
@@ -91,30 +76,13 @@ varList_supply = [
     {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
    ]
 
-varList_consumption =['battery_in','phs_in','exports']
-# Calculate net supply = sum(varList_supply)-sum(varList_consumption)
-# This creates (electricity_supply, total)
-cross_plots.calculateTotalSupply(varList_supply,varList_consumption)
-
-# Scatter plot with net supply
-listModels = cross_plots.modelsid #any model can be excluded, the list should include the model ids
-varName = 'electricity_supply'
-use_technology_fuel = 'total'
-scale = 1
-xlabel = 'Electricity (TWh)'
-xmax = 180
-fileName = 'elecSupply.pdf'
-year = '2050'
-
-cross_plots.plotScatter(listModels,varName ,use_technology_fuel,year,sceColors,scale,xlabel,xmax,fileName)
-
 
 # Electricity supply bar plot
 varName = 'electricity_supply'
 listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 160
+xmax = 180
 fileName = 'elecSupply_tech.pdf'
 right = False #True if model names have to go on the right
 legend = False # True if legend has to be displayed
@@ -134,6 +102,7 @@ cross_plots.plotBar(listModels,varName ,varList_supply,year,scale,xlabel,xmax,fi
 # color: color to use for this category
 varList_supply_net = [
     {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
+    {'name':'Nuclear','data':['nuclear'],'color':'#FF007F'},
     {'name':'Solar','data':['spv'],'color':'#FAC748'},
     {'name':'Wind','data':['wind'],'color':'#F2960E'},
     {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
@@ -165,10 +134,12 @@ cross_plots.plotBar(listModels,varName ,varList_supply_net,year,scale,xlabel,xma
 
 # Distribution box plot of annual electricity supply by technology
 
+
 # name: name of the technology or group of technologies (valid names: https://sweet-cross.github.io/instructions-data/docs/sets/tech_generation/)
 # data: list with the technologies that correspond to this category
 varList_supply = [
     {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
+    {'name':'Nuc.','data':['nuclear'],'color':'#FF007F'},
     {'name':'Solar','data':['spv'],'color':'#FAC748'},
     {'name':'Wind','data':['wind'],'color':'#F2960E'},
     {'name':'Geoth.','data':['geothermal_pp'],'color':'#ac79c4'},
@@ -181,7 +152,7 @@ varList_supply = [
 
 varName = 'electricity_supply'
 listModels = cross_plots.modelsid
-order = ["Hydro",'Solar','Wind','Waste','Gas','Wood','Geoth.','H2','Liquids']
+order = ["Hydro",'Solar','Wind','Nuc.','Waste','Gas','Wood','Geoth.','H2','Liquids']
 ylabel = 'Electricity (TWh)'
 ymax = 70
 fileName = 'elecDist_tech.pdf'
@@ -627,91 +598,3 @@ fileName = 'freight_road_fec_dist.pdf'
 cross_plots.plotTechDist(listModels,varName,varList_transport,year,order,ylabel,ymax,fileName,legend)
 
 
-#Get the hourly data for the variables of interest
-varList_supply_h = [
-    {'name':'Net-imports','data':['net_imports'],'color':'#CCCCCC'},
-    {'name':'Storage out','data':['net_storage_out'],'color':'#939CAC'},
-    {'name':'Solar','data':['spv'],'color':'#FAC748'},
-    {'name':'Hydro Dams','data':['hydro_dam'],'color':'#ADD8E6'},
-    {'name':'Wind','data':['wind'],'color':'#F2960E'},
-    {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
-    {'name':'Thermal','data':['methane_pp','fuel_cell_methane','hydrogen_pp','fuel_cell_h2','waste_pp','wood_pp','liquids_pp'],'color':'#b82222'},
-    {'name':'Hydro RoR','data':['hydro_ror'],'color':'#0377CA'},
-    ]
-
-
-varList_use_h = [
-    {'name':'Net-exports','data':['net_exports'],'color':'#CCCCCC'},
-    {'name':'Storage in','data':['net_storage_in'],'color':'#939CAC'},
-    {'name':'EVs','data':['road_public','road_private','truck','ldv'],'color':'#09c5c9'},
-    {'name':'Heat pumps','data':['space_heating_heat_pump','process_heat_heat_pump'],'color':'#F2960E'},
-    {'name':'Heaters','data':['space_heating_heater_elec','process_heat_heater_elec','space_heating_boiler_electrode','process_heat_boiler_electrode'],'color':'#CF4832'},
-    {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
-    {'name':'Others','data':['power_to_liquid','dac','data_centers'],'color':'#9751CB'},
-    {'name':'Trains','data':['passenger_rail','freight_rail'],'color':'#000000'},
-    {'name':'Base','data':['elec_appliances'],'color':'#097F6D'},
-    {'name':'Losses','data':['grid_losses','storage_losses'],'color':'#8B5A2B'}
-#    {'name':'Total','data':['Electricity-consumption|Total demand'],'color':'#8E8900'}
-    ]
-
-     
-
-
-cross_plots.extractPositiveNegative(varList_supply_h,varList_use_h)
-
-#Plot stacked hourly profiles
-listModels = cross_plots.models
-positive_variables = varList_supply_h
-negative_variables = varList_use_h
-ylabel_pos = "Electricity supply (GW)"
-ylabel_neg = "Electricity use (GW)"
-ymax = 30
-legend = False
-fileName = 'hourlyElec'
-
-season = "summer"
-cross_plots.plotHourlyStack(listModels,positive_variables,negative_variables,season,ylabel_pos,ylabel_neg,ymax,legend,fileName)
-
-season = "winter"
-cross_plots.plotHourlyStack(listModels,positive_variables,negative_variables,season,ylabel_pos,ylabel_neg,ymax,legend,fileName)
-
-#Plot hourly profiles by technology
-listModels = cross_plots.models
-
-ncols = 3
-scenario = "abroad-together"
-season = "summer"
-
-varList_elec_supply_dist = ['Net-imports','Solar','Wind','Hydro Dams','Hydro RoR','Storage out','Thermal']
-ymax = 27
-ylabel = "Electricity use (GWh/h)"
-fileName = "hourProfileTech_"+season+"_"+scenario+".pdf"
-cross_plots.plotHourProfileTech(listModels,scenario,varList_elec_supply_dist,season,ylabel,ymax,ncols,fileName)
-
-
-varList_elec_use_dist = ['Net-exports','Electrolysis','Storage in','EVs','Heat pumps','Heaters','Base']
-ymax = 15
-ylabel = "Electricity use (GWh/h)"
-fileName = "hourProfileSupply_"+season+"_"+scenario+".pdf"
-cross_plots.plotHourProfileTech(listModels,scenario,varList_elec_use_dist,season,ylabel,ymax,ncols,fileName)
-
-
-#Plot hourly profiles by technology
-listModels = cross_plots.models
-
-ncols = 3
-scenario = "abroad-together"
-season = "summer"
-
-varList_elec_supply_dist = ['Net-imports','Solar','Wind','Hydro Dams','Hydro RoR','Storage out','Thermal']
-ymax = 27
-ylabel = "Electricity use (GWh/h)"
-fileName = "hourProfileTech_"+season+"_"+scenario+".pdf"
-cross_plots.plotHourProfileTech(listModels,scenario,varList_elec_supply_dist,season,ylabel,ymax,ncols,fileName)
-
-
-varList_elec_use_dist = ['Net-exports','Electrolysis','Storage in','EVs','Heat pumps','Heaters','Base']
-ymax = 15
-ylabel = "Electricity use (GWh/h)"
-fileName = "hourProfileSupply_"+season+"_"+scenario+".pdf"
-cross_plots.plotHourProfileTech(listModels,scenario,varList_elec_use_dist,season,ylabel,ymax,ncols,fileName)
