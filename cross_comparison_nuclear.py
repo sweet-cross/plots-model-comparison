@@ -31,7 +31,7 @@ model_list =  [
 
 # Create the object that produces the plots and processes the data
 # Name of the csv file with the results 
-fileResults = "results/nuclear_results_20251201_2050"
+fileResults = "results/nuclear_results_20251201_2050_sesfixed"
 # Scenario names and corresponding colors 
 sce = ['abroad-resnuc-high','abroad-resnuc-medium','abroad-resnuc-low','abroad-resnuc-phaseout','abroad-res-high','abroad-res-medium','abroad-res-low','abroad-res-phaseout','abroad-nores-high','abroad-nores-medium','abroad-nores-low','abroad-nores-phaseout']
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E','#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']

@@ -199,7 +199,7 @@ class Plots:
         Calculate cat = sum(subcats)
         """ 
         
-        for v in subcats:
+        for v in self.subcats:
             for m in self.modelsid:
                 for s in self.sceModel[m]:
                     time = []
@@ -211,14 +211,14 @@ class Plots:
                     for t in time:
                         # Check if the variable exists
                         try:
-                            totalCat = self.allData.loc[(s,m,v['varName'],v['cat'],v['time_resolution'],t),'value'].iloc[0]
+                            totalCat = self.allData.loc[(s,m,v['varName'],v['cat'],v['time_resolution'],t),'value']
                         except:
                             totalCat = 0
                             flag = 0
                             # Check if the subvariables exist
                             for subv in v['subcats']:
                                 try:
-                                    totalCat = totalCat + self.allData.loc[(s,m,v['varName'],subv,v['time_resolution'],t),'value'].iloc[0]
+                                    totalCat = totalCat + self.allData.loc[(s,m,v['varName'],subv,v['time_resolution'],t),'value']
                                     flag +=1
                                 except:
                                     totalCat = totalCat 
@@ -290,7 +290,7 @@ class Plots:
                     total = np.nan
                     for v in varList_supply:
                         try:
-                            data_v = self.annualData.loc[(s,m,'electricity_supply',v,'annual',y),'value'].iloc[0]
+                            data_v = self.annualData.loc[(s,m,'electricity_supply',v,'annual',y),'value']
                         except:
                             data_v = np.nan
                             
@@ -458,7 +458,7 @@ class Plots:
                 for i in np.arange(numSce):
                     for subv in v['data']:
                         try:
-                            datasubv = self.annualData.loc[(self.sce[i],m,varName,subv,'annual',year),'value'].iloc[0] 
+                            datasubv = self.annualData.loc[(self.sce[i],m,varName,subv,'annual',year),'value']
                         except KeyError:
                             datasubv = 0
                         if not np.isnan(datasubv):
@@ -577,7 +577,7 @@ class Plots:
                     for subv in v['data']:
                         datasubv = np.nan
                         try:
-                            datasubv = self.annualData.loc[(s,m,varName,subv,'annual',year),'value'].iloc[0]
+                            datasubv = self.annualData.loc[(s,m,varName,subv,'annual',year),'value']
                         except:
                             datasubv = np.nan
                         if not np.isnan(datasubv):
