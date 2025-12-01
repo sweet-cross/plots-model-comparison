@@ -382,7 +382,7 @@ class Plots:
                 try:
                     value = self.annualData.loc[(self.sce[i],m,varName,use_technology_fuel,'annual',year),'value']/scale
                 except:
-                    value = np.NaN
+                    value = np.nan
                 plt.scatter(value,y,c=self.sceColors[i])
 
         # y axis. Minor ticks are the lines and major ticks the model names
