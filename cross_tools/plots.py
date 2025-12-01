@@ -11,7 +11,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import seaborn as sb
-from datetime import datetime
+from datetime import datetime, timedelta
 import inspect
 import os
 
@@ -237,12 +237,15 @@ class Plots:
              'varDemand': 'electricity_consumption','use':['exports'], 
              'netPositive':'net_imports',
              'netNegative':'net_exports',
-             'time_resolution':['annual','typical_day']},
+             'time_resolution':['annual']},
+            #'time_resolution':['annual','typical-day']}, Since GF doesnt submit typical days, we dont do it for now
             {'varSupply': 'electricity_supply','tech':['battery_out','phs_out'],
              'varDemand': 'electricity_consumption','use':['battery_in','phs_in'],
              'netPositive':'net_storage_out',
              'netNegative':'net_storage_in',
-             'time_resolution':['annual','typical_day']}
+             'time_resolution':['annual']},
+            #'time_resolution':['annual','typical-day']}, Since GF doesnt submit typical days, we dont do it for now
+            
         ]
         for m in self.modelsid:
             for s in self.sceModel[m]:
@@ -253,15 +256,20 @@ class Plots:
                         if  resolution == 'annual':
                             time = self.yearsModel[m]
                         elif resolution == 'typical-day':
-                            time = [self.typicalDays['summer']['value'][m]]+[self.typicalDays['winter']['value'][m]]
+                            
+                            timestamps_summer = [datetime.strptime(self.typicalDays['summer']['value'][m], "%d.%m.%Y") + timedelta(hours=i) for i in range(24)]
+                            timestamps_winter = [datetime.strptime(self.typicalDays['winter']['value'][m], "%d.%m.%Y") + timedelta(hours=i) for i in range(24)]
+                            
+                            
+                            time = [dt.strftime("%d.%m.%Y %H:%M") for dt in timestamps_summer]+[dt.strftime("%d.%m.%Y %H:%M") for dt in timestamps_winter]
                             sufix = '_typical_day'
                         
                         for t in time:
                             net = 0
                             for subv in v['tech']:
-                                net = net + self.allData.loc[(s,m,v['varSupply']+sufix,subv,resolution,t),'value'].iloc[0]
+                                net = net + self.allData.loc[(s,m,v['varSupply']+sufix,subv,resolution,t),'value']
                             for subv in v['use']:
-                                net = net - self.allData.loc[(s,m,v['varDemand']+sufix,subv,resolution,t),'value'].iloc[0]
+                                net = net - self.allData.loc[(s,m,v['varDemand']+sufix,subv,resolution,t),'value']
                             if net>0:
                                 self.allData.loc[(s,m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = net
                                 self.allData.loc[(s,m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = 0
