@@ -85,7 +85,7 @@ xlabel = 'Electricity (TWh)'
 xmax = 180
 fileName = 'elecSupply_tech.pdf'
 right = False #True if model names have to go on the right
-legend = False # True if legend has to be displayed
+legend = True # True if legend has to be displayed
 pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = '' # name of variable to plot on top of the bar plot, '' if none, 'total': plots the total
 year = '2050'
@@ -174,6 +174,7 @@ varList_use = [
     {'name':'Process heat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
     {'name':'Power to liquids','data':['power_to_liquid'],'color':'#4B4EFC'},
     {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
+    {'name': 'Data centers', 'data': ['data_centers'], 'color': '#4A90E2'},
     {'name':'CCS','data':['dac'],'color':'#9751CB'},
     {'name':'Storage','data':['battery_in','phs_in'],'color':'#939CAC'},
     {'name':'Exports','data':['exports'],'color':'#CCCCCC'},
@@ -207,6 +208,7 @@ varList_use_net = [
     {'name':'Process heat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
     {'name':'Power to liquids','data':['power_to_liquid'],'color':'#4B4EFC'},
     {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
+    {'name': 'Data centers', 'data': ['data_centers'], 'color': '#4A90E2'},
     {'name':'Others','data':['dac','data_centers'],'color':'#9751CB'},
     {'name':'Storage','data':['net_storage_in'],'color':'#939CAC'},
     {'name':'Net-exports','data':['net_exports'],'color':'#CCCCCC'},
