@@ -199,7 +199,7 @@ class Plots:
         Calculate cat = sum(subcats)
         """ 
         
-        for v in self.subcats:
+        for v in subcats:
             for m in self.modelsid:
                 for s in self.sceModel[m]:
                     time = []
