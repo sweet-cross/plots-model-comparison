@@ -277,7 +277,7 @@ class Plots:
                             else:
                                 self.allData.loc[(s,m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = 0
                                 self.allData.loc[(s,m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = -1*net
-                                
+
                    
     def __calculateTotalSupply(self,varList_supply):
         """ 
@@ -417,136 +417,763 @@ class Plots:
         plt.show()
         
 
-    def plotBar(self,listModelsid,varName ,varList,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height):
-        """ 
-        Bar plot by model and scenario. 
-        Parameters:
-        ----------
-        listModelsid: list of models id to plot
-        varName: str, variable name in the data template
-        varList: list of dictionaries with 
-            name: name of the technology or group of technologies,
-            data: list with the technologies that correspond to this category
-            color: color to use for this category
-        year: year for the plot
-        scale: numeric, if needed, plot will plot var*scale, for unit changes, for example
-        xlabel: str, label for x-axis
-        xmax: int, maximum level x-axis
-        fileName: str, file name for the plot
-        right: True if model names have to go on the right
-        legend: True if legend has to be displayed
-        pos_legend: str: 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-        onTopVarName: str: name of variable to plot on top of the bar plot, '' if none
-        width: width of the plot in cm
-        height: height of the plot in cm
+
+
+    
+    def plotBarHorizontal(
+        self,
+        listModelsid,
+        listSce,
+        varName,
+        varList,
+        year,
+        scale,
+        label,
+        figmax,
+        fileName,
+        invert,
+        legend,
+        pos_legend,
+        width,
+        height,
+        group_by="model",   # 'model' or 'scenario'
+        multi=False,        # False = one plot; True = subplots per group
+    ):
         """
-
-        numSce= len(self.sce)
-        nmodels = len(listModelsid)
-
-        # Get data
-        dataPlot={}
-        colors = {}
-        names = []
-
-
+        Horizontal stacked bar plot by model and scenario.
+    
+        Parameters
+        ----------
+        listModelsid : list
+            List of model ids to plot.
+        listSce : None, list[str], or dict[str, str]
+            Which scenarios to include and how to label them.
+        
+            - None  → use all scenarios in self.sce (labels = scenario IDs)
+            - list  → subset of scenarios (labels = the same list elements)
+            - dict  → keys = scenario IDs in the data
+                        values = alternative display labels for axis ticks
+        
+                Example:
+                    listSce = {
+                        'abroad-resnuc-high': 'High cost',
+                        'abroad-resnuc-low': 'Low cost'
+                    }
+        varName : str
+            Variable name in the data template.
+        varList : list of dict
+            Each dict with:
+                - 'name': name of the technology or group of technologies,
+                - 'data': list with the technologies in this category,
+                - 'color': color used for this category.
+        year : int
+            Year for the plot.
+        scale : float
+            Factor to divide the data (e.g. unit changes).
+        label : str
+            Label for the x-axis (value axis).
+        figmax : float
+            Maximum of the x-axis (value axis).
+        fileName : str
+            File name (without extension) for the plot.
+        invert : bool
+            True if the x-axis should be inverted.
+        legend : bool
+            If True, show legend.
+        pos_legend : str
+            Legend position: 'upper left', 'upper right', 'lower left', 'lower right'.
+        width : float
+            Width of the plot in cm.
+        height : float
+            Height of the plot in cm.
+        group_by : {'model', 'scenario'}
+            Whether groups are models (bars inside are scenarios)
+            or groups are scenarios (bars inside are models).
+        multi : bool
+            If False, all groups in one axis (with separators).
+            If True, one subplot per group, shared xlim.
+        """
+    
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import matplotlib.ticker as ticker
+        import seaborn as sb
+    
+        # ----- Scenario selection -----
+        if listSce is None:
+            sce_names = list(self.sce)
+            sce_labels = sce_names[:]  # Default labels equal IDs
+        elif isinstance(listSce, dict):
+            sce_names = list(listSce.keys())      # For retrieving data
+            sce_labels = list(listSce.values())   # For display
+        else:
+            sce_names = list(listSce)
+            sce_labels = sce_names[:]             # Labels equal IDs
+    
+        numSce   = len(listSce)
+        nmodels  = len(listModelsid)
+        listModels = [self.models[k] for k in listModelsid if k in self.models]
+    
+        if group_by not in ("model", "scenario"):
+            raise ValueError("group_by must be 'model' or 'scenario'")
+    
+        # ---------- Get data as 2D matrices: [model, scenario] ----------
+        dataMat = {}   # name -> (nmodels, numSce)
+        colors  = {}
+        names   = []
+    
         for v in varList:
-            datav = [0]*numSce*nmodels
-            colors[v['name']] = v['color']
-            names.append(v['name'])
-            for index, m in enumerate(listModelsid):
-                for i in np.arange(numSce):
-                    for subv in v['data']:
+            mat = np.zeros((nmodels, numSce))
+            colors[v["name"]] = v["color"]
+            names.append(v["name"])
+    
+            for im, m in enumerate(listModelsid):
+                for isce, sce_name in enumerate(sce_names):
+                    for subv in v["data"]:
                         try:
-                            datasubv = self.annualData.loc[(self.sce[i],m,varName,subv,'annual',year),'value']
+                            datasubv = self.annualData.loc[
+                                (sce_name, m, varName, subv, "annual", year),
+                                "value",
+                            ]
                         except KeyError:
                             datasubv = 0
                         if not np.isnan(datasubv):
-                            datav[index*(numSce) + i] = datav[index*(numSce) + i] + datasubv/scale 
-            dataPlot[v['name']]= datav  
-
-        # Calculate position of bars, labels and grids
-        ypos_grid = []
-        ypos_cols = []
-        ypos_bar  = []
-
-        for index, m in enumerate(listModelsid):
-            y_ini = nmodels*numSce/2 - index*numSce*0.5 + 0.5*(nmodels-index)
-            ypos_grid.append(y_ini)
-            ypos_cols.append(y_ini-numSce/4-0.25)
-            for i in np.arange(numSce):
-                y = y_ini - i * 0.5 - 0.5
-                ypos_bar.append(y)
-
-        # figure and axis
-
+                            mat[im, isce] += datasubv / scale
+            dataMat[v["name"]] = mat
+    
+        # ---------- Grouping logic ----------
+        if group_by == "model":
+            nGroups = nmodels
+            nWithin = numSce
+            group_labels  = listModels         # one per model
+            within_labels = sce_labels           # one per scenario
+    
+            def flatten_for_plot(mat):
+                # order: model-major, then scenario (axis 0 -> groups)
+                return mat.reshape(-1)
+    
+        else:  # group_by == "scenario"
+            nGroups = numSce
+            nWithin = nmodels
+            group_labels  = sce_labels           # one per scenario
+            within_labels = listModels        # one per model
+            print(group_labels)
+            def flatten_for_plot(mat):
+                # order: scenario-major, then model (axis 1 -> groups)
+                return mat.T.reshape(-1)
+    
+        # ============================================================
+        #                MODE 1: SINGLE AXIS (multi=False)
+        # ============================================================
+        if not multi:
+            # ---------- Positions of bars and group separators ----------
+            pos_grid = []  # separator / grid positions between groups
+            pos_cols = []  # center of each group block (for group labels)
+            pos_bar  = []  # one per (group, within) bar
+    
+            for g in range(nGroups):
+                ini = nGroups * nWithin / 2 - g * nWithin * 0.5 + 0.5 * (nGroups - g)
+                pos_grid.append(ini)
+                pos_cols.append(ini - nWithin / 4 - 0.25)
+                for w in range(nWithin):
+                    pos = ini - w * 0.5 - 0.5
+                    pos_bar.append(pos)
+    
+            pos_bar = np.array(pos_bar)
+    
+            # ---------- Figure and axis ----------
+            sb.set_style("white")
+            cm = 1 / 2.54
+            fig, ax = plt.subplots(1, figsize=(width * cm, height * cm))
+    
+            barfunc         = ax.barh
+            stack_key       = "left"
+            set_mainlim     = ax.set_xlim
+            set_seclim      = ax.set_ylim
+            set_value_label = ax.set_xlabel
+            main_grid       = ax.xaxis.grid
+            cat_minor_loc   = ax.yaxis.set_minor_locator
+            cat_minor_grid  = ax.yaxis.grid
+    
+            # ---------- Plot stacked bars ----------
+            offset = np.zeros(nGroups * nWithin)
+            bar_width = 0.3
+    
+            for name in names:
+                row_flat = flatten_for_plot(dataMat[name])
+                kwargs = {stack_key: offset}
+                barfunc(
+                    pos_bar,
+                    row_flat,
+                    bar_width,
+                    color=colors[name],
+                    edgecolor="none",
+                    zorder=1,
+                    **kwargs,
+                )
+                offset += row_flat
+    
+            # ---------- Invert x-axis if needed ----------
+            if invert:
+                ax.invert_xaxis()
+                set_mainlim(figmax, 0)
+            else:
+                set_mainlim(0, figmax)
+    
+            # ---------- "Within" labels (one per bar) ----------
+            within_labels_flat = []
+            if group_by == "model":
+                for _m in listModels:
+                    within_labels_flat.extend(within_labels)
+            else:
+                for _s in sce_names:
+                    within_labels_flat.extend(within_labels)
+    
+            ax.set_yticks(pos_bar)
+            ax.set_yticklabels(within_labels_flat)
+            ax.tick_params(axis="x", which="major", length=0)
+    
+            # ---------- Group labels (outside the bar block) ----------
+            x_min, x_max = ax.get_xlim()
+            span = x_max - x_min
+            if not invert:
+                x_text = x_max + 0.02 * span
+                ha = "left"
+            else:
+                x_text = x_min - 0.02 * span
+                ha = "right"
+    
+            for y, group_label in zip(pos_cols, group_labels):
+                ax.text(x_text, y, group_label, va="center", ha=ha)
+    
+            # ---------- Secondary axis (categorical) limits ----------
+            set_seclim(0, pos_grid[0])
+    
+            # ---------- Dotted lines separating groups ----------
+            cat_minor_loc(ticker.FixedLocator(pos_grid))
+            cat_minor_grid(color="gray", linestyle="dashed", which="minor")
+    
+            # ---------- Main grid on value axis ----------
+            main_grid(color="gray", linestyle="dashed")
+    
+            # ---------- Axis labels & spines ----------
+            set_value_label(label)
+    
+            if invert:
+                ax.spines['left'].set_visible(False)
+                ax.spines['top'].set_visible(False)
+                
+            else:
+                ax.spines['right'].set_visible(False)
+                ax.spines['top'].set_visible(False)
+    
+            # ---------- Legend ----------
+            if legend:
+                ax.legend(names, loc=pos_legend, ncol=1)
+    
+            # ---------- Save & show ----------
+            plt.savefig(self.folder_plots + "/" + fileName, bbox_inches="tight")
+            plt.savefig(
+                self.folder_plots + "/" + fileName + ".png",
+                bbox_inches="tight",
+                dpi=300,
+            )
+            plt.show()
+            return
+    
+        # ============================================================
+        #                MODE 2: MULTI-SUBPLOT (multi=True)
+        # ============================================================
+    
+        # One subplot per group, side by side, with shared xlim
         sb.set_style("white")
-        cm = 1/2.54  # centimeters in inches
-        fig, (ax)= plt.subplots(1, figsize=(width*cm, height*cm))
-
-
-        # Initialize the horizontal-offset for the stacked bar chart.
-        x_offset = np.zeros(numSce*nmodels)
+        cm = 1 / 2.54
+    
+        fig, axes = plt.subplots(
+            1,
+            nGroups,
+            figsize=(width * cm, height * cm),
+            sharex=True,    # share value axis (x) across all
+            sharey=False,
+        )
+    
+        if nGroups == 1:
+            axes = [axes]
+    
         bar_width = 0.3
-        for index in colors.keys():
-            row = dataPlot[index]
-            plt.barh(ypos_bar,row, bar_width, left=x_offset,color=colors[index],zorder=1, edgecolor='none')
-            x_offset = x_offset + row
-
-        # Invert axis if the plot is oriented to the right
-        listModels = [self.models[k] for k in listModelsid if k in self.models]
-        if right==True:
-            ax.invert_xaxis() 
-            ax.yaxis.set_major_locator(ticker.FixedLocator(ypos_cols))
-            plt.yticks(ypos_cols, [])
-            plt.xlim(xmax,0)
-            if legend==True:
-                plt.legend(names, loc=pos_legend, ncol = 1)
-
-        else:
-            # y axis. Minor ticks are the lines and major ticks the model names
-            ax.yaxis.set_major_locator(ticker.FixedLocator(ypos_cols))
-            plt.yticks(ypos_cols, listModels)
-            plt.xlim(0,xmax)
-            if legend==True:
-                plt.legend(names, loc=pos_legend, ncol = 1)
-
-
-        if len(onTopVarName)!=0:
-            for index, m in enumerate(listModelsid):
-                y_ini = nmodels*numSce/2 - index*numSce*0.5 + 0.5*(nmodels-index)
-                for i in np.arange(numSce):
-                    y = y_ini - i * 0.5 - 0.5
-                    ax.autoscale(False) # To avoid that the scatter changes limits
-                    ax.scatter(self.annualData.loc[(self.sce[i],m,varName,onTopVarName,'annual',year),'value']/scale,y,
-                               c='#000000',marker=r'x',s=12,zorder=2,linewidths=1)
-
-
-        ax.yaxis.set_minor_locator(ticker.FixedLocator(ypos_grid))
-        ax.yaxis.grid(color='gray', linestyle='dashed',which='minor')
-        # Remove the tick lines
-        ax.tick_params(axis='y', which='major', tick1On=False, tick2On=False)
-
-        # x axis.
-        ax.set_axisbelow(True)
-        ax.xaxis.grid(color='gray', linestyle='dashed')
-        plt.xlabel(xlabel)
-
-        # y and x limits
-        plt.ylim(0, ypos_grid[0])
-
-
-        # remove spines
-        ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        #ax.spines['bottom'].set_visible(False)# adjust limits and draw grid lines
+    
+        for g in range(nGroups):
+            ax = axes[g]
+    
+            # --- Use the SAME spacing logic as single-axis, but with nGroups=1 ---
+            # This removes the weird extra gap between bars.
+            local_pos_bar = []
+            local_pos_grid = []
+            local_pos_cols = []
+    
+            # pretend we have just 1 "group" with nWithin bars
+            ini = 1 * nWithin / 2 - 0 * nWithin * 0.5 + 0.5 * (1 - 0)
+            local_pos_grid.append(ini)
+            local_pos_cols.append(ini - nWithin / 4 - 0.25)
+            for w in range(nWithin):
+                pos = ini - w * 0.5 - 0.5
+                local_pos_bar.append(pos)
+    
+            local_pos_bar = np.array(local_pos_bar)
+            offset_local = np.zeros(nWithin)
+    
+            barfunc         = ax.barh
+            stack_key       = "left"
+            set_mainlim     = ax.set_xlim
+            set_seclim      = ax.set_ylim
+            set_value_label = ax.set_xlabel
+    
+            # stack bars in this group
+            for name in names:
+                mat = dataMat[name]
+                if group_by == "model":
+                    row_vals = mat[g, :]            # scenarios
+                else:
+                    row_vals = mat[:, g]            # models
+    
+                kwargs = {stack_key: offset_local}
+                barfunc(
+                    local_pos_bar,
+                    row_vals,
+                    bar_width,
+                    color=colors[name],
+                    edgecolor="none",
+                    zorder=1,
+                    **kwargs,
+                )
+                offset_local += row_vals
+    
+            # shared value limit
+            if invert:
+                ax.invert_xaxis()
+                set_mainlim(figmax, 0)
+            else:
+                set_mainlim(0, figmax)
+    
+            # within labels
+            if group_by == "model":
+                wt_labels = within_labels    # scenarios
+            else:
+                wt_labels = within_labels    # models
+    
+            ax.set_yticks(local_pos_bar)
+            ax.set_yticklabels(wt_labels)
+            ax.tick_params(axis="x", which="major", length=0)
+    
+            # local y-limits (categorical) – match our single-axis style
+            set_seclim(0, local_pos_grid[0])
+    
+            # group label as title
+            ax.set_title(group_labels[g])
+    
+            # grid on value axis
+            ax.xaxis.grid(color="gray", linestyle="dashed")
+    
+            set_value_label(label)
+    
+            # clean spines a bit
+            if invert:
+                ax.spines['left'].set_visible(False)
+                ax.spines['top'].set_visible(False)
+                
+            else:
+                ax.spines['right'].set_visible(False)
+                ax.spines['top'].set_visible(False)
         
-        plt.savefig(self.folder_plots+'/'+fileName,bbox_inches='tight')
-        plt.savefig(self.folder_plots+'/'+fileName+'.png',bbox_inches='tight', dpi=300)
+            if g != 0:
+                ax.set_yticklabels([])
+                ax.tick_params(axis="y", which="major", length=0)
+        
+        # Legend: one for the whole figure
+        if legend:
+            handles, labels_legend = axes[0].get_legend_handles_labels()
+            if handles:
+                fig.legend(handles, labels_legend, loc=pos_legend, ncol=1)
+    
+        fig.tight_layout()
+        plt.savefig(self.folder_plots + "/" + fileName, bbox_inches="tight")
+        plt.savefig(
+            self.folder_plots + "/" + fileName + ".png",
+            bbox_inches="tight",
+            dpi=300,
+        )
         plt.show()
+
+
+    def plotBarVertical(
+        self,
+        listModelsid,
+        listSce,
+        varName,
+        varList,
+        year,
+        scale,
+        label,
+        figmax,
+        fileName,
+        invert,
+        legend,
+        pos_legend,
+        width,
+        height,
+        group_by="model",   # 'model' or 'scenario'
+        multi=False,        # False = one plot; True = subplots per group
+    ):
+        """
+        Vertical stacked bar plot by model and scenario.
+    
+        Parameters
+        ----------
+        listModelsid : list
+            List of model ids to plot.
+        listSce : None, list[str], or dict[str, str]
+            Which scenarios to include and how to label them.
         
-         
+            - None  → use all scenarios in self.sce (labels = scenario IDs)
+            - list  → subset of scenarios (labels = the same list elements)
+            - dict  → keys = scenario IDs in the data
+                        values = alternative display labels for axis ticks
+        
+                Example:
+                    listSce = {
+                        'abroad-resnuc-high': 'High cost',
+                        'abroad-resnuc-low': 'Low cost'
+                    }
+        varName : str
+            Variable name in the data template.
+        varList : list of dict
+            Each dict with:
+                - 'name': name of the technology or group of technologies,
+                - 'data': list with the technologies in this category,
+                - 'color': color used for this category.
+        year : int
+            Year for the plot.
+        scale : float
+            Factor to divide the data (e.g. unit changes).
+        label : str
+            Label for the y-axis (value axis).
+        figmax : float
+            Maximum of the y-axis (value axis).
+        fileName : str
+            File name (without extension) for the plot.
+        invert : bool
+            True if the y-axis should be inverted.
+        legend : bool
+            If True, show legend.
+        pos_legend : str
+            Legend position: 'upper left', 'upper right', 'lower left', 'lower right'.
+        width : float
+            Width of the plot in cm.
+        height : float
+            Height of the plot in cm.
+        group_by : {'model', 'scenario'}
+            Whether groups are models (bars inside are scenarios)
+            or groups are scenarios (bars inside are models).
+        multi : bool
+            If False, all groups in one axis (with separators).
+            If True, one subplot per group, shared ylim.
+        """
+    
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import matplotlib.ticker as ticker
+        import seaborn as sb
+    
+        # ----- Scenario selection -----
+        if listSce is None:
+            sce_names = list(self.sce)
+            sce_labels = sce_names[:]  # Default labels equal IDs
+        elif isinstance(listSce, dict):
+            sce_names = list(listSce.keys())      # For retrieving data
+            sce_labels = list(listSce.values())   # For display
+        else:
+            sce_names = list(listSce)
+            sce_labels = sce_names[:]             # Labels equal IDs
+            
+        numSce   = len(listSce)
+        nmodels  = len(listModelsid)
+        listModels = [self.models[k] for k in listModelsid if k in self.models]
+    
+        if group_by not in ("model", "scenario"):
+            raise ValueError("group_by must be 'model' or 'scenario'")
+    
+        # ---------- Get data as 2D matrices: [model, scenario] ----------
+        dataMat = {}   # name -> (nmodels, numSce)
+        colors  = {}
+        names   = []
+    
+        for v in varList:
+            mat = np.zeros((nmodels, numSce))
+            colors[v["name"]] = v["color"]
+            names.append(v["name"])
+    
+            for im, m in enumerate(listModelsid):
+                for isce, sce_name in enumerate(sce_names):
+                    for subv in v["data"]:
+                        try:
+                            datasubv = self.annualData.loc[
+                                (sce_name, m, varName, subv, "annual", year),
+                                "value",
+                            ]
+                        except KeyError:
+                            datasubv = 0
+                        if not np.isnan(datasubv):
+                            mat[im, isce] += datasubv / scale
+            dataMat[v["name"]] = mat
+    
+            
+        # ---------- Grouping logic ----------
+        if group_by == "model":
+            nGroups = nmodels
+            nWithin = numSce
+            group_labels  = listModels         # one per model
+            within_labels = sce_labels           # one per scenario
+    
+            def flatten_for_plot(mat):
+                # order: model-major, then scenario
+                return mat.reshape(-1)
+    
+        else:  # group_by == "scenario"
+            nGroups = numSce
+            nWithin = nmodels
+            group_labels  = sce_labels           # one per scenario
+            within_labels = listModels        # one per model
+    
+            def flatten_for_plot(mat):
+                # order: scenario-major, then model
+                return mat.T.reshape(-1)
+    
+        # ============================================================
+        #                MODE 1: SINGLE AXIS (multi=False)
+        # ============================================================
+        if not multi:
+            # ---------- Positions of bars and group separators ----------
+            pos_grid = []
+            pos_cols = []
+            pos_bar  = []
+    
+            for g in range(nGroups):
+                ini = nGroups * nWithin / 2 - g * nWithin * 0.5 + 0.5 * (nGroups - g)
+                pos_grid.append(ini)
+                pos_cols.append(ini - nWithin / 4 - 0.25)
+                for w in range(nWithin):
+                    pos = ini - w * 0.5 - 0.5
+                    pos_bar.append(pos)
+    
+            pos_bar = np.array(pos_bar)
+    
+            # ---------- Figure and axis ----------
+            sb.set_style("white")
+            cm = 1 / 2.54
+            fig, ax = plt.subplots(1, figsize=(width * cm, height * cm))
+    
+            barfunc         = ax.bar
+            stack_key       = "bottom"
+            set_mainlim     = ax.set_ylim
+            set_seclim      = ax.set_xlim
+            set_value_label = ax.set_ylabel
+            main_grid       = ax.yaxis.grid
+            cat_minor_loc   = ax.xaxis.set_minor_locator
+            cat_minor_grid  = ax.xaxis.grid
+    
+            # ---------- Plot stacked bars ----------
+            offset = np.zeros(nGroups * nWithin)
+            bar_width = 0.3
+    
+            for name in names:
+                row_flat = flatten_for_plot(dataMat[name])
+                kwargs = {stack_key: offset}
+                barfunc(
+                    pos_bar,
+                    row_flat,
+                    bar_width,
+                    color=colors[name],
+                    edgecolor="none",
+                    zorder=1,
+                    **kwargs,
+                )
+                offset += row_flat
+    
+            # ---------- Invert y-axis if needed ----------
+            if invert:
+                ax.invert_ylim()
+                set_mainlim(figmax, 0)
+            else:
+                set_mainlim(0, figmax)
+    
+            # ---------- "Within" labels (one per bar) ----------
+            within_labels_flat = []
+            if group_by == "model":
+                for _m in listModels:
+                    within_labels_flat.extend(within_labels)
+            else:
+                for _s in sce_names:
+                    within_labels_flat.extend(within_labels)
+    
+            ax.set_xticks(pos_bar)
+            ax.set_xticklabels(within_labels_flat, rotation=90)
+            ax.tick_params(axis="y", which="major", length=0)
+    
+            # ---------- Group labels (outside the bar block) ----------
+            y_min, y_max = ax.get_ylim()
+            span = y_max - y_min
+            if not invert:
+                y_text = y_max + 0.02 * span
+                va = "bottom"
+            else:
+                y_text = y_min - 0.02 * span
+                va = "top"
+    
+            for x, group_label in zip(pos_cols, group_labels):
+                ax.text(x, y_text, group_label, ha="center", va=va)
+    
+            # ---------- Secondary axis (categorical) limits ----------
+            set_seclim(0, pos_grid[0])
+    
+            # ---------- Dotted lines separating groups ----------
+            cat_minor_loc(ticker.FixedLocator(pos_grid))
+            cat_minor_grid(color="gray", linestyle="dashed", which="minor")
+    
+            # ---------- Main grid on value axis ----------
+            main_grid(color="gray", linestyle="dashed")
+    
+            # ---------- Axis labels & spines ----------
+            set_value_label(label)
+    
+            if invert:
+               ax.spines['right'].set_visible(False)
+               ax.spines['bottom'].set_visible(False)
+            else:
+               ax.spines['right'].set_visible(False)
+               ax.spines['top'].set_visible(False)
+    
+            # ---------- Legend ----------
+            if legend:
+                ax.legend(names, loc=pos_legend, ncol=1)
+    
+            plt.savefig(self.folder_plots + "/" + fileName, bbox_inches="tight")
+            plt.savefig(
+                self.folder_plots + "/" + fileName + ".png",
+                bbox_inches="tight",
+                dpi=300,
+            )
+            plt.show()
+            return
+    
+        # ============================================================
+        #                MODE 2: MULTI-SUBPLOT (multi=True)
+        # ============================================================
+    
+        sb.set_style("white")
+        cm = 1 / 2.54
+    
+        fig, axes = plt.subplots(
+            1,
+            nGroups,
+            figsize=(width * cm, height * cm),
+            sharex=False,
+            sharey=True,    # shared value axis (y)
+        )
+    
+        if nGroups == 1:
+            axes = [axes]
+    
+        bar_width = 0.3
+    
+        for g in range(nGroups):
+            ax = axes[g]
+    
+            # local positions using same spacing logic as single-axis
+            local_pos_bar = []
+            local_pos_grid = []
+            local_pos_cols = []
+    
+            ini = 1 * nWithin / 2 - 0 * nWithin * 0.5 + 0.5 * (1 - 0)
+            local_pos_grid.append(ini)
+            local_pos_cols.append(ini - nWithin / 4 - 0.25)
+            for w in range(nWithin):
+                pos = ini - w * 0.5 - 0.5
+                local_pos_bar.append(pos)
+    
+            local_pos_bar = np.array(local_pos_bar)
+            offset_local = np.zeros(nWithin)
+    
+            barfunc         = ax.bar
+            stack_key       = "bottom"
+            set_mainlim     = ax.set_ylim
+            set_seclim      = ax.set_xlim
+            set_value_label = ax.set_ylabel
+    
+            # stack bars in this group
+            for name in names:
+                mat = dataMat[name]
+                if group_by == "model":
+                    row_vals = mat[g, :]
+                else:
+                    row_vals = mat[:, g]
+    
+                kwargs = {stack_key: offset_local}
+                barfunc(
+                    local_pos_bar,
+                    row_vals,
+                    bar_width,
+                    color=colors[name],
+                    edgecolor="none",
+                    zorder=1,
+                    **kwargs,
+                )
+                offset_local += row_vals
+    
+            # shared value limit
+            if invert:
+                ax.invert_yaxis()
+                set_mainlim(figmax, 0)
+            else:
+                set_mainlim(0, figmax)
+    
+            # within labels
+            ax.set_xticks(local_pos_bar)
+            ax.set_xticklabels(within_labels, rotation=90)
+            ax.tick_params(axis="y", which="major", length=0)
+    
+            # x-limits (categorical)
+            set_seclim(0, local_pos_grid[0])
+    
+            # group label as title
+            ax.set_title(group_labels[g])
+    
+            # grid on value axis
+            ax.yaxis.grid(color="gray", linestyle="dashed")
+    
+            set_value_label(label)
+    
+            if invert:
+                ax.spines['right'].set_visible(False)
+                ax.spines['bottom'].set_visible(False)
+            else:
+                ax.spines['right'].set_visible(False)
+                ax.spines['top'].set_visible(False)
+    
+        if legend:
+            handles, labels_legend = axes[0].get_legend_handles_labels()
+            if handles:
+                fig.legend(handles, labels_legend, loc=pos_legend, ncol=1)
+    
+        fig.tight_layout()
+        plt.savefig(self.folder_plots + "/" + fileName, bbox_inches="tight")
+        plt.savefig(
+            self.folder_plots + "/" + fileName + ".png",
+            bbox_inches="tight",
+            dpi=300,
+        )
+        plt.show()
+
+
     def plotTechDist(self,listModelsid,varName,varList,year,order,ylabel,ymax,fileName,legend):
         """ 
         Plots the distribution by technology

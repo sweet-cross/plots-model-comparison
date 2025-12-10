@@ -31,12 +31,12 @@ model_list =  [
 
 # Create the object that produces the plots and processes the data
 # Name of the csv file with the results 
-fileResults = "results/results_20251125"
+fileResults = "results/results_20251125_wodup"
 # Scenario names and corresponding colors 
 sce = ['abroad-res-full','abroad-res-lim','domestic-res-full','domestic-res-lim','abroad-nores-full','abroad-nores-lim','domestic-nores-full','domestic-nores-lim',]
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
 # Folders where the plots will be created
-folder_plots='plots'
+folder_plots='presentation_latex/figures_2025_10_25'
 
 
 cross_plots = plots.Plots(fileResults,model_list,sce,sceColors,folder_plots) 
@@ -425,7 +425,7 @@ varList_spaceHeat = [
     {'name':'Liquids','data':['boiler_liquids','chp_liquids'],'color':'#4B4EFC'},
     {'name':'Waste','data':['boiler_waste','chp_waste'],'color':'#b82222'},
     {'name':'Wood','data':['boiler_wood','chp_wood'],'color':'#a9807c'},
-    {'name':'District Heating','data':['district_heating'],'color':'#CCCCCC'},
+    {'name':'District Heating','data':['district_heat'],'color':'#CCCCCC'},
     ]
 
 
@@ -468,6 +468,62 @@ legend = False
 year = '2050'
 
 cross_plots.plotTechDist(listModels,varName,varList_dist_spaceheat,year,order,ylabel,ymax,fileName,legend)
+
+
+# Distric heating supply by technology https://sweet-cross.github.io/instructions-data/docs/sets/tech_heat/
+
+varList_distHeat = [
+    {'name':'Heat pumps','data':['heat_pump'],'color':'#1290A3'},
+    {'name':'Heaters','data':['heater_elec','boiler_electrode'],'color':'#FF6F31'},
+    {'name':'Solar','data':['solar_thermal'],'color':'#FAC748'},
+    {'name':'Geothermal','data':['geothermal_heat'],'color':'#9467BD'},
+    {'name':'Methane','data':['boiler_methane','chp_methane'],'color':'#1f6228'},
+    {'name':'Hydrogen','data':['boiler_h2','chp_h2'],'color':'#03CBA0'},
+    {'name':'Liquids','data':['boiler_liquids','chp_liquids'],'color':'#4B4EFC'},
+    {'name':'Waste','data':['boiler_waste','chp_waste'],'color':'#b82222'},
+    {'name':'Wood','data':['boiler_wood','chp_wood'],'color':'#a9807c'},
+    ]
+
+
+varName = 'district_heat_useful_energy_production'
+listModels = cross_plots.modelsid
+scale = 1
+xlabel = 'District heating (TWh)'
+xmax = 60
+fileName = 'districtHeating.pdf'
+right = False #True if model names have to go on the right, it invers the axis
+legend = False # True if legend has to be displayed
+pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+onTopVarName = ''
+year = '2050'
+height=15
+width=7
+cross_plots.plotBar(listModels,varName,varList_distHeat,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+
+
+# District heating distribution by technology
+varList_dist_distheat = [
+    {'name':'Heat\npumps','data':['heat_pump'],'color':'#1290A3'},
+    {'name':'Heaters','data':['heater_elec','boiler_electrode'],'color':'#FF6F31'},
+    {'name':'Solar','data':['solar_thermal'],'color':'#FAC748'},
+    {'name':'Geoth.','data':['geothermal_heat'],'color':'#9467BD'},
+    {'name':'Gas','data':['boiler_methane','chp_methane'],'color':'#1f6228'},
+    {'name':'H2','data':['boiler_h2','chp_h2'],'color':'#03CBA0'},
+    {'name':'Liquids','data':['boiler_liquids','chp_liquids'],'color':'#4B4EFC'},
+    {'name':'Waste','data':['boiler_waste','chp_waste'],'color':'#b82222'},
+    {'name':'Wood','data':['boiler_wood','chp_wood'],'color':'#a9807c'},
+    ]
+
+varName = 'district_heat_useful_energy_production'
+listModels = cross_plots.modelsid
+order = ["Heat\npumps",'Wood','Waste','Solar','Geoth.','Gas','H2','Heaters','Liquids']
+ylabel = 'Space heating (TWh)'
+ymax = 60
+fileName = 'districtHeating_dist.pdf'
+legend = False
+year = '2050'
+
+cross_plots.plotTechDist(listModels,varName,varList_dist_distheat,year,order,ylabel,ymax,fileName,legend)
 
 
 # Industrial heat supply by technology

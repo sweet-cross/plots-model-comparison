@@ -1,0 +1,51 @@
+%Change font to arial
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Include there the packages you need
+%\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+%\usepackage{lmodern}%
+\usepackage{multimedia}
+\usepackage{color}
+%\usepackage{colortbl}
+\usepackage{hhline}
+\usepackage{rotating}
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,calc,positioning,patterns,fit,matrix,trees,automata}
+\tikzstyle{every picture}+=[remember picture]
+\tikzstyle{del} = [anchor=base]
+\tikzstyle{na} = [baseline=-.5ex]
+\usepackage{setspace}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage[latin1]{inputenc}
+\usepackage[tight]{units}
+\usepackage{relsize}
+
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\graphicspath{{logos},{figures_2025_12_02/}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Tables
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{0.1cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mode<presentation>{\usetheme[]{CROSS}}
+\setbeamerfont{frametitle}{series=\bfseries}
+\beamertemplatenavigationsymbolsempty \setlength{\itemsep}{2em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This is the CROSS logo on the right
+\pgfdeclareimage[width=1.5cm]{logo}{logos/LogoSweetZusatz-CoSi.pdf}
+\logo{\pgfuseimage{logo}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This is the figure in the titlepage
+%\pgfdeclareimage[width=13cm]{titleFig}{figures/cover.pdf}% use this command if your figures are in pdf
+%\pgfdeclareimage[width=13cm]{titleFig}{figures/cover.eps}% use this command if your figures are in eps
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This produces the table of contents at the beginning of each section and subsection
+\AtBeginSection[]{\frame{\tableofcontents[currentsection]}}
+%\AtBeginSubsection[]{\frame{\tableofcontents[currentsection,currentsubsection]}}

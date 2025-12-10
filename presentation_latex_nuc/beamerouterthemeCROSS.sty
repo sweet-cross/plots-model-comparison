@@ -1,0 +1,165 @@
+\ProvidesPackageRCS $Header: /cvsroot/latex-beamer/latex-beamer/themes/outer/beamerouterthemeCROSS.sty,v
+1.8 2004/12/09 22:31:19 tantau Exp $
+
+% Copyright 2003 by Till Tantau <tantau@users.sourceforge.net>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+\newdimen\beamer@sidebarwidth
+\newdimen\beamer@headheight
+\newdimen\beamer@footheight
+\usebeamerfont{frametitle}
+\beamer@sidebarwidth=2.5\baselineskip
+\beamer@headheight=1.6\baselineskip
+\beamer@footheight=1.4\baselineskip
+\newdimen\beamer@linelength
+\beamer@linelength=\paperwidth
+\reset@font
+
+\def\beamer@lefttext{left}
+
+\DeclareOptionBeamer{hideothersubsections}[]{\beamer@nav@subsectionstyle{show/show/hide}}
+\DeclareOptionBeamer{hideallsubsections}[]{\beamer@nav@subsectionstyle{hide}}
+
+\DeclareOptionBeamer{width}{\beamer@sidebarwidth=#1}
+\DeclareOptionBeamer{left}{\def\beamer@sidebarside{left}}
+\DeclareOptionBeamer{right}{\def\beamer@sidebarside{right}}
+\ExecuteOptionsBeamer{left}
+\ProcessOptionsBeamer
+
+
+\mode<presentation>
+\ifdim\beamer@headheight>0pt
+% if head height is 0pt, use default frame title
+
+  \setbeamercolor*{frametitle}{parent=sidebar}
+  \setbeamercolor{separation line}{use=structure,bg=structure.fg!40!bg}
+
+\setbeamertemplate{frametitle}
+{%%%% The following lines are used to move the title and the subtitle
+\ifx\insertframesubtitle\empty\vspace{-0.5cm}\else\vspace{-0.4cm}\fi
+\insertframetitle
+\ifx\insertframesubtitle\empty\else
+{\footnotesize\\\insertframesubtitle}
+\fi
+\vspace{-0.5cm}
+}
+
+\setbeamertemplate{title page}
+{
+% This template uses a cover figure located in the figures folder
+%%%%%%%%%%%%%%%%%%%%%Background front page%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\includegraphics[width=4cm]{logos/LogoSweetZusatz-CoSi.pdf}\\[2cm]
+{\Large \textbf{\inserttitle}}\\
+\vspace{0.5cm}
+\textbf{\insertauthor}\\
+{\footnotesize \insertinstitute} \\
+\vspace{0.5cm}
+{\scriptsize \insertdate }
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%Background with title%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+}
+
+% % \defbeamertemplate*{frametitle}{sidebar theme}
+%  {%
+%    \nointerlineskip%
+%    \vskip-\beamer@headheight%
+%    \vbox to \beamer@headheight{%
+%      \vfil
+%      \leftskip=-\beamer@leftmargin%
+%      \advance\leftskip by0.5cm%
+%      \rightskip=-\beamer@rightmargin%
+%      \advance\rightskip by0.3cm plus1fil%
+%      %{\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle\par}%
+%      {\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\insertframesubtitle\par}%
+%      \vbox{}%
+%      \vskip-1em%
+%      \vfil
+%    }%
+%  }
+
+
+  \defbeamertemplate*{headline}{sidebar theme}
+  {%	
+	\begin{beamercolorbox}[wd=\paperwidth,right]{frametitle}
+		  \ifx\beamer@sidebarside\beamer@lefttext%
+      \else%
+        \hfill% 
+			\fi%
+      \ifdim\beamer@sidebarwidth>0pt%
+			 \usebeamercolor[bg]{logo}%
+        \vrule width\beamer@sidebarwidth height \beamer@headheight%
+        \hskip-\beamer@sidebarwidth%
+        \hbox to \beamer@sidebarwidth{\hss\vbox to
+          \beamer@headheight{\vss\hbox{\color{fg}}\vss }\hss}
+      \else%
+        \vrule width0pt height \beamer@headheight%
+      \fi%
+   \end{beamercolorbox}
+    
+    %\hskip0.5cm
+		% Separation line
+		%\ifx\insertframetitle\empty 
+		
+		%\else
+  	%\begin{beamercolorbox}[wd=.93\beamer@linelength,colsep=.35pt]{lower separation line head}
+		%\end{beamercolorbox}
+   %\fi
+ }
+
+\fi
+
+\newif\ifbeamer@theme@subsection
+\beamer@theme@subsectiontrue
+
+
+\ifdim\beamer@sidebarwidth>0pt
+
+                                % Sidebar
+  \defbeamertemplate*{sidebar \beamer@sidebarside}{sidebar theme}
+  {	
+    \defbeamertemplate*{footline}{sidebar theme}
+  { 
+  	\ifx\insertframetitle\empty\else
+		\vskip52em
+       
+  	\vskip0.8cm
+    
+    \begin{beamercolorbox}[wd=\paperwidth,ht=.1ex,dp=1.5ex,left]{author in head/foot}%
+    \usebeamerfont{author in head/foot}%
+    \insertlogo \hfill 
+     \end{beamercolorbox}%
+    \fi
+  }
+    \hskip20pt
+    \usebeamertemplate{footline}
+    \vfill
+    \ifx\beamer@sidebarside\beamer@lefttext%
+    \else%
+      \usebeamercolor{normal text}%
+			\llap{\usebeamertemplate***{navigation symbols}\hskip.1cm}%
+      \vskip1.5pt%
+    \fi%
+  }%
+
+  \ifx\beamer@sidebarside\beamer@lefttext%
+    \defbeamertemplate*{sidebar right}{sidebar theme}
+    {%
+      \vfill%
+			 \llap{\usebeamertemplate***{navigation symbols}\hskip0.1cm}%
+      \vskip1.5pt}
+  \fi
+                                % Margins
+  \setbeamersize{text margin left=-0.5cm,text margin right=-0.2cm}
+\fi
+
+\mode
+<all>
+
+%%% Local Variables:
+%%% TeX-master: "~/texmf/tex/latex/beamer/test/test.tex"
+%%% End:

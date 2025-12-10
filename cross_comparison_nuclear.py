@@ -36,63 +36,69 @@ fileResults = "results/nuclear_results_20251201_2050_sesfixed"
 sce = ['abroad-resnuc-high','abroad-resnuc-medium','abroad-resnuc-low','abroad-resnuc-phaseout','abroad-res-high','abroad-res-medium','abroad-res-low','abroad-res-phaseout','abroad-nores-high','abroad-nores-medium','abroad-nores-low','abroad-nores-phaseout']
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E','#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
 # Folders where the plots will be created
-folder_plots='plots'
+folder_plots='presentation_latex_nuc/figures_2025_12_02'
 
 
 cross_plots = plots.Plots(fileResults,model_list,sce,sceColors,folder_plots) 
 
 
-# Annual electricity supply with total imports and exports
-
-# Scatter plot with net supply
-listModels = cross_plots.modelsid #any model can be excluded, the list should include the model ids
-varName = 'electricity_supply'
-use_technology_fuel = 'total'
-scale = 1
-xlabel = 'Electricity (TWh)'
-xmax = 180
-fileName = 'elecSupply.pdf'
-year = '2050'
-
-cross_plots.plotScatter(listModels,varName ,use_technology_fuel,year,scale,xlabel,xmax,fileName)
 
 
 
-# name: name of the technology or group of technologies (valid names: https://sweet-cross.github.io/instructions-data/docs/sets/tech_generation/)
-# data: list with the technologies that correspond to this category
-# color: color to use for this category
-varList_supply = [
-    {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
-    {'name':'Nuclear','data':['nuclear'],'color':'#FF007F'},
-    {'name':'Solar','data':['spv'],'color':'#FAC748'},
-    {'name':'Wind','data':['wind'],'color':'#F2960E'},
-    {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
-    {'name':'Methane','data':["methane_pp",'fuel_cell_methane'],'color':'#1f6228'},
-    {'name':'Hydrogen','data':['hydrogen_pp','fuel_cell_h2'],'color':'#03CBA0'},
-    {'name':'Liquids','data':['liquids_pp'],'color':'#4B4EFC'},
-    {'name':'Waste','data':['waste_pp'],'color':'#b82222'},
-    {'name':'Wood','data':['wood_pp'],'color':'#a9807c'},
-    {'name':'Storage','data':['battery_out','phs_out'],'color':'#939CAC'},
-    {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
-   ]
+# # Annual electricity supply with total imports and exports
+
+# # Scatter plot with net supply
+# listModels = cross_plots.modelsid #any model can be excluded, the list should include the model ids
+# varName = 'electricity_supply'
+# use_technology_fuel = 'total'
+# scale = 1
+# xlabel = 'Electricity (TWh)'
+# xmax = 180
+# fileName = 'elecSupply.pdf'
+# year = '2050'
+
+# cross_plots.plotScatter(listModels,varName ,use_technology_fuel,year,scale,xlabel,xmax,fileName)
 
 
-# Electricity supply bar plot
-varName = 'electricity_supply'
-listModels = cross_plots.modelsid
-scale = 1
-xlabel = 'Electricity (TWh)'
-xmax = 180
-fileName = 'elecSupply_tech.pdf'
-right = False #True if model names have to go on the right
-legend = True # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = '' # name of variable to plot on top of the bar plot, '' if none, 'total': plots the total
-year = '2050'
-height=12
-width=7
 
-cross_plots.plotBar(listModels,varName ,varList_supply,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+# # name: name of the technology or group of technologies (valid names: https://sweet-cross.github.io/instructions-data/docs/sets/tech_generation/)
+# # data: list with the technologies that correspond to this category
+# # color: color to use for this category
+# varList_supply = [
+#     {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
+#     {'name':'Nuclear','data':['nuclear'],'color':'#FF007F'},
+#     {'name':'Solar','data':['spv'],'color':'#FAC748'},
+#     {'name':'Wind','data':['wind'],'color':'#F2960E'},
+#     {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
+#     {'name':'Methane','data':["methane_pp",'fuel_cell_methane'],'color':'#1f6228'},
+#     {'name':'Hydrogen','data':['hydrogen_pp','fuel_cell_h2'],'color':'#03CBA0'},
+#     {'name':'Liquids','data':['liquids_pp'],'color':'#4B4EFC'},
+#     {'name':'Waste','data':['waste_pp'],'color':'#b82222'},
+#     {'name':'Wood','data':['wood_pp'],'color':'#a9807c'},
+#     {'name':'Storage','data':['battery_out','phs_out'],'color':'#939CAC'},
+#     {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
+#    ]
+
+
+# # Electricity supply bar plot
+# varName = 'electricity_supply'
+# listModels = cross_plots.modelsid
+# scale = 1
+# xlabel = 'Electricity (TWh)'
+# xmax = 180
+# fileName = 'elecSupply_tech.pdf'
+# right = False #True if model names have to go on the right
+# legend = False # True if legend has to be displayed
+# pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+# onTopVarName = '' # name of variable to plot on top of the bar plot, '' if none, 'total': plots the total
+# year = '2050'
+# height=12
+# width=7
+
+# cross_plots.plotBar(listModels,varName ,varList_supply,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+
+
+
 
 
 # Annual electricity supply with net imports 
@@ -117,21 +123,51 @@ varList_supply_net = [
 
 varName = 'electricity_supply'
 listModels = cross_plots.modelsid
-scale = 1
 xlabel = 'Electricity (TWh)'
 xmax = 101
-fileName = 'elecSupply_tech_net.pdf'
-right = False #True if model names have to go on the right
-legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''# 'total'
+fileName = 'elecSupply_tech_net'
 year = '2050'
-height=15
-width=7
+scenarios={
+        # 'id': 'label'
+        'abroad-resnuc-phaseout':'Phase-out',
+        'abroad-resnuc-high':'High cost',
+        'abroad-resnuc-medium':'Medium cost',
+        'abroad-resnuc-low':'Low cost',
+    }
 
-cross_plots.plotBar(listModels,varName ,varList_supply_net,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+
+cross_plots.plotBarHorizontal(
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_supply_net, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = 'elecSupply_tech_net',
+    invert=False, legend=False, pos_legend="upper right",
+    width=4, height=15,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 
+cross_plots.plotBarVertical(
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_supply_net, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = 'elecSupply_tech_net',
+    invert=False, legend=False, pos_legend="upper right",
+    width=20, height=10,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 # Distribution box plot of annual electricity supply by technology
 
 
@@ -187,9 +223,9 @@ scale = 1
 xlabel = 'Electricity (TWh)'
 xmax = 160
 fileName = 'elecUse.pdf'
-right = True #True if model names have to go on the right
-legend = False # True if legend has to be displayed
-pos_legend = 'lower left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+right = False #True if model names have to go on the right
+legend = True # True if legend has to be displayed
+pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = ''
 year = '2050'
 height=15
@@ -223,7 +259,7 @@ xmax = 101
 fileName = 'elecUse_net.pdf'
 right = True #True if model names have to go on the right
 legend = False # True if legend has to be displayed
-pos_legend = 'lower left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
 onTopVarName = ''
 year = '2050'
 height=15
@@ -427,7 +463,7 @@ varList_spaceHeat = [
     {'name':'Liquids','data':['boiler_liquids','chp_liquids'],'color':'#4B4EFC'},
     {'name':'Waste','data':['boiler_waste','chp_waste'],'color':'#b82222'},
     {'name':'Wood','data':['boiler_wood','chp_wood'],'color':'#a9807c'},
-    {'name':'District Heating','data':['district_heating'],'color':'#CCCCCC'},
+    {'name':'District Heating','data':['district_heat'],'color':'#CCCCCC'},
     ]
 
 
@@ -470,6 +506,62 @@ legend = False
 year = '2050'
 
 cross_plots.plotTechDist(listModels,varName,varList_dist_spaceheat,year,order,ylabel,ymax,fileName,legend)
+
+
+# Distric heating supply by technology https://sweet-cross.github.io/instructions-data/docs/sets/tech_heat/
+
+varList_distHeat = [
+    {'name':'Heat pumps','data':['heat_pump'],'color':'#1290A3'},
+    {'name':'Heaters','data':['heater_elec','boiler_electrode'],'color':'#FF6F31'},
+    {'name':'Solar','data':['solar_thermal'],'color':'#FAC748'},
+    {'name':'Geothermal','data':['geothermal_heat'],'color':'#9467BD'},
+    {'name':'Methane','data':['boiler_methane','chp_methane'],'color':'#1f6228'},
+    {'name':'Hydrogen','data':['boiler_h2','chp_h2'],'color':'#03CBA0'},
+    {'name':'Liquids','data':['boiler_liquids','chp_liquids'],'color':'#4B4EFC'},
+    {'name':'Waste','data':['boiler_waste','chp_waste'],'color':'#b82222'},
+    {'name':'Wood','data':['boiler_wood','chp_wood'],'color':'#a9807c'},
+    ]
+
+
+varName = 'district_heat_useful_energy_production'
+listModels = cross_plots.modelsid
+scale = 1
+xlabel = 'District heating (TWh)'
+xmax = 60
+fileName = 'districtHeating.pdf'
+right = False #True if model names have to go on the right, it invers the axis
+legend = False # True if legend has to be displayed
+pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
+onTopVarName = ''
+year = '2050'
+height=15
+width=7
+cross_plots.plotBar(listModels,varName,varList_distHeat,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+
+
+# District heating distribution by technology
+varList_dist_distheat = [
+    {'name':'Heat\npumps','data':['heat_pump'],'color':'#1290A3'},
+    {'name':'Heaters','data':['heater_elec','boiler_electrode'],'color':'#FF6F31'},
+    {'name':'Solar','data':['solar_thermal'],'color':'#FAC748'},
+    {'name':'Geoth.','data':['geothermal_heat'],'color':'#9467BD'},
+    {'name':'Gas','data':['boiler_methane','chp_methane'],'color':'#1f6228'},
+    {'name':'H2','data':['boiler_h2','chp_h2'],'color':'#03CBA0'},
+    {'name':'Liquids','data':['boiler_liquids','chp_liquids'],'color':'#4B4EFC'},
+    {'name':'Waste','data':['boiler_waste','chp_waste'],'color':'#b82222'},
+    {'name':'Wood','data':['boiler_wood','chp_wood'],'color':'#a9807c'},
+    ]
+
+varName = 'district_heat_useful_energy_production'
+listModels = cross_plots.modelsid
+order = ["Heat\npumps",'Wood','Waste','Solar','Geoth.','Gas','H2','Heaters','Liquids']
+ylabel = 'Space heating (TWh)'
+ymax = 60
+fileName = 'districtHeating_dist.pdf'
+legend = False
+year = '2050'
+
+cross_plots.plotTechDist(listModels,varName,varList_dist_distheat,year,order,ylabel,ymax,fileName,legend)
 
 
 # Industrial heat supply by technology
