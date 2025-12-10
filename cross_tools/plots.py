@@ -65,6 +65,7 @@ class Plots:
         self.sce = scenarios
         self.sceColors = sceColors
         self.sceModel = self.getReportedScenariosByModel()
+        self.sceVariants= self.getReportedSceVariants()
         
         
         #Calculate net imports and exports
@@ -96,15 +97,15 @@ class Plots:
             {'varName':'space_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
             {'varName':'district_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
             {'varName':'process_heat_useful_energy_production','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-           ]
+            ]
 
 
         self.__checkSubcategories(subcats)
         
-        self.annualData = self.allData.loc[(slice(None),slice(None),slice(None),slice(None),'annual',slice(None)),'value'].to_frame()
+        self.annualData = self.allData.loc[(slice(None),slice(None),slice(None),slice(None),slice(None),'annual',slice(None)),'value'].to_frame()
         
         varList_supply_net = ['hydro_dam','hydro_ror','nuclear','spv','wind','geothermal_pp',"methane_pp",'fuel_cell_methane',
-                          'hydrogen_pp','fuel_cell_h2','liquids_pp','waste_pp','wood_pp','net_storage_out','net_imports']
+                           'hydrogen_pp','fuel_cell_h2','liquids_pp','waste_pp','wood_pp','net_storage_out','net_imports']
         
         self.__calculateTotalSupply(varList_supply_net)
         
@@ -144,7 +145,7 @@ class Plots:
         data = pd.read_csv(fileResults+'.csv', index_col=[],header=[0])
         
         #  remove columns that are not used 
-        data.drop(columns=['scenario_group','scenario_variant','uploaded_by','uploaded_at','country'],inplace=True)
+        data.drop(columns=['scenario_group','uploaded_by','uploaded_at','country'],inplace=True)
                         
         # Get the annual values and make them numeric instead of text
         data['value']=pd.to_numeric(data['value'])
@@ -153,7 +154,7 @@ class Plots:
         data['value']=data.apply(lambda x: x.value * self.__correctUnit(x.time_resolution,x.unit),axis=1)
         data = data.drop(['unit'], axis=1)
         
-        data = data.set_index(['scenario_name','model','variable','use_technology_fuel', 'time_resolution','timestamp'])
+        data = data.set_index(['scenario_name','scenario_variant','model','variable','use_technology_fuel', 'time_resolution','timestamp'])
         # Models to columns
         #data = data.unstack(level=1)
         #data.columns = data.columns.droplevel()
@@ -177,7 +178,7 @@ class Plots:
     def getReportedYearsByModel(self):
         years =  {}
         for m in self.modelsid:
-            data_annual_m = self.allData.loc[(slice(None),m,slice(None),slice(None),'annual',slice(None)),:].reset_index(level=[5])
+            data_annual_m = self.allData.loc[(slice(None),slice(None),m,slice(None),slice(None),'annual',slice(None)),:].reset_index(level=[6])
             years_m = data_annual_m.timestamp.unique().tolist()
             years[m]=years_m
             
@@ -187,12 +188,32 @@ class Plots:
     def getReportedScenariosByModel(self):
         sceModel =  {}
         for m in self.modelsid:
-            data_annual_m = self.allData.loc[(slice(None),m,slice(None),slice(None),'annual',slice(None)),:].reset_index(level=[0])
-            sce_m = data_annual_m.scenario_name.unique().tolist()
-            sceModel[m]=sce_m
+           data_annual_m = self.allData.loc[(slice(None),slice(None),m,slice(None),slice(None),'annual',slice(None)),:]
+            # Bring scenario_name and scenario_variant back as columns
+           data_annual_m = data_annual_m.reset_index(level=['scenario_name', 'scenario_variant'])
+    
+           # Unique (scenario_name, scenario_variant) combinations
+           combos = (
+               data_annual_m[['scenario_name', 'scenario_variant']]
+               .drop_duplicates()
+               .apply(tuple, axis=1)
+               .tolist()
+           )
+
+           sceModel[m] = combos
             
         return sceModel
-
+    
+    def getReportedSceVariants(self):
+        seen = set()
+        union_list = []
+        
+        for pairs in self.sceModel.values():
+            for combo in pairs:
+                if combo not in seen:
+                    seen.add(combo)
+                    union_list.append(combo)
+        return union_list
                         
     def __checkSubcategories(self,subcats):
         """ 
@@ -211,20 +232,20 @@ class Plots:
                     for t in time:
                         # Check if the variable exists
                         try:
-                            totalCat = self.allData.loc[(s,m,v['varName'],v['cat'],v['time_resolution'],t),'value']
+                            totalCat = self.allData.loc[(s[0],s[1],m,v['varName'],v['cat'],v['time_resolution'],t),'value']
                         except:
                             totalCat = 0
                             flag = 0
                             # Check if the subvariables exist
                             for subv in v['subcats']:
                                 try:
-                                    totalCat = totalCat + self.allData.loc[(s,m,v['varName'],subv,v['time_resolution'],t),'value']
+                                    totalCat = totalCat + self.allData.loc[(s[0],s[1],m,v['varName'],subv,v['time_resolution'],t),'value']
                                     flag +=1
                                 except:
                                     totalCat = totalCat 
                             
                             if flag>0:
-                                self.allData.loc[(s,m,v['varName'],v['cat'],'annual',t),'value']  = totalCat
+                                self.allData.loc[(s[0],s[1],m,v['varName'],v['cat'],'annual',t),'value']  = totalCat
                                 
                             
     def __calculateNets(self):
@@ -267,16 +288,16 @@ class Plots:
                         for t in time:
                             net = 0
                             for subv in v['tech']:
-                                net = net + self.allData.loc[(s,m,v['varSupply']+sufix,subv,resolution,t),'value']
+                                net = net + self.allData.loc[(s[0],s[1],m,v['varSupply']+sufix,subv,resolution,t),'value']
                             for subv in v['use']:
-                                net = net - self.allData.loc[(s,m,v['varDemand']+sufix,subv,resolution,t),'value']
+                                net = net - self.allData.loc[(s[0],s[1],m,v['varDemand']+sufix,subv,resolution,t),'value']
                             if net>0:
-                                self.allData.loc[(s,m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = net
-                                self.allData.loc[(s,m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = 0
+                                self.allData.loc[(s[0],s[1],m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = net
+                                self.allData.loc[(s[0],s[1],m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = 0
                                 
                             else:
-                                self.allData.loc[(s,m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = 0
-                                self.allData.loc[(s,m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = -1*net
+                                self.allData.loc[(s[0],s[1],m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = 0
+                                self.allData.loc[(s[0],s[1],m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = -1*net
 
                    
     def __calculateTotalSupply(self,varList_supply):
@@ -290,7 +311,7 @@ class Plots:
                     total = np.nan
                     for v in varList_supply:
                         try:
-                            data_v = self.annualData.loc[(s,m,'electricity_supply',v,'annual',y),'value']
+                            data_v = self.annualData.loc[(s[0],s[1],m,'electricity_supply',v,'annual',y),'value']
                         except:
                             data_v = np.nan
                             
@@ -300,7 +321,7 @@ class Plots:
                             else:
                                 total = total + data_v
                     
-                    self.annualData.loc[(s,m,'electricity_supply','total','annual',y),'value']   = total
+                    self.annualData.loc[(s[0],s[1],m,'electricity_supply','total','annual',y),'value']   = total
                      
     
     def __extractPositiveNegative(self,positive_variables,negative_variables):
@@ -338,84 +359,248 @@ class Plots:
             posNegData.rename(columns={'variable':'model','value':'Electricity (GW)'},inplace=True)
             self.posNegData[season] = posNegData.set_index(["scenario",'index','timestep','model'])
             
-                            
-    
-              
-
-    def plotScatter(self,listModelsid, varName,use_technology_fuel,year,scale,xlabel,xmax,fileName):
-        """ 
-        Plot scatter of variable by model and scenario. 
-        A great part of the function is only to make sure the labels are in the right place
-
-        Parameters:
-        ----------
-        listModelsid: list of models id to plot
-        varName: str, variable name in the data template
-        use_technology_fuel: str, name of the use, technology or fuel
-        year: year for the plot
-        scale: numeric, if needed, plot will plot var*scale, for unit changes, for example
-        xlabel: str, label for x-axis
-        xmax: int, maximum level x-axis
-        fileName: str, file name for the plot
+     
+    def plotScatter(
+        self,
+        listModelsid,
+        listSce,
+        varName,
+        use_technology_fuel,
+        year,
+        scale,
+        label,          # label of value axis (x or y)
+        figmax,         # max of value axis (x or y)
+        fileName,
+        width,
+        height,
+        orientation="horizontal",   # 'horizontal' or 'vertical'
+        group_by="model",           # 'model' or 'scenario'
+    ):
         """
+        Scatter plot of a variable by model and scenario/variant.
+    
+        Geometry and grouping follow the same logic as:
+          - plotBarHorizontal (for orientation='horizontal')
+          - plotBarVertical   (for orientation='vertical', multi=False)
+    
+        Behaviour:
+          - group_by='model':
+                groups   = models
+                within   = scenarios
+                primary ticks = scenarios (repeated per model)
+                group labels  = models (outside: right for horizontal, top for vertical)
+          - group_by='scenario':
+                groups   = scenarios
+                within   = models
+                primary ticks = models (repeated per scenario)
+                group labels  = scenarios (outside)
+        """
+        
+        # ----- Styling -----
         sb.reset_defaults()
         matplotlib.rcParams["font.family"] = "sans-serif"
-        matplotlib.rcParams['font.sans-serif'] = "Arial"
-
-        nmodels = len(self.models)
-        ypos_grid = []
-        ypos_cols = []
-
-        # figure and axis
-        fig, (ax)= plt.subplots(1, figsize=(5, 6))
-
-
-        numSce= len(self.sce)
-        
-
-        for index, m in enumerate(listModelsid):
-            y_ini = nmodels*numSce/2 - index*numSce*0.5 + 0.5*(nmodels-index)
-            ypos_grid.append(y_ini)
-            ypos_cols.append(y_ini-numSce/4-0.25)
-            for i in np.arange(numSce):
-                y = y_ini - i * 0.5 - 0.5
-                try:
-                    value = self.annualData.loc[(self.sce[i],m,varName,use_technology_fuel,'annual',year),'value']/scale
-                except:
-                    value = np.nan
-                plt.scatter(value,y,c=self.sceColors[i])
-
-        # y axis. Minor ticks are the lines and major ticks the model names
-
-        ax.yaxis.set_major_locator(ticker.FixedLocator(ypos_cols))
-        
+        matplotlib.rcParams["font.sans-serif"] = "Arial"
+    
+        # ===============================
+        # 1. Scenario selection + labels
+        # ===============================
+        if listSce is None:
+            # Expect self.sceVariants to be list of (scenario, variant)
+            sce_names = list(self.sceVariants)
+            sce_labels = [f"{s} ({v})" for s, v in sce_names]
+        elif isinstance(listSce, dict):
+            sce_names = list(listSce.keys())      # tuples (scenario, variant)
+            sce_labels = list(listSce.values())   # pretty labels
+        else:
+            # list-like; accept tuples or simple scenario IDs
+            sce_names = []
+            sce_labels = []
+            for item in listSce:
+                if isinstance(item, tuple) and len(item) == 2:
+                    s, v = item
+                else:
+                    s, v = item, "reference"
+                sce_names.append((s, v))
+                sce_labels.append(f"{s} ({v})")
+    
+        numSce   = len(sce_names)
+        nmodels  = len(listModelsid)
         listModels = [self.models[k] for k in listModelsid if k in self.models]
-        plt.yticks(ypos_cols, listModels)
-
-        ax.yaxis.set_minor_locator(ticker.FixedLocator(ypos_grid))
-        ax.yaxis.grid(color='gray', linestyle='dashed',which='minor')
-        # Remove the tick lines
-        ax.tick_params(axis='y', which='major', tick1On=False, tick2On=False)
-
-        # x axis.
-        ax.set_axisbelow(True)
-        ax.xaxis.grid(color='gray', linestyle='dashed')
-        plt.xlabel(xlabel)
-
-        # y and x limits
-        plt.ylim(0, ypos_grid[0])
-        plt.xlim(0,xmax)
-
-        # remove spines
-        ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        #ax.spines['bottom'].set_visible(False)# adjust limits and draw grid lines
-
-        plt.savefig(self.folder_plots+'/'+fileName,bbox_inches='tight')
-        plt.savefig(self.folder_plots+'/'+fileName+'.png',bbox_inches='tight', dpi=300)
-        plt.show()
+    
+        if group_by not in ("model", "scenario"):
+            raise ValueError("group_by must be 'model' or 'scenario'")
+    
+        is_horizontal = (orientation == "horizontal")
+    
+        # ====================================
+        # 2. Build values matrix [model, sce]
+        # ====================================
+        values = np.full((nmodels, numSce), np.nan)
+    
+        for im, m in enumerate(listModelsid):
+            for isce, (sce_id, variant) in enumerate(sce_names):
+                try:
+                    val = self.annualData.loc[
+                        (sce_id, variant, m, varName, use_technology_fuel, "annual", year),
+                        "value",
+                    ]
+                except KeyError:
+                    val = np.nan
+                if not np.isnan(val):
+                    values[im, isce] = val / scale
+    
+        # ============================================================
+        # 3. Grouping logic (same as bars)
+        # ============================================================
+        if group_by == "model":
+            nGroups = nmodels
+            nWithin = numSce
+            group_labels  = listModels        # printed outside
+            within_labels = sce_labels        # used for ticks
+    
+            def index_for(g, w):
+                # g = model index, w = scenario index
+                return g, w
+    
+        else:  # group_by == "scenario"
+            nGroups = numSce
+            nWithin = nmodels
+            group_labels  = sce_labels        # printed outside
+            within_labels = listModels        # used for ticks
+    
+            def index_for(g, w):
+                # g = scenario index, w = model index
+                return w, g
+    
+        # ============================================================
+        # 4. Geometry for category axis
+        #    (copy of horizontal / vertical bar logic)
+        # ============================================================
+        pos_grid = []  # group separators
+        pos_cols = []  # group centers
+        pos_bar  = []  # one per (group, within) point
         
+        for g in range(nGroups):
+            ini = nGroups * nWithin / 2 - g * nWithin * 0.5 + 0.5 * (nGroups - g)
+            pos_grid.append(ini)
+            pos_cols.append(ini - nWithin / 4 - 0.25)
+            for w in range(nWithin):
+                # use the SAME formula for horizontal and vertical
+                pos = ini - w * 0.5 - 0.5
+                pos_bar.append(pos)
+        
+        pos_bar = np.array(pos_bar)
+    
+        # For vertical orientation, flip so first group is LEFT-most,
+        # mirroring your final plotBarVertical behaviour.
+        if not is_horizontal:
+            max_pos = pos_grid[0]
+            pos_grid = [max_pos - x for x in pos_grid]
+            pos_cols = [max_pos - x for x in pos_cols]
+            pos_bar  = max_pos - pos_bar
+        else:
+            max_pos = pos_grid[0]
+    
+        # ============================================================
+        # 5. Prepare figure & axis
+        # ============================================================
+        sb.set_style("white")
+        cm = 1 / 2.54
+        fig, ax = plt.subplots(1, figsize=(width * cm, height * cm))
+    
+        set_val_lim   = ax.set_xlim if is_horizontal else ax.set_ylim
+        set_cat_lim   = ax.set_ylim if is_horizontal else ax.set_xlim
+        val_grid      = ax.xaxis.grid if is_horizontal else ax.yaxis.grid
+        cat_minor_loc = ax.yaxis.set_minor_locator if is_horizontal else ax.xaxis.set_minor_locator
+        cat_minor_grid= ax.yaxis.grid if is_horizontal else ax.xaxis.grid
+        set_val_label = ax.set_xlabel if is_horizontal else ax.set_ylabel
+    
+        # ============================================================
+        # 6. Plot all points
+        # ============================================================
+        tick_pos = []      # within positions (for primary ticks)
+        tick_lab = []      # within labels repeated in group order
+    
+        k = 0
+        for g in range(nGroups):
+            for w in range(nWithin):
+                im, isce = index_for(g, w)
+                v = values[im, isce]
+                pos = pos_bar[k]
+                k += 1
+    
+                if not np.isnan(v):
+                    if is_horizontal:
+                        x, y = v, pos
+                    else:
+                        x, y = pos, v
+                    ax.scatter(x, y, c=self.sceColors[isce], s=20, zorder=2)
+    
+                tick_pos.append(pos)
+                tick_lab.append(within_labels[w])
+    
+        # ============================================================
+        # 7. Axes labels, ticks, grids
+        # ============================================================
+        # Value axis
+        set_val_lim(0, figmax)
+        val_grid(color="gray", linestyle="dashed")
+    
+        # Category axis range
+        set_cat_lim(0, max_pos)
+    
+        # Primary ticks = within labels (scenarios or models)
+        if is_horizontal:
+            ax.yaxis.set_major_locator(ticker.FixedLocator(tick_pos))
+            ax.set_yticklabels(tick_lab)
+            ax.tick_params(axis="y", which="major", length=0)
+        else:
+            ax.xaxis.set_major_locator(ticker.FixedLocator(tick_pos))
+            ax.set_xticklabels(tick_lab, rotation=90)
+            ax.tick_params(axis="x", which="major", length=0)
+    
+        # Group labels printed outside at group centers
+        if is_horizontal:
+            # text on the right
+            xmin, xmax = ax.get_xlim()
+            span = xmax - xmin
+            x_text = xmax + 0.02 * span
+            for y, lab in zip(pos_cols, group_labels):
+                ax.text(x_text, y, lab, va="center", ha="left")
+        else:
+            # text at the top
+            ymin, ymax = ax.get_ylim()
+            span = ymax - ymin
+            y_text = ymax + 0.02 * span
+            for x, lab in zip(pos_cols, group_labels):
+                ax.text(x, y_text, lab, va="bottom", ha="center")
+    
+        # Dotted group separators
+        cat_minor_loc(ticker.FixedLocator(pos_grid))
+        cat_minor_grid(color="gray", linestyle="dashed", which="minor")
+    
+        # Value label
+        set_val_label(label)
+    
+        # Spines & grid style (match bars)
+        ax.set_axisbelow(True)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        if is_horizontal:
+            ax.spines["left"].set_visible(False)
+        else:
+            ax.spines["bottom"].set_visible(False)
+    
+        # ============================================================
+        # 8. Save & show
+        # ============================================================
+        plt.savefig(self.folder_plots + "/" + fileName+ ".pdf", bbox_inches="tight")
+        plt.savefig(
+            self.folder_plots + "/" + fileName + ".png",
+            bbox_inches="tight",
+            dpi=300,
+        )
+        plt.show()
 
 
 
@@ -446,18 +631,18 @@ class Plots:
         ----------
         listModelsid : list
             List of model ids to plot.
-        listSce : None, list[str], or dict[str, str]
+        listSce : None, list[str], or dict[tuple, str]
             Which scenarios to include and how to label them.
         
-            - None  → use all scenarios in self.sce (labels = scenario IDs)
+            - None  → use all scenarios in self.sceVariants (labels = scenario IDs)
             - list  → subset of scenarios (labels = the same list elements)
-            - dict  → keys = scenario IDs in the data
+            - dict  → keys = (scenario IDs in the data, variant)
                         values = alternative display labels for axis ticks
         
                 Example:
                     listSce = {
-                        'abroad-resnuc-high': 'High cost',
-                        'abroad-resnuc-low': 'Low cost'
+                        ('abroad-resnuc-high','reference'): 'High cost',
+                        ('abroad-resnuc-low','reference'): 'Low cost'
                     }
         varName : str
             Variable name in the data template.
@@ -494,14 +679,9 @@ class Plots:
             If True, one subplot per group, shared xlim.
         """
     
-        import numpy as np
-        import matplotlib.pyplot as plt
-        import matplotlib.ticker as ticker
-        import seaborn as sb
-    
         # ----- Scenario selection -----
         if listSce is None:
-            sce_names = list(self.sce)
+            sce_names = self.sceVariants
             sce_labels = sce_names[:]  # Default labels equal IDs
         elif isinstance(listSce, dict):
             sce_names = list(listSce.keys())      # For retrieving data
@@ -510,7 +690,7 @@ class Plots:
             sce_names = list(listSce)
             sce_labels = sce_names[:]             # Labels equal IDs
     
-        numSce   = len(listSce)
+        numSce   = len(sce_names)
         nmodels  = len(listModelsid)
         listModels = [self.models[k] for k in listModelsid if k in self.models]
     
@@ -532,7 +712,7 @@ class Plots:
                     for subv in v["data"]:
                         try:
                             datasubv = self.annualData.loc[
-                                (sce_name, m, varName, subv, "annual", year),
+                                (sce_name[0],sce_name[1], m, varName, subv, "annual", year),
                                 "value",
                             ]
                         except KeyError:
@@ -769,7 +949,8 @@ class Plots:
             set_seclim(0, local_pos_grid[0])
     
             # group label as title
-            ax.set_title(group_labels[g])
+            ax.set_title(group_labels[g], fontsize=ax.xaxis.get_ticklabels()[0].get_fontsize())
+
     
             # grid on value axis
             ax.xaxis.grid(color="gray", linestyle="dashed")
@@ -796,7 +977,7 @@ class Plots:
                 fig.legend(handles, labels_legend, loc=pos_legend, ncol=1)
     
         fig.tight_layout()
-        plt.savefig(self.folder_plots + "/" + fileName, bbox_inches="tight")
+        plt.savefig(self.folder_plots + "/" + fileName+ ".pdf", bbox_inches="tight")
         plt.savefig(
             self.folder_plots + "/" + fileName + ".png",
             bbox_inches="tight",
@@ -831,18 +1012,18 @@ class Plots:
         ----------
         listModelsid : list
             List of model ids to plot.
-        listSce : None, list[str], or dict[str, str]
+        listSce : None, list[str], or dict[tuple, str]
             Which scenarios to include and how to label them.
         
-            - None  → use all scenarios in self.sce (labels = scenario IDs)
+            - None  → use all scenarios in self.sceVariants (labels = scenario IDs)
             - list  → subset of scenarios (labels = the same list elements)
-            - dict  → keys = scenario IDs in the data
+            - dict  → keys = (scenario IDs in the data, variant)
                         values = alternative display labels for axis ticks
         
                 Example:
                     listSce = {
-                        'abroad-resnuc-high': 'High cost',
-                        'abroad-resnuc-low': 'Low cost'
+                        ('abroad-resnuc-high','reference'): 'High cost',
+                        ('abroad-resnuc-low','reference'): 'Low cost'
                     }
         varName : str
             Variable name in the data template.
@@ -879,14 +1060,10 @@ class Plots:
             If True, one subplot per group, shared ylim.
         """
     
-        import numpy as np
-        import matplotlib.pyplot as plt
-        import matplotlib.ticker as ticker
-        import seaborn as sb
-    
+   
         # ----- Scenario selection -----
         if listSce is None:
-            sce_names = list(self.sce)
+            sce_names = self.sceVariants
             sce_labels = sce_names[:]  # Default labels equal IDs
         elif isinstance(listSce, dict):
             sce_names = list(listSce.keys())      # For retrieving data
@@ -895,7 +1072,7 @@ class Plots:
             sce_names = list(listSce)
             sce_labels = sce_names[:]             # Labels equal IDs
             
-        numSce   = len(listSce)
+        numSce   = len(sce_names)
         nmodels  = len(listModelsid)
         listModels = [self.models[k] for k in listModelsid if k in self.models]
     
@@ -917,7 +1094,7 @@ class Plots:
                     for subv in v["data"]:
                         try:
                             datasubv = self.annualData.loc[
-                                (sce_name, m, varName, subv, "annual", year),
+                                (sce_name[0],sce_name[1], m, varName, subv, "annual", year),
                                 "value",
                             ]
                         except KeyError:
@@ -962,10 +1139,18 @@ class Plots:
                 pos_grid.append(ini)
                 pos_cols.append(ini - nWithin / 4 - 0.25)
                 for w in range(nWithin):
-                    pos = ini - w * 0.5 - 0.5
+                    pos = ini - (nWithin - 1 - w) * 0.5 - 0.5
                     pos_bar.append(pos)
     
             pos_bar = np.array(pos_bar)
+            
+            # --- Flip groups so the first one is on the LEFT ---
+            max_grid = pos_grid[0]              # largest x used as total span
+            pos_grid = [max_grid - x for x in pos_grid]
+            pos_cols = [max_grid - x for x in pos_cols]
+            pos_bar  = max_grid - pos_bar
+
+
     
             # ---------- Figure and axis ----------
             sb.set_style("white")
@@ -1001,7 +1186,7 @@ class Plots:
     
             # ---------- Invert y-axis if needed ----------
             if invert:
-                ax.invert_ylim()
+                ax.invert_yaxis()
                 set_mainlim(figmax, 0)
             else:
                 set_mainlim(0, figmax)
@@ -1033,8 +1218,8 @@ class Plots:
                 ax.text(x, y_text, group_label, ha="center", va=va)
     
             # ---------- Secondary axis (categorical) limits ----------
-            set_seclim(0, pos_grid[0])
-    
+            set_seclim(0, max_grid)
+
             # ---------- Dotted lines separating groups ----------
             cat_minor_loc(ticker.FixedLocator(pos_grid))
             cat_minor_grid(color="gray", linestyle="dashed", which="minor")
@@ -1097,7 +1282,7 @@ class Plots:
             local_pos_grid.append(ini)
             local_pos_cols.append(ini - nWithin / 4 - 0.25)
             for w in range(nWithin):
-                pos = ini - w * 0.5 - 0.5
+                pos = ini - (nWithin - 1 - w) * 0.5 - 0.5
                 local_pos_bar.append(pos)
     
             local_pos_bar = np.array(local_pos_bar)
@@ -1145,12 +1330,17 @@ class Plots:
             set_seclim(0, local_pos_grid[0])
     
             # group label as title
-            ax.set_title(group_labels[g])
-    
+            ax.set_title(group_labels[g], fontsize=ax.xaxis.get_ticklabels()[0].get_fontsize())
+
             # grid on value axis
             ax.yaxis.grid(color="gray", linestyle="dashed")
     
-            set_value_label(label)
+            # Only show y-axis label on the first subplot
+            if g == 0:
+                set_value_label(label)
+            else:
+                ax.set_ylabel("")
+                ax.tick_params(axis="y", labelleft=False)
     
             if invert:
                 ax.spines['right'].set_visible(False)
@@ -1165,13 +1355,248 @@ class Plots:
                 fig.legend(handles, labels_legend, loc=pos_legend, ncol=1)
     
         fig.tight_layout()
-        plt.savefig(self.folder_plots + "/" + fileName, bbox_inches="tight")
+        plt.savefig(self.folder_plots + "/" + fileName+ ".pdf", bbox_inches="tight")
         plt.savefig(
             self.folder_plots + "/" + fileName + ".png",
             bbox_inches="tight",
             dpi=300,
         )
         plt.show()
+        
+    def plotLineByScenario(
+        self,
+        listModelsid,
+        map_sce_xaxis,
+        varName,
+        use_technology_fuel,
+        year,
+        scale,
+        xlabel,
+        ylabel,
+        fileName,
+        width,
+        height,
+    ):
+        """
+        Line plot of a variable by scenario/variant, with custom x-positions.
+    
+        Parameters
+        ----------
+        listModelsid : list[str]
+            Model IDs to plot (keys in self.models).
+    
+        map_sce_xaxis : dict[(str, str), (str, float)]
+            Mapping from (scenario_id, variant) -> (line_id, x_value).
+            line_id    : arbitrary string used to group points into lines
+                         (e.g. 'resnuc', 'res', or '5% WACC', '10% WACC').
+            x_value    : numeric value for the x-axis (e.g. OCC).
+    
+            Example:
+                map_sce_xaxis = {
+                    ('abroad-resnuc-high','reference'):   ('resnuc', 12000),
+                    ('abroad-resnuc-medium','reference'): ('resnuc', 8000),
+                    ('abroad-resnuc-low','reference'):    ('resnuc', 5000),
+                    ('abroad-res-high','reference'):      ('res',    12000),
+                    ('abroad-res-medium','reference'):    ('res',    8000),
+                    ('abroad-res-low','reference'):       ('res',    5000),
+                }
+    
+        varName : str
+            Variable name in the data template.
+    
+        use_technology_fuel : str
+            Name of the use / technology / fuel.
+    
+        year : int
+            Year for the plot.
+    
+        scale : float
+            Factor dividing the raw value (e.g. PJ → TWh).
+    
+        xlabel, ylabel : str
+            Axis labels.
+    
+        fileName : str
+            Base name for saved figure files.
+    
+        width, height : float
+            Figure size in centimeters.
+        """
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import seaborn as sb
+        import matplotlib
+    
+        # ---- Styling ----
+        sb.reset_defaults()
+        matplotlib.rcParams["font.family"] = "sans-serif"
+        matplotlib.rcParams["font.sans-serif"] = "Arial"
+    
+        # Collect all line_ids (e.g. 'resnuc', 'res', ...)
+        line_ids = sorted({v[0] for v in map_sce_xaxis.values()})
+    
+        # Container: values[model_id][line_id] = list of (x,y)
+        values = {
+            m: {line_id: [] for line_id in line_ids}
+            for m in listModelsid
+        }
+    
+        # ---- Read data ----
+        for (sce_id, variant), (line_id, x_val) in map_sce_xaxis.items():
+            for m in listModelsid:
+                try:
+                    val = self.annualData.loc[
+                        (sce_id, variant, m, varName, use_technology_fuel, "annual", year),
+                        "value",
+                    ]
+                except KeyError:
+                    val = np.nan
+    
+                if not np.isnan(val):
+                    y_val = val / scale
+                    values[m][line_id].append((x_val, y_val))
+    
+        # ---- Figure ----
+        cm = 1 / 2.54
+        fig, ax = plt.subplots(1, figsize=(width * cm, height * cm))
+    
+        # Simple color mapping for models
+        # If you already have self.modelColors, you can replace this.
+        color_cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+        model_colors = {}
+        for i, m in enumerate(listModelsid):
+            if hasattr(self, "modelColors") and m in self.modelColors:
+                model_colors[m] = self.modelColors[m]
+            else:
+                model_colors[m] = color_cycle[i % len(color_cycle)]
+    
+        # Some markers for different line_ids so they are distinguishable
+        marker_cycle = ["o", "s", "^", "D", "v", "P", "X"]
+        line_styles = ["-", "--", "-.", ":"]
+    
+        # For legend management
+        model_handles = {}
+        line_handles  = {}
+    
+        # ---- Plot each model & line ----
+        for im, m in enumerate(listModelsid):
+            for il, line_id in enumerate(line_ids):
+                pts = values[m][line_id]
+                if not pts:
+                    continue
+    
+                # sort by x
+                pts = sorted(pts, key=lambda t: t[0])
+                xs = [p[0] for p in pts]
+                ys = [p[1] for p in pts]
+    
+                color = model_colors[m]
+                marker = marker_cycle[il % len(marker_cycle)]
+                ls = line_styles[il % len(line_styles)]
+    
+                # line + markers
+                h = ax.plot(
+                    xs,
+                    ys,
+                    linestyle=ls,
+                    marker=marker,
+                    color=color,
+                    label=self.models.get(m, m),
+                )[0]
+    
+                # store handles for potential legends
+                model_handles.setdefault(m, h)
+                line_handles.setdefault(line_id, h)
+    
+                # annotate each point: "x: y GW"
+                for x_val, y_val in zip(xs, ys):
+                    text = f"{int(x_val)}: {round(y_val):.1f} GW"
+                    ax.text(
+                        x_val,
+                        y_val,
+                        text,
+                        fontsize=8,
+                        va="bottom",
+                        ha="center",
+                        bbox=dict(
+                            boxstyle="round,pad=0.2",
+                            edgecolor=color,
+                            facecolor="white",
+                            linewidth=1,
+                        ),
+                    )
+    
+        # ---- Axes, grid, labels ----
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        ax.grid(True, linestyle="--", alpha=0.5)
+    
+        # Optional: small padding around x
+        all_x = [x for m_dict in values.values() for line_pts in m_dict.values() for (x, _) in line_pts]
+        if all_x:
+            xmin, xmax = min(all_x), max(all_x)
+            span = xmax - xmin if xmax > xmin else 1.0
+            ax.set_xlim(xmin - 0.05 * span, xmax + 0.05 * span)
+    
+        # ---- Legends ----
+        from matplotlib.lines import Line2D
+
+        # ---- Build final legend with custom handles ----
+        combined_handles = []
+        combined_labels  = []
+        
+        # 1. Model entries  (colored lines, NO markers)
+        for m in listModelsid:
+            if m in model_handles:
+                # get color from the actual plotted handle
+                color = model_handles[m].get_color()
+                h = Line2D(
+                    [], [], 
+                    linestyle='-',
+                    color=color,
+                    marker='None',
+                    linewidth=2,
+                )
+                combined_handles.append(h)
+                combined_labels.append(self.models.get(m, m))
+        
+        # 2. Line-group entries  (black line + marker + linestyle)
+        for il, lid in enumerate(line_ids):
+            marker = marker_cycle[il % len(marker_cycle)]
+            ls     = line_styles[il % len(line_styles)]
+        
+            h = Line2D(
+                [], [],
+                linestyle=ls,
+                color='DARKGREY',
+                marker=marker,
+                markersize=8,
+                linewidth=1.5,
+            )
+        
+            combined_handles.append(h)
+            combined_labels.append(lid)
+        
+        # ---- Draw combined legend ----
+        ax.legend(
+            combined_handles,
+            combined_labels,
+            loc="upper right",
+            frameon=True,
+        )
+
+
+
+    
+        plt.tight_layout()
+        plt.savefig(self.folder_plots + "/" + fileName+ ".pdf", bbox_inches="tight")
+        plt.savefig(
+            self.folder_plots + "/" + fileName + ".png",
+            bbox_inches="tight",
+            dpi=300,
+        )
+        plt.show()
+
 
 
     def plotTechDist(self,listModelsid,varName,varList,year,order,ylabel,ymax,fileName,legend):
