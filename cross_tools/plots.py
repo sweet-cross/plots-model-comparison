@@ -534,7 +534,10 @@ class Plots:
                         x, y = v, pos
                     else:
                         x, y = pos, v
-                    ax.scatter(x, y, c=self.sceColors[isce], s=20, zorder=2)
+                    if group_by == "model":
+                        ax.scatter(x, y, c=self.sceColors[isce], s=20, zorder=2)
+                    else:  # group_by == "scenario"    
+                        ax.scatter(x, y, c=self.model_colors[im], s=20, zorder=2)
     
                 tick_pos.append(pos)
                 tick_lab.append(within_labels[w])

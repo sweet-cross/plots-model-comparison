@@ -77,7 +77,7 @@ cross_plots.plotScatter(
     fileName=fileName,
     width=5, height=12,
     orientation="horizontal",
-    group_by="model",
+    group_by="scenario",
 )
 
 cross_plots.plotScatter(
@@ -92,7 +92,7 @@ cross_plots.plotScatter(
     fileName=fileName,
     width=12, height=5,
     orientation="vertical",
-    group_by="model",
+    group_by="scenario",
 )
 
 
