@@ -1528,7 +1528,7 @@ class Plots:
     
                 # annotate each point: "x: y GW"
                 for x_val, y_val in zip(xs, ys):
-                    text = f"{int(x_val)}: {round(y_val):.1f} GW"
+                    text = f"{int(x_val)}: {y_val:.1f} GW"
                     ax.text(
                         x_val,
                         y_val,

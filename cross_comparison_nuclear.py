@@ -282,6 +282,12 @@ scenario_groups = {
             ('abroad-resnuc-high',   'wacc_8', 'nexuse'): 0.0,
             ('abroad-resnuc-medium', 'wacc_8', 'nexuse'): 0.4,
             ('abroad-resnuc-low',    'wacc_8', 'nexuse'): 1.63,
+            ('abroad-resnuc-high',   'wacc_8', 'stem'): 0.4,
+            ('abroad-resnuc-medium', 'wacc_8', 'stem'): 1.7,
+            ('abroad-resnuc-low',    'wacc_8', 'stem'): 2.8,
+            ('abroad-resnuc-high',   'wacc_5', 'stem'): 1.4,
+            ('abroad-resnuc-medium', 'wacc_5', 'stem'): 2.3,
+            ('abroad-resnuc-low',    'wacc_5', 'stem'): 3.6,
         },
     },
     "nores": {
@@ -293,11 +299,41 @@ scenario_groups = {
                 ('abroad-nores-high','wacc_8'):('wacc_8',12000),
                 ('abroad-nores-medium','wacc_8'):('wacc_8',8000),
                 ('abroad-nores-low','wacc_8'):('wacc_8',5000),
+
             },
         "extra_values": {
             ('abroad-nores-high',   'wacc_8', 'nexuse'): 0.0,
             ('abroad-nores-medium', 'wacc_8', 'nexuse'): 0.0,
             ('abroad-nores-low',    'wacc_8', 'nexuse'): 0.0,
+              ('abroad-nores-high',   'wacc_8', 'stem'): 0.8,
+              ('abroad-nores-medium', 'wacc_8', 'stem'): 1.7,
+              ('abroad-nores-low',    'wacc_8', 'stem'): 3.3,
+              ('abroad-nores-high',   'wacc_5', 'stem'): 1.5,
+              ('abroad-nores-medium', 'wacc_5', 'stem'): 3.3,
+              ('abroad-nores-low',    'wacc_5', 'stem'): 3.6,
+        },
+    },
+    "res": {
+        "map_sce_xaxis": {
+                # ('scenario-id','variant'): 'label'
+                ('abroad-res-high','wacc_5'):('wacc_5',12000),
+                ('abroad-res-medium','wacc_5'):('wacc_5',8000),
+                ('abroad-res-low','wacc_5'):('wacc_5',5000),
+                ('abroad-res-high','wacc_8'):('wacc_8',12000),
+                ('abroad-res-medium','wacc_8'):('wacc_8',8000),
+                ('abroad-res-low','wacc_8'):('wacc_8',5000),
+
+            },
+        "extra_values": {
+            ('abroad-res-high',   'wacc_8', 'nexuse'): 0.0,
+            ('abroad-res-medium', 'wacc_8', 'nexuse'): 0.0,
+            ('abroad-res-low',    'wacc_8', 'nexuse'): 0.0,
+              ('abroad-res-high',   'wacc_8', 'stem'): 0.4,
+              ('abroad-res-medium', 'wacc_8', 'stem'): 1.1,
+              ('abroad-res-low',    'wacc_8', 'stem'): 1.4,
+              ('abroad-res-high',   'wacc_5', 'stem'): 0.7,
+              ('abroad-res-medium', 'wacc_5', 'stem'): 1.4,
+              ('abroad-res-low',    'wacc_5', 'stem'): 2.4,
         },
     },
 }
@@ -325,7 +361,7 @@ for group_name, cfg in scenario_groups.items():
         fileName = fileName+'_'+group_name,
         width = 18,
         height = 10,
-        ylim = (0,8),
+        ylim = (0,5),
         extra_values        = cfg["extra_values"], 
     )
 
