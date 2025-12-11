@@ -115,6 +115,78 @@ for name, scenarios in scenario_list.items():
     )
 
 
+# Hydrogen supply by technology https://sweet-cross.github.io/instructions-data/docs/sets/tech_hydrogen/
+varList_h2_supply = [
+    {'name':'Electrolysis','data':['electrolyser'],'color':'#FAC748'},
+    {'name':'Steam reforming','data':['steam_reforming'],'color':'#1f6228'},
+    {'name':'Gasification','data':['wood_gasification_h2','waste_gasification_h2'],'color':'#a9807c'},
+    {'name':'Pyrolysis','data':['methane_pyrolysis'],'color':'#A93226'},
+    {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
+    ]
+
+varName = 'h2_supply'
+listModels = cross_plots.modelsid
+xlabel = 'Hydrogen (TWh)'
+xmax = 40
+fileName = 'h2Supply_tech'
+year = 2050
+
+for name, scenarios in scenario_list.items():
+    #cross_plots.plotBarHorizontal(
+    cross_plots.plotBarVertical(   
+        listModelsid=listModels, 
+        listSce=scenarios,
+        varName = varName, 
+        varList=varList_h2_supply, 
+        year=year, 
+        scale=1,
+        label=xlabel, 
+        figmax = xmax,
+        fileName = fileName+'_'+name,
+        invert=False, legend=False, pos_legend="upper right",
+    #    width=5, height=12,
+        width=12, height=5,
+        group_by="scenario", # 'scenario' or 'model'
+        multi=False,          # <--- one plot
+    )
+
+
+varList_h2_consump = [
+    {'name':'Electricity','data':['hydrogen_pp','fuel_cell_h2'],'color':'#9751CB'},
+    {'name':'Freight','data':['truck','ldv'],'color':'#8B5349'},
+    {'name':'Passengers','data':['passenger_road_public','passenger_road_private'],'color':'#09c5c9'},
+    {'name':'Space heating','data':['space_heating'],'color':'#F2960E'},
+    {'name':'Process heat','data':['process_heat'],'color':'#CF4832'},
+    {'name':'Fuel synthesis','data':['fuel_synthesis'],'color':'#1F4E79'},
+     {'name':'Storage','data':['storage'],'color':'#939CAC'},
+    {'name':'Exports','data':['exports'],'color':'#CCCCCC'}
+    ]
+
+varName = 'h2_fec'
+listModels = cross_plots.modelsid
+scale = 1
+xlabel = 'Hydrogen (TWh)'
+xmax = 40
+fileName = 'h2Use'
+year = 2050
+for name, scenarios in scenario_list.items():
+    #cross_plots.plotBarHorizontal(
+    cross_plots.plotBarVertical(   
+        listModelsid=listModels, 
+        listSce=scenarios,
+        varName = varName, 
+        varList=varList_h2_consump, 
+        year=year, 
+        scale=1,
+        label=xlabel, 
+        figmax = xmax,
+        fileName = fileName+'_'+name,
+        invert=False, legend=True, pos_legend="upper right",
+    #    width=5, height=12,
+        width=12, height=5,
+        group_by="scenario", # 'scenario' or 'model'
+        multi=False,          # <--- one plot
+    )
 
 
 # Electricity consumption by use with net exports
