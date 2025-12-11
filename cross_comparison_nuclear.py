@@ -19,8 +19,8 @@ from cross_tools import plots
 model_list =  [
           #{'name': 'Calliope', 'file': 'resultsCross_Calliope','summer':'Jul 20','winter':'Feb 08','color':'#D57CBE'},
           #{'name': 'Expanse', 'file': 'resultsCross_Expanse','summer':'Jul 02','winter':'Jan 01','color':'#FF7D0D'},
-           #{'name': 'Nexus-e+\nEP2050+', 'file': 'resultsCross_Nexuse-EP','summer':'Jul 02','winter':'Feb 08','color':'#BCBD21'},
-           #{'name': 'SecMod', 'id': 'secmod','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#9565BD'},
+          {'name': 'Nexus-e', 'id':'nexuse','summer':'Typical day','summerDay':'02.07.2050','winter':'Typical day','winterDay':'08.02.2050','color':'#BCBD21'},
+          #{'name': 'SecMod', 'id': 'secmod','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#9565BD'},
           {'name': 'SES', 'id':'ses','summer':'Typical day','summerDay':'01.08.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#1E75B3'},
           {'name': 'SES-ETH', 'id': 'seseth','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#2A9E2A'}
           #{'name': 'STEM', 'id': 'stem','summer':'Week day','summerDay':'01.07.2050','winter':'Week day','winterDay':'01.02.2050','color':'#D52426'},
@@ -31,7 +31,7 @@ model_list =  [
 
 # Create the object that produces the plots and processes the data
 # Name of the csv file with the results 
-fileResults = "results/nuclear_results_20251201_2050_sesfixed"
+fileResults = "results/nuclear_results_20251211"
 # Scenario names and corresponding colors 
 sce = ['abroad-resnuc-high','abroad-resnuc-medium','abroad-resnuc-low','abroad-resnuc-phaseout','abroad-res-high','abroad-res-medium','abroad-res-low','abroad-res-phaseout','abroad-nores-high','abroad-nores-medium','abroad-nores-low','abroad-nores-phaseout']
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E','#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
@@ -40,63 +40,6 @@ folder_plots='presentation_latex_nuc/figures_2025_12_02'
 
 
 cross_plots = plots.Plots(fileResults,model_list,sce,sceColors,folder_plots) 
-
-
-
-
-
-# # Annual electricity supply with total imports and exports
-
-# Scatter plot with net supply
-listModels = cross_plots.modelsid #any model can be excluded, the list should include the model ids
-varName = 'electricity_supply'
-use_technology_fuel = 'total'
-scale = 1
-xlabel = 'Electricity (TWh)'
-xmax = 101
-fileName = 'elecSupply'
-year = '2050'
-scenarios={
-        # ('scenario-id','variant'): 'label'
-        ('abroad-resnuc-phaseout','reference'):'Phase-out',
-        ('abroad-resnuc-high','reference'):'High cost',
-        ('abroad-resnuc-medium','reference'):'Medium cost',
-        ('abroad-resnuc-low','reference'):'Low cost',
-    }
-
-
-cross_plots.plotScatter(
-    listModelsid=listModels,
-    listSce=scenarios,
-    varName=varName,
-    use_technology_fuel=use_technology_fuel,
-    year=year,
-    scale=1,
-    label="Electricity (TWh)",
-    figmax=xmax,
-    fileName=fileName,
-    width=5, height=12,
-    orientation="horizontal",
-    group_by="scenario",
-)
-
-cross_plots.plotScatter(
-    listModelsid=listModels,
-    listSce=scenarios,
-    varName=varName,
-    use_technology_fuel=use_technology_fuel,
-    year=year,
-    scale=1,
-    label="Electricity (TWh)",
-    figmax=xmax,
-    fileName=fileName,
-    width=12, height=5,
-    orientation="vertical",
-    group_by="scenario",
-)
-
-
-
 
 
 # Annual electricity supply with net imports 
@@ -126,48 +69,51 @@ listModels = cross_plots.modelsid
 xlabel = 'Electricity (TWh)'
 xmax = 101
 fileName = 'elecSupply_tech_net'
-year = '2050'
-scenarios={
+year = 2050
+
+scenario_list={
+    'nores': {
         # ('scenario-id','variant'): 'label'
-        ('abroad-resnuc-phaseout','reference'):'Phase-out',
-        ('abroad-resnuc-high','reference'):'High cost',
-        ('abroad-resnuc-medium','reference'):'Medium cost',
-        ('abroad-resnuc-low','reference'):'Low cost',
+        ('abroad-nores-phaseout','wacc_5'):'Phase-out',
+        ('abroad-nores-high','wacc_5'):'High cost',
+        ('abroad-nores-medium','wacc_5'):'Medium cost',
+        ('abroad-nores-low','wacc_5'):'Low cost',
+    },
+    'res': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-res-phaseout','wacc_5'):'Phase-out',
+        ('abroad-res-high','wacc_5'):'High cost',
+        ('abroad-res-medium','wacc_5'):'Medium cost',
+        ('abroad-res-low','wacc_5'):'Low cost',
+    },
+    'resnuc': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-resnuc-phaseout','wacc_5'):'Phase-out',
+        ('abroad-resnuc-high','wacc_5'):'High cost',
+        ('abroad-resnuc-medium','wacc_5'):'Medium cost',
+        ('abroad-resnuc-low','wacc_5'):'Low cost',
+    },
     }
 
+for name, scenarios in scenario_list.items():
+    #cross_plots.plotBarHorizontal(
+    cross_plots.plotBarVertical(   
+        listModelsid=listModels, 
+        listSce=scenarios,
+        varName = varName, 
+        varList=varList_supply_net, 
+        year=year, 
+        scale=1,
+        label=xlabel, 
+        figmax = xmax,
+        fileName = fileName+'_'+name,
+        invert=False, legend=False, pos_legend="upper right",
+    #    width=5, height=12,
+        width=12, height=5,
+        group_by="scenario", # 'scenario' or 'model'
+        multi=False,          # <--- one plot
+    )
 
-cross_plots.plotBarHorizontal(
-    listModelsid=listModels, 
-    listSce=scenarios,
-    varName = varName, 
-    varList=varList_supply_net, 
-    year=year, 
-    scale=1,
-    label=xlabel, 
-    figmax = xmax,
-    fileName = fileName,
-    invert=False, legend=False, pos_legend="upper right",
-    width=5, height=12,
-    group_by="scenario", # 'scenario' or 'model'
-    multi=False,          # <--- one plot
-)
-
-
-cross_plots.plotBarVertical(
-    listModelsid=listModels, 
-    listSce=scenarios,
-    varName = varName, 
-    varList=varList_supply_net, 
-    year=year, 
-    scale=1,
-    label=xlabel, 
-    figmax = xmax,
-    fileName = fileName,
-    invert=False, legend=False, pos_legend="upper right",
-    width=12, height=5,
-    group_by="scenario", # 'scenario' or 'model'
-    multi=False,          # <--- one plot
-)
 
 
 
@@ -196,59 +142,94 @@ scale = 1
 xlabel = 'Electricity (TWh)'
 xmax = 101
 fileName = 'elecUse_net'
-year = '2050'
-scenarios={
+year = 2050
+
+scenario_list={
+    'nores': {
         # ('scenario-id','variant'): 'label'
-        ('abroad-resnuc-phaseout','reference'):'Phase-out',
-        ('abroad-resnuc-high','reference'):'High cost',
-        ('abroad-resnuc-medium','reference'):'Medium cost',
-        ('abroad-resnuc-low','reference'):'Low cost',
+        ('abroad-nores-phaseout','wacc_5'):'Phase-out',
+        ('abroad-nores-high','wacc_5'):'High cost',
+        ('abroad-nores-medium','wacc_5'):'Medium cost',
+        ('abroad-nores-low','wacc_5'):'Low cost',
+    },
+    'res': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-res-phaseout','wacc_5'):'Phase-out',
+        ('abroad-res-high','wacc_5'):'High cost',
+        ('abroad-res-medium','wacc_5'):'Medium cost',
+        ('abroad-res-low','wacc_5'):'Low cost',
+    },
+    'resnuc': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-resnuc-phaseout','wacc_5'):'Phase-out',
+        ('abroad-resnuc-high','wacc_5'):'High cost',
+        ('abroad-resnuc-medium','wacc_5'):'Medium cost',
+        ('abroad-resnuc-low','wacc_5'):'Low cost',
+    },
     }
 
 
-cross_plots.plotBarHorizontal(
-    listModelsid=listModels, 
-    listSce=scenarios,
-    varName = varName, 
-    varList=varList_use_net, 
-    year=year, 
-    scale=1,
-    label=xlabel, 
-    figmax = xmax,
-    fileName = fileName,
-    invert=False, legend=False, pos_legend="upper right",
-    width=5, height=12,
-    group_by="scenario", # 'scenario' or 'model'
-    multi=False,          # <--- one plot
-)
+for name, scenarios in scenario_list.items():
+    #cross_plots.plotBarHorizontal(
+    cross_plots.plotBarVertical(   
+        listModelsid=listModels, 
+        listSce=scenarios,
+        varName = varName, 
+        varList=varList_use_net, 
+        year=year, 
+        scale=1,
+        label=xlabel, 
+        figmax = xmax,
+        fileName = fileName+'_'+name,
+        invert=True, legend=False, pos_legend="upper right",
+    #    width=5, height=12,
+        width=12, height=5,
+        group_by="scenario", # 'scenario' or 'model'
+        multi=False,          # <--- one plot
+    )
 
 
-cross_plots.plotBarVertical(
-    listModelsid=listModels, 
-    listSce=scenarios,
-    varName = varName, 
-    varList=varList_use_net, 
-    year=year, 
-    scale=1,
-    label=xlabel, 
-    figmax = xmax,
-    fileName = fileName,
-    invert=False, legend=False, pos_legend="upper right",
-    width=12, height=5,
-    group_by="scenario", # 'scenario' or 'model'
-    multi=True,          # <--- one plot
-)
 
 
-map_sce_xaxis ={
-        # ('scenario-id','variant'): 'label'
-        ('abroad-resnuc-high','reference'):('resnuc',12000),
-        ('abroad-resnuc-medium','reference'):('resnuc',8000),
-        ('abroad-resnuc-low','reference'):('resnuc',5000),
-        ('abroad-res-high','reference'):('res',12000),
-        ('abroad-res-medium','reference'):('res',8000),
-        ('abroad-res-low','reference'):('res',5000),
-    }
+
+#### Capacity vs. cost plot
+
+
+scenario_groups = {
+    "resnuc": {
+        "map_sce_xaxis": {
+                # ('scenario-id','variant'): 'label'
+                ('abroad-resnuc-high','wacc_5'):('wacc_5',12000),
+                ('abroad-resnuc-medium','wacc_5'):('wacc_5',8000),
+                ('abroad-resnuc-low','wacc_5'):('wacc_5',5000),
+                ('abroad-resnuc-high','wacc_8'):('wacc_8',12000),
+                ('abroad-resnuc-medium','wacc_8'):('wacc_8',8000),
+                ('abroad-resnuc-low','wacc_8'):('wacc_8',5000),
+            },
+        "extra_values": {
+            ('abroad-resnuc-high',   'wacc_8', 'nexuse'): 0.0,
+            ('abroad-resnuc-medium', 'wacc_8', 'nexuse'): 0.4,
+            ('abroad-resnuc-low',    'wacc_8', 'nexuse'): 1.63,
+        },
+    },
+    "nores": {
+        "map_sce_xaxis": {
+                # ('scenario-id','variant'): 'label'
+                ('abroad-nores-high','wacc_5'):('wacc_5',12000),
+                ('abroad-nores-medium','wacc_5'):('wacc_5',8000),
+                ('abroad-nores-low','wacc_5'):('wacc_5',5000),
+                ('abroad-nores-high','wacc_8'):('wacc_8',12000),
+                ('abroad-nores-medium','wacc_8'):('wacc_8',8000),
+                ('abroad-nores-low','wacc_8'):('wacc_8',5000),
+            },
+        "extra_values": {
+            ('abroad-nores-high',   'wacc_8', 'nexuse'): 0.0,
+            ('abroad-nores-medium', 'wacc_8', 'nexuse'): 0.0,
+            ('abroad-nores-low',    'wacc_8', 'nexuse'): 0.0,
+        },
+    },
+}
+
 
 listModels = cross_plots.modelsid #any model can be excluded, the list should include the model ids
 varName = 'installed_capacity'
@@ -256,20 +237,25 @@ use_technology_fuel = 'nuclear'
 xlabel = 'Overnight capital cost (EUR/kW)'
 ylabel = 'Nuclear capacity (GW)'
 fileName = 'nucCap_occ'
-year = '2050'
+year = 2050
+
+for group_name, cfg in scenario_groups.items():
+
+    cross_plots.plotLineByScenario(
+        listModelsid = listModels,
+        map_sce_xaxis = cfg["map_sce_xaxis"],
+        varName = varName,
+        use_technology_fuel = use_technology_fuel,
+        year = year,
+        scale = 1,  # if values are MW → GW, etc.
+        xlabel = xlabel,
+        ylabel = ylabel,
+        fileName = fileName+'_'+group_name,
+        width = 18,
+        height = 10,
+        ylim = (0,8),
+        extra_values        = cfg["extra_values"], 
+    )
 
 
 
-cross_plots.plotLineByScenario(
-    listModelsid = listModels,
-    map_sce_xaxis = map_sce_xaxis,
-    varName = varName,
-    use_technology_fuel = use_technology_fuel,
-    year = year,
-    scale = 1,  # if values are MW → GW, etc.
-    xlabel = xlabel,
-    ylabel = ylabel,
-    fileName = fileName,
-    width = 18,
-    height = 10,
-)

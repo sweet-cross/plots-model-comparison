@@ -39,10 +39,11 @@ sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40
 folder_plots='presentation_latex/figures_2025_10_25'
 
 
+
 cross_plots = plots.Plots(fileResults,model_list,sce,sceColors,folder_plots) 
 
 
-# Annual electricity supply with total imports and exports
+# # Annual electricity supply with total imports and exports
 
 # Scatter plot with net supply
 listModels = cross_plots.modelsid #any model can be excluded, the list should include the model ids
@@ -50,18 +51,55 @@ varName = 'electricity_supply'
 use_technology_fuel = 'total'
 scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 180
-fileName = 'elecSupply.pdf'
+xmax = 100
+fileName = 'elecSupply'
 year = '2050'
+scenarios={
+        # ('scenario-id','variant'): 'label'
+        ('abroad-res-full','reference'):'abroad-res-full',
+        ('abroad-res-lim','reference'):'abroad-res-lim',
+        ('domestic-res-full','reference'):'domestic-res-full',
+        ('domestic-res-lim','reference'):'domestic-res-lim',
+    }
 
-cross_plots.plotScatter(listModels,varName ,use_technology_fuel,year,scale,xlabel,xmax,fileName)
+
+cross_plots.plotScatter(
+    listModelsid=listModels,
+    listSce=scenarios,
+    varName=varName,
+    use_technology_fuel=use_technology_fuel,
+    year=year,
+    scale=1,
+    label="Electricity (TWh)",
+    figmax=xmax,
+    fileName=fileName,
+    width=5, height=12,
+    orientation="horizontal",
+    group_by="scenario",
+)
+
+cross_plots.plotScatter(
+    listModelsid=listModels,
+    listSce=scenarios,
+    varName=varName,
+    use_technology_fuel=use_technology_fuel,
+    year=year,
+    scale=1,
+    label="Electricity (TWh)",
+    figmax=xmax,
+    fileName=fileName,
+    width=12, height=5,
+    orientation="vertical",
+    group_by="scenario",
+)
 
 
+# Annual electricity supply with net imports 
 
 # name: name of the technology or group of technologies (valid names: https://sweet-cross.github.io/instructions-data/docs/sets/tech_generation/)
 # data: list with the technologies that correspond to this category
 # color: color to use for this category
-varList_supply = [
+varList_supply_net = [
     {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
     {'name':'Nuclear','data':['nuclear'],'color':'#FF007F'},
     {'name':'Solar','data':['spv'],'color':'#FAC748'},
@@ -72,27 +110,62 @@ varList_supply = [
     {'name':'Liquids','data':['liquids_pp'],'color':'#4B4EFC'},
     {'name':'Waste','data':['waste_pp'],'color':'#b82222'},
     {'name':'Wood','data':['wood_pp'],'color':'#a9807c'},
-    {'name':'Storage','data':['battery_out','phs_out'],'color':'#939CAC'},
-    {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
+    {'name':'Storage','data':['net_storage_out'],'color':'#939CAC'},
+    {'name':'Net-imports','data':['net_imports'],'color':'#CCCCCC'}
+    #     {'name':'Storage','data':['battery_out','phs_out'],'color':'#939CAC'},
+    #     {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
    ]
 
-
-# Electricity supply bar plot
 varName = 'electricity_supply'
 listModels = cross_plots.modelsid
-scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 180
-fileName = 'elecSupply_tech.pdf'
-right = False #True if model names have to go on the right
-legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = '' # name of variable to plot on top of the bar plot, '' if none, 'total': plots the total
+xmax = 101
+fileName = 'elecSupply_tech_net'
 year = '2050'
-height=12
-width=7
+scenarios={
+        # ('scenario-id','variant'): 'label'
+        ('abroad-res-full','reference'):'abroad-res-full',
+        ('abroad-res-lim','reference'):'abroad-res-lim',
+        ('domestic-res-full','reference'):'domestic-res-full',
+        ('domestic-res-lim','reference'):'domestic-res-lim',
+    }
 
-cross_plots.plotBar(listModels,varName ,varList_supply,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+
+cross_plots.plotBarHorizontal(
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_supply_net, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=5, height=12,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
+
+
+cross_plots.plotBarVertical(
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_supply_net, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
+
+
+
 
 
 # Annual electricity supply with net imports 

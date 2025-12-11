@@ -1379,6 +1379,8 @@ class Plots:
         fileName,
         width,
         height,
+        ylim=None,
+        extra_values=None, 
     ):
         """
         Line plot of a variable by scenario/variant, with custom x-positions.
@@ -1424,6 +1426,10 @@ class Plots:
     
         width, height : float
             Figure size in centimeters.
+            
+        ylim : (float, float) or None, optional
+            If not None, fixed y-axis limits (ymin, ymax).
+        
         """
         import numpy as np
         import matplotlib.pyplot as plt
@@ -1444,9 +1450,11 @@ class Plots:
             for m in listModelsid
         }
     
-        # ---- Read data ----
+                        
+         # ---- Read data ----
         for (sce_id, variant), (line_id, x_val) in map_sce_xaxis.items():
             for m in listModelsid:
+                # 1) try to read from self.annualData
                 try:
                     val = self.annualData.loc[
                         (sce_id, variant, m, varName, use_technology_fuel, "annual", year),
@@ -1455,6 +1463,13 @@ class Plots:
                 except KeyError:
                     val = np.nan
     
+                # 2) if missing, try extra_values
+                if (np.isnan(val) or val is None) and extra_values is not None:
+                    key = (sce_id, variant, m)
+                    if key in extra_values:
+                        val = extra_values[key]
+    
+                # 3) if still NaN, skip
                 if not np.isnan(val):
                     y_val = val / scale
                     values[m][line_id].append((x_val, y_val))
@@ -1540,6 +1555,10 @@ class Plots:
             xmin, xmax = min(all_x), max(all_x)
             span = xmax - xmin if xmax > xmin else 1.0
             ax.set_xlim(xmin - 0.05 * span, xmax + 0.05 * span)
+            
+        # <<< Optional fixed y-limits
+        if ylim is not None:
+            ax.set_ylim(ylim)
     
         # ---- Legends ----
         from matplotlib.lines import Line2D
@@ -1572,7 +1591,7 @@ class Plots:
                 [], [],
                 linestyle=ls,
                 color='DARKGREY',
-                marker=marker,
+                marker='None',
                 markersize=8,
                 linewidth=1.5,
             )
