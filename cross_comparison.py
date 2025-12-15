@@ -53,7 +53,7 @@ scale = 1
 xlabel = 'Electricity (TWh)'
 xmax = 100
 fileName = 'elecSupply'
-year = '2050'
+year = 2050
 scenarios={
         # ('scenario-id','variant'): 'label'
         ('abroad-res-full','reference'):'abroad-res-full',
@@ -121,7 +121,7 @@ listModels = cross_plots.modelsid
 xlabel = 'Electricity (TWh)'
 xmax = 101
 fileName = 'elecSupply_tech_net'
-year = '2050'
+year = 2050
 scenarios={
         # ('scenario-id','variant'): 'label'
         ('abroad-res-full','reference'):'abroad-res-full',

@@ -61,11 +61,11 @@ class Plots:
         # Read the file with the data
         self.allData = self.__readData(fileResults) 
         
-        self.yearsModel = self.getReportedYearsByModel()
+        self.yearsModel = self.__getReportedYearsByModel()
         self.sce = scenarios
         self.sceColors = sceColors
-        self.sceModel = self.getReportedScenariosByModel()
-        self.sceVariants= self.getReportedSceVariants()
+        self.sceModel = self.__getReportedScenariosByModel()
+        self.sceVariants= self.__getReportedSceVariants()
         
         
         #Calculate net imports and exports
@@ -77,26 +77,35 @@ class Plots:
         # This guarantees that we can compare even if models report different levels of aggregation 
 
         subcats = [
-            {'varName':'electricity_supply','time_resolution':'annual','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain','spv_agriculture']},
-            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain','spv_agriculture']},
-            {'varName':'electricity_supply','time_resolution':'annual','cat':'wind','subcats':['wind_on','wind_off']},
-            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'wind','subcats':['wind_on','wind_off']},
-            {'varName':'electricity_supply','time_resolution':'annual','cat':'methane_pp','subcats':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs"]},
-            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'methane_pp','subcats':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs"]},
-            {'varName':'electricity_supply','time_resolution':'annual','cat':'liquids_pp','subcats':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs']},
-            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'liquids_pp','subcats':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs']},
-            {'varName':'electricity_supply','time_resolution':'annual','cat':'waste_pp','subcats':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs']},
-            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'waste_pp','subcats':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs']},
-            {'varName':'electricity_supply','time_resolution':'annual','cat':'wood_pp','subcats':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs']},
-            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'wood_pp','subcats':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs']},
-            {'varName':'electricity_supply','time_resolution':'annual','cat':'hydrogen_pp','subcats':['hydrogen_chp','hydrogen_cc']},
-            {'varName':'electricity_supply_typical_day','time_resolution':'typical-day','cat':'hydrogen_pp','subcats':['hydrogen_chp','hydrogen_cc']},
-            {'varName':'space_heat_useful_energy_supply','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-            {'varName':'district_heat_useful_energy_supply','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-            {'varName':'process_heat_useful_energy_production','time_resolution':'annual','cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-            {'varName':'space_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-            {'varName':'district_heat_useful_energy_supply','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
-            {'varName':'process_heat_useful_energy_production','time_resolution':'annual','cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']}, 
+            {'varName':'electricity_supply',
+             'time_resolution':['annual','typical-day'],
+             'data':[
+                 {'cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain','spv_agriculture']},
+                 {'cat':'wind','subcats':['wind_on','wind_off']},
+                 {'cat':'methane_pp','subcats':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs"]},
+                 {'cat':'liquids_pp','subcats':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs']},
+                 {'cat':'waste_pp','subcats':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs']},
+                 {'cat':'wood_pp','subcats':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs']},
+                 {'cat':'hydrogen_pp','subcats':['hydrogen_chp','hydrogen_cc']},
+                 ]},
+            {'varName':'space_heat_useful_energy_supply',
+             'time_resolution':['annual'],
+             'data':[
+                 {'cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
+                 {'cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']},
+                 ]},
+            {'varName':'district_heat_useful_energy_supply',
+             'time_resolution':['annual'],
+             'data':[
+                 {'cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
+                 {'cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']},
+                 ]},
+            {'varName':'process_heat_useful_energy_production',
+             'time_resolution':['annual'],
+             'data':[
+                 {'cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
+                 {'cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']},
+                 ]},
             ]
 
 
@@ -105,12 +114,18 @@ class Plots:
         variables = ['total_system_costs','carbon_price']
         self.__checkVariablesNoSub(variables)
         
-        self.annualData = self.allData.loc[(slice(None),slice(None),slice(None),slice(None),slice(None),'annual',slice(None)),'value'].to_frame()
-        
         varList_supply_net = ['hydro_dam','hydro_ror','nuclear','spv','wind','geothermal_pp',"methane_pp",'fuel_cell_methane',
                            'hydrogen_pp','fuel_cell_h2','liquids_pp','waste_pp','wood_pp','net_storage_out','net_imports']
         
         self.__calculateTotalSupply(varList_supply_net)
+        
+        
+        self.allData = self.allData.set_index(['scenario_name','scenario_variant','model','variable','use_technology_fuel', 'time_resolution','timestamp'])
+        self.allData = self.allData.fillna(0)
+        
+        self.annualData = self.allData.loc[(slice(None),slice(None),slice(None),slice(None),slice(None),'annual',slice(None)),'value'].to_frame()
+        
+        
         
         # ---- Print info for the user ----
         print("=== Plots object initialized ===\n")
@@ -156,12 +171,26 @@ class Plots:
         # Correct the unit
         data['value']=data.apply(lambda x: x.value * self.__correctUnit(x.time_resolution,x.unit),axis=1)
         data = data.drop(['unit'], axis=1)
+
+        # Make timestamp either an int for annual or a datetime for hourly data 
+        # annual → int year
+        mask_annual = data['time_resolution'] == 'annual'
+        data.loc[mask_annual, 'timestamp'] = (
+            data.loc[mask_annual, 'timestamp']
+            .astype(int)
+        )
         
-        data = data.set_index(['scenario_name','scenario_variant','model','variable','use_technology_fuel', 'time_resolution','timestamp'])
-        # Models to columns
-        #data = data.unstack(level=1)
-        #data.columns = data.columns.droplevel()
-        data = data.fillna(0)
+        # Hourly-based → datetime (minute precision)
+        mask_hourly = data['time_resolution'].isin(['typical-day', 'hourly'])
+        data.loc[mask_hourly, 'timestamp'] = (
+            pd.to_datetime(
+                data.loc[mask_hourly, 'timestamp'],
+                dayfirst=True,
+                errors='coerce'
+            )
+            .dt.floor('min')
+        )
+       
         return data
     
     def __correctUnit(self,timeResolution,unit):
@@ -178,36 +207,42 @@ class Plots:
             else: 
                 return 0
             
-    def getReportedYearsByModel(self):
+    def __getReportedYearsByModel(self):
         years =  {}
         for m in self.modelsid:
-            data_annual_m = self.allData.loc[(slice(None),slice(None),m,slice(None),slice(None),'annual',slice(None)),:].reset_index(level=[6])
-            years_m = data_annual_m.timestamp.unique().tolist()
+            data_annual_m = self.allData.loc[
+                (self.allData["model"] == m) &
+                (self.allData["time_resolution"] == "annual"),
+                "timestamp"
+            ]
+            years_m = (
+                pd.to_numeric(data_annual_m, errors='coerce')
+                  .dropna()
+                  .astype(int)
+                  .unique()
+                  .tolist()
+                  )
             years[m]=years_m
             
         return years
     
     
-    def getReportedScenariosByModel(self):
-        sceModel =  {}
-        for m in self.modelsid:
-           data_annual_m = self.allData.loc[(slice(None),slice(None),m,slice(None),slice(None),'annual',slice(None)),:]
-            # Bring scenario_name and scenario_variant back as columns
-           data_annual_m = data_annual_m.reset_index(level=['scenario_name', 'scenario_variant'])
-    
-           # Unique (scenario_name, scenario_variant) combinations
-           combos = (
-               data_annual_m[['scenario_name', 'scenario_variant']]
-               .drop_duplicates()
-               .apply(tuple, axis=1)
-               .tolist()
-           )
+    def __getReportedScenariosByModel(self):
+        sceModel = {}
 
-           sceModel[m] = combos
-            
+        for m in self.modelsid:
+            df = self.allData.loc[
+                (self.allData["model"] == m) &
+                (self.allData["time_resolution"] == "annual"),
+                ["scenario_name", "scenario_variant"]
+            ]
+    
+            combos = list(map(tuple, df.drop_duplicates().to_numpy()))
+            sceModel[m] = combos
+    
         return sceModel
     
-    def getReportedSceVariants(self):
+    def __getReportedSceVariants(self):
         seen = set()
         union_list = []
         
@@ -217,55 +252,99 @@ class Plots:
                     seen.add(combo)
                     union_list.append(combo)
         return union_list
-                        
-    def __checkSubcategories(self,subcats):
-        """ 
-        Calculate cat = sum(subcats)
-        """ 
+   
+
+
+    def __checkSubcategories(self, subcats):
+        """
+        Create category rows by aggregating subcategories:
+            value(varName, cat) = sum(value(varName, subcats))
+    
+        Works for:
+          - annual: timestamp is a year (e.g., 2050)
+          - typical-day: timestamp is hourly datetimes within a representative day
+        """
         
+        df = self.allData.copy()
+        new_rows = []
+
+        base_keys = ["scenario_name","scenario_variant","model","variable","time_resolution","timestamp"]
+
         for v in subcats:
-            for m in self.modelsid:
-                for s in self.sceModel[m]:
-                    time = []
-                    if  v['time_resolution'] == 'annual':
-                        time = self.yearsModel[m]
-                    elif v['time_resolution'] == 'typical-day':
-                        time = [self.typicalDays['summer']['value'][m]]+[self.typicalDays['winter']['value'][m]]
-                        # Annual data
-                    for t in time:
-                        # Check if the variable exists
-                        try:
-                            totalCat = self.allData.loc[(s[0],s[1],m,v['varName'],v['cat'],v['time_resolution'],t),'value']
-                        except:
-                            totalCat = 0
-                            flag = 0
-                            # Check if the subvariables exist
-                            for subv in v['subcats']:
-                                try:
-                                    totalCat = totalCat + self.allData.loc[(s[0],s[1],m,v['varName'],subv,v['time_resolution'],t),'value']
-                                    flag +=1
-                                except:
-                                    totalCat = totalCat 
-                            
-                            if flag>0:
-                                self.allData.loc[(s[0],s[1],m,v['varName'],v['cat'],'annual',t),'value']  = totalCat
+            varName = v["varName"]
+            
+            for resolution in v["time_resolution"]:
+                suffix = "_typical_day" if resolution in ["typical-day", "hourly"] else ""
+                var = varName + suffix
+                
+                for item in v["data"]:
+                    cat = item["cat"]
+                    sub_list = item["subcats"]
+                    
+                    # restrict to relevant slice
+                    d = df.loc[
+                        (df["time_resolution"] == resolution) &
+                        (df["variable"] == var) &
+                        (df["use_technology_fuel"].isin(sub_list + [cat])),
+                        :
+                    ]
+                    if d.empty:
+                        continue
+                    
+                    # sum subcategories
+                    sub_sum = (
+                        d.loc[d["use_technology_fuel"].isin(sub_list)]
+                         .groupby(base_keys, as_index=False)["value"]
+                         .sum()
+                    )
+                    if sub_sum.empty:
+                        continue
+                    
+                    # remove keys where category already exists
+                    existing_cat = (
+                        d.loc[d["use_technology_fuel"] == cat, base_keys]
+                         .drop_duplicates()
+                    )
+                    
+                    if resolution == "annual":
+                        sub_sum["timestamp"] = pd.to_numeric(sub_sum["timestamp"], errors="coerce").astype("Int64")
+                        if not existing_cat.empty:
+                            existing_cat["timestamp"] = pd.to_numeric(existing_cat["timestamp"], errors="coerce").astype("Int64")
+                    else:
+                        sub_sum["timestamp"] = pd.to_datetime(sub_sum["timestamp"], dayfirst=True, errors="coerce").dt.floor("min")
+                        if not existing_cat.empty:
+                            existing_cat["timestamp"] = pd.to_datetime(existing_cat["timestamp"], dayfirst=True, errors="coerce").dt.floor("min")
+
+                    if not existing_cat.empty:
+                        sub_sum = sub_sum.merge(existing_cat, on=base_keys, how="left", indicator=True)
+                        sub_sum = sub_sum.loc[sub_sum["_merge"] == "left_only"].drop(columns="_merge")
+
+                    
+                    if sub_sum.empty:
+                        continue
+
+                    # build new category rows
+                    sub_sum["use_technology_fuel"] = cat
+                    new_rows.append(sub_sum)
+        if not new_rows:
+            return
+
+        add = pd.concat(new_rows, ignore_index=True)
+        self.allData = pd.concat([self.allData, add], ignore_index=True)
+        
+
                                 
     def __checkVariablesNoSub(self,variables):
         """ 
         Remove any text that was reported in use_technology_fuel for variables without subcategories 
         """ 
-        # Convert index to DataFrame
-        idx_df = self.allData.index.to_frame(index=False)
-        
         # Create mask on the 'variable' index level
-        mask = idx_df['variable'].isin(variables)
+        mask = self.allData['variable'].isin(variables)
         
         # Set use_technology_fuel to '' where condition holds
-        idx_df.loc[mask, 'use_technology_fuel'] = ''
+        self.allData.loc[mask, 'use_technology_fuel'] = ''
         
-        # Rebuild MultiIndex
-        self.allData.index = pd.MultiIndex.from_frame(idx_df)
-      
+        
                                 
     def __calculateNets(self):
         """ 
@@ -277,71 +356,123 @@ class Plots:
              'varDemand': 'electricity_consumption','use':['exports'], 
              'netPositive':'net_imports',
              'netNegative':'net_exports',
-             'time_resolution':['annual']},
-            #'time_resolution':['annual','typical-day']}, Since GF doesnt submit typical days, we dont do it for now
+             'time_resolution':['annual','typical-day']}, 
             {'varSupply': 'electricity_supply','tech':['battery_out','phs_out'],
              'varDemand': 'electricity_consumption','use':['battery_in','phs_in'],
              'netPositive':'net_storage_out',
              'netNegative':'net_storage_in',
-             'time_resolution':['annual']},
-            #'time_resolution':['annual','typical-day']}, Since GF doesnt submit typical days, we dont do it for now
+            'time_resolution':['annual','typical-day']}, 
             
         ]
-        for m in self.modelsid:
-            for s in self.sceModel[m]:
-                for v in variables:
-                    for resolution in v['time_resolution']:
-                        time = []
-                        sufix = ''
-                        if  resolution == 'annual':
-                            time = self.yearsModel[m]
-                        elif resolution == 'typical-day':
-                            
-                            timestamps_summer = [datetime.strptime(self.typicalDays['summer']['value'][m], "%d.%m.%Y") + timedelta(hours=i) for i in range(24)]
-                            timestamps_winter = [datetime.strptime(self.typicalDays['winter']['value'][m], "%d.%m.%Y") + timedelta(hours=i) for i in range(24)]
-                            
-                            
-                            time = [dt.strftime("%d.%m.%Y %H:%M") for dt in timestamps_summer]+[dt.strftime("%d.%m.%Y %H:%M") for dt in timestamps_winter]
-                            sufix = '_typical_day'
-                        
-                        for t in time:
-                            net = 0
-                            for subv in v['tech']:
-                                net = net + self.allData.loc[(s[0],s[1],m,v['varSupply']+sufix,subv,resolution,t),'value']
-                            for subv in v['use']:
-                                net = net - self.allData.loc[(s[0],s[1],m,v['varDemand']+sufix,subv,resolution,t),'value']
-                            if net>0:
-                                self.allData.loc[(s[0],s[1],m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = net
-                                self.allData.loc[(s[0],s[1],m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = 0
-                                
-                            else:
-                                self.allData.loc[(s[0],s[1],m,v['varSupply']+sufix,v['netPositive'],resolution,t),'value'] = 0
-                                self.allData.loc[(s[0],s[1],m,v['varDemand']+sufix,v['netNegative'],resolution,t),'value'] = -1*net
+        
+        out_rows = []
+        keys = ["scenario_name", "scenario_variant", "model", "time_resolution", "timestamp"]
+        
+        base = self.allData.copy()
+        
+        for v in variables:
+            for resolution in v['time_resolution']:
+                suffix = "_typical_day" if resolution in ["typical-day", "hourly"] else ""
+                var_supply = v["varSupply"] + suffix
+                var_demand = v["varDemand"] + suffix
+                
+                # filter to the two variables + resolution of interest
+                df = base.loc[
+                       (base["time_resolution"] == resolution) &
+                       (base["variable"].isin([var_supply, var_demand])),
+                       :
+                       ]
+            
+                if df.empty:
+                    continue
 
+                # Supply side: sum over tech list
+                supply = (
+                    df.loc[
+                        (df["variable"] == var_supply) &
+                        (df["use_technology_fuel"].isin(v["tech"])),
+                        keys + ["value"]
+                    ]
+                    .groupby(keys, as_index=False)["value"]
+                    .sum()
+                    .rename(columns={"value": "supply_sum"})
+                )
+                
+                # Demand side: sum over use list
+                demand = (
+                    df.loc[
+                        (df["variable"] == var_demand) &
+                        (df["use_technology_fuel"].isin(v["use"])),
+                        keys + ["value"]
+                    ]
+                    .groupby(keys, as_index=False)["value"]
+                    .sum()
+                    .rename(columns={"value": "demand_sum"})
+                )
+                
+                
+                # Combine (outer so missing tech/use becomes 0)
+                netdf = supply.merge(demand, on=keys, how="outer")
+                netdf["supply_sum"] = netdf["supply_sum"].fillna(0.0)
+                netdf["demand_sum"] = netdf["demand_sum"].fillna(0.0)
+                netdf["net"] = netdf["supply_sum"] - netdf["demand_sum"]
+                
+                if netdf.empty:
+                    continue
+
+                # Build two outputs:
+                #  - on supply variable: netPositive = max(net,0)
+                #  - on demand variable: netNegative = max(-net,0)
+                pos = netdf[keys].copy()
+                pos["variable"] = var_supply
+                pos["use_technology_fuel"] = v["netPositive"]
+                pos["value"] = netdf["net"].clip(lower=0.0)
+    
+                neg = netdf[keys].copy()
+                neg["variable"] = var_demand
+                neg["use_technology_fuel"] = v["netNegative"]
+                neg["value"] = (-netdf["net"]).clip(lower=0.0)
+    
+                out_rows.append(pos)
+                out_rows.append(neg)
+        
+        if not out_rows:
+            return
+
+        new_rows = pd.concat(out_rows, ignore_index=True)
+    
+        self.allData = pd.concat([self.allData, new_rows], ignore_index=True)
+        
+        
                    
     def __calculateTotalSupply(self,varList_supply):
         """ 
         Calculate Net supply = sum(varList_supply)
         """ 
-        for m in self.modelsid:
-            for s in self.sceModel[m]:
-                # Annual data
-                for y in self.yearsModel[m]:
-                    total = np.nan
-                    for v in varList_supply:
-                        try:
-                            data_v = self.annualData.loc[(s[0],s[1],m,'electricity_supply',v,'annual',y),'value']
-                        except:
-                            data_v = np.nan
-                            
-                        if not np.isnan(data_v):
-                            if np.isnan(total):
-                                total = data_v
-                            else:
-                                total = total + data_v
-                    
-                    self.annualData.loc[(s[0],s[1],m,'electricity_supply','total','annual',y),'value']   = total
-                     
+        df = self.allData.copy()
+        # --- restrict to annual electricity supply & selected fuels ---
+        d = df.loc[
+            (df["time_resolution"] == "annual") &
+            (df["variable"] == "electricity_supply") &
+            (df["use_technology_fuel"].isin(varList_supply)),
+            :
+        ]
+        if d.empty:
+            return
+        
+        # --- sum across supply technologies ---
+        keys = ["scenario_name", "scenario_variant", "model", "time_resolution", "timestamp"]
+        total = (
+            d.groupby(keys, as_index=False)["value"]
+             .sum(min_count=1)  # keeps NaN if all components are NaN
+        )
+        # --- build output rows ---
+        total["variable"] = "electricity_supply"
+        total["use_technology_fuel"] = "total"
+        
+        self.allData = pd.concat([self.allData, total], ignore_index=True)
+           
+    
     
     def __extractPositiveNegative(self,positive_variables,negative_variables):
         
