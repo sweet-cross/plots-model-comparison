@@ -107,7 +107,21 @@ for name, scenarios in scenario_list.items():
         label=xlabel, 
         figmax = xmax,
         fileName = fileName+'_'+name,
-        invert=False, legend=False, pos_legend="upper right",
+        invert=False, legend=True,
+   #     pos_legend={# This puts the legend outside-right for horizontal plots
+   #              "loc": "lower center",
+   #              "bbox_to_anchor": (0.5, 1.05),
+   #              "ncol": 4,
+   #             },
+        pos_legend={# This puts the legend outside-right for vertical plots
+                "loc": "center left",
+                "bbox_to_anchor": (1.02, 0.5),
+                },
+   #    pos_legend={ # This puts the legend outside-bottom 
+   #     "loc": "upper center",
+   #     "bbox_to_anchor": (0.5, -0.15),  #(0.5, -0.15) for vertical plots, this is the shift of the legend 
+   #     "ncol": 4,#number of columns of the legend
+   #     },
     #    width=5, height=12,
         width=12, height=5,
         group_by="scenario", # 'scenario' or 'model'
@@ -143,8 +157,12 @@ for name, scenarios in scenario_list.items():
         label=xlabel, 
         figmax = xmax,
         fileName = fileName+'_'+name,
-        invert=False, legend=False, pos_legend="upper right",
-    #    width=5, height=12,
+        invert=False, legend=True, 
+        pos_legend={# This puts the legend outside-right for vertical plots
+                "loc": "center left",
+                "bbox_to_anchor": (1.02, 0.5),
+                },
+ #    width=5, height=12,
         width=12, height=5,
         group_by="scenario", # 'scenario' or 'model'
         multi=False,          # <--- one plot
@@ -181,8 +199,12 @@ for name, scenarios in scenario_list.items():
         label=xlabel, 
         figmax = xmax,
         fileName = fileName+'_'+name,
-        invert=False, legend=True, pos_legend="upper right",
-    #    width=5, height=12,
+        invert=False, legend=True, 
+        pos_legend={# This puts the legend outside-right for vertical plots
+                "loc": "center left",
+                "bbox_to_anchor": (1.02, 0.5),
+                },
+#    width=5, height=12,
         width=12, height=5,
         group_by="scenario", # 'scenario' or 'model'
         multi=False,          # <--- one plot
@@ -253,8 +275,12 @@ for name, scenarios in scenario_list.items():
         label=xlabel, 
         figmax = xmax,
         fileName = fileName+'_'+name,
-        invert=True, legend=False, pos_legend="upper right",
-    #    width=5, height=12,
+        invert=True, legend=True, 
+        pos_legend={# This puts the legend outside-right for vertical plots
+                "loc": "center left",
+                "bbox_to_anchor": (1.02, 0.5),
+                },
+#    width=5, height=12,
         width=12, height=5,
         group_by="scenario", # 'scenario' or 'model'
         multi=False,          # <--- one plot
@@ -494,3 +520,72 @@ for group_name, cfg in scenario_groups.items():
 
 
 
+
+#### Imports and exports
+fileName = 'elec_imports'
+year = 2050
+
+signedVarList = [
+    {
+        "name": "Imports",
+        "varName": "electricity_supply",
+        "techs": ["imports"],
+        "sign": +1,
+        "color": "#cccccc",
+    },
+    {
+        "name": "Exports",
+        "varName": "electricity_consumption",
+        "techs": ["exports"],
+        "sign": -1,
+        "color": "#CF4832",
+    },
+]
+
+scenario_list={
+    'nores': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-nores-phaseout','wacc_5'):'Phase-out',
+        ('abroad-nores-high','wacc_5'):'High cost',
+        ('abroad-nores-medium','wacc_5'):'Medium cost',
+        ('abroad-nores-low','wacc_5'):'Low cost',
+    },
+    'res': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-res-phaseout','wacc_5'):'Phase-out',
+        ('abroad-res-high','wacc_5'):'High cost',
+        ('abroad-res-medium','wacc_5'):'Medium cost',
+        ('abroad-res-low','wacc_5'):'Low cost',
+    },
+    'resnuc': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-resnuc-phaseout','wacc_5'):'Phase-out',
+        ('abroad-resnuc-high','wacc_5'):'High cost',
+        ('abroad-resnuc-medium','wacc_5'):'Medium cost',
+        ('abroad-resnuc-low','wacc_5'):'Low cost',
+    },
+    }
+
+for name, scenarios in scenario_list.items():
+    print(name)
+    cross_plots.plotBarVerticalSigned(
+        listModelsid=listModels,
+        listSce=scenarios,
+        signedVarList=signedVarList,
+        year=year,
+        scale=1,
+        label="Electricity (TWh)",
+        figmax=100,
+        fileName=fileName+"_"+name,
+        invert=False,
+        legend=True,
+        #pos_legend="upper right",
+        pos_legend={# This puts the legend outside-right for vertical plots
+                "loc": "center left",
+                "bbox_to_anchor": (1.02, 0.5),
+                },
+        width=12,
+        height=5,
+        group_by="scenario",  # or "model"
+        multi=False,
+    )
