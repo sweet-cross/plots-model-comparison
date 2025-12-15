@@ -102,6 +102,9 @@ class Plots:
 
         self.__checkSubcategories(subcats)
         
+        variables = ['total_system_costs','carbon_price']
+        self.__checkVariablesNoSub(variables)
+        
         self.annualData = self.allData.loc[(slice(None),slice(None),slice(None),slice(None),slice(None),'annual',slice(None)),'value'].to_frame()
         
         varList_supply_net = ['hydro_dam','hydro_ror','nuclear','spv','wind','geothermal_pp',"methane_pp",'fuel_cell_methane',
@@ -162,7 +165,7 @@ class Plots:
         return data
     
     def __correctUnit(self,timeResolution,unit):
-        annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000,'gw':1,'mw':1/1000}
+        annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000,'gw':1,'mw':1/1000,'bchf':1,'mchf':1/1000,'chf/tco2':1}
         hourly_factors = {'gw':1,'gwh/h':1, 'mw':1/1000,'mwh/h':1/1000}
         if timeResolution == 'annual':
             if unit.lower() in annual_factors.keys():
@@ -247,7 +250,23 @@ class Plots:
                             if flag>0:
                                 self.allData.loc[(s[0],s[1],m,v['varName'],v['cat'],'annual',t),'value']  = totalCat
                                 
-                            
+    def __checkVariablesNoSub(self,variables):
+        """ 
+        Remove any text that was reported in use_technology_fuel for variables without subcategories 
+        """ 
+        # Convert index to DataFrame
+        idx_df = self.allData.index.to_frame(index=False)
+        
+        # Create mask on the 'variable' index level
+        mask = idx_df['variable'].isin(variables)
+        
+        # Set use_technology_fuel to '' where condition holds
+        idx_df.loc[mask, 'use_technology_fuel'] = ''
+        
+        # Rebuild MultiIndex
+        self.allData.index = pd.MultiIndex.from_frame(idx_df)
+      
+                                
     def __calculateNets(self):
         """ 
         Calculate net imports, exports and storage for all the models, scenarios and timesteps

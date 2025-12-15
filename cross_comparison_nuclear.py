@@ -261,8 +261,121 @@ for name, scenarios in scenario_list.items():
     )
 
 
+# Total System Costs
+varList_cost = [
+    {'name':'Total','data':[''],'color':'#A6A6A6'},
+    ]
+
+varName = 'total_system_costs'
+listModels = cross_plots.modelsid
+scale = 1
+xlabel = 'Total system costs (Billion CHF)'
+xmax = 50
+fileName = 'total_system_costs'
+year = 2050
+
+scenario_list={
+    'nores': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-nores-phaseout','wacc_5'):'Phase-out',
+        ('abroad-nores-high','wacc_5'):'High cost',
+        ('abroad-nores-medium','wacc_5'):'Medium cost',
+        ('abroad-nores-low','wacc_5'):'Low cost',
+    },
+    'res': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-res-phaseout','wacc_5'):'Phase-out',
+        ('abroad-res-high','wacc_5'):'High cost',
+        ('abroad-res-medium','wacc_5'):'Medium cost',
+        ('abroad-res-low','wacc_5'):'Low cost',
+    },
+    'resnuc': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-resnuc-phaseout','wacc_5'):'Phase-out',
+        ('abroad-resnuc-high','wacc_5'):'High cost',
+        ('abroad-resnuc-medium','wacc_5'):'Medium cost',
+        ('abroad-resnuc-low','wacc_5'):'Low cost',
+    },
+    }
 
 
+for name, scenarios in scenario_list.items():
+    #cross_plots.plotBarHorizontal(
+    cross_plots.plotBarVertical(   
+        listModelsid=listModels, 
+        listSce=scenarios,
+        varName = varName, 
+        varList=varList_cost, 
+        year=year, 
+        scale=1,
+        label=xlabel, 
+        figmax = xmax,
+        fileName = fileName+'_'+name,
+        invert=False, legend=False, pos_legend="upper right",
+    #    width=5, height=12,
+        width=12, height=5,
+        group_by="scenario", # 'scenario' or 'model'
+        multi=False,          # <--- one plot
+    )
+
+
+
+# Carbon price
+varList_cost = [
+    {'name':'Total','data':[''],'color':'#A6A6A6'},
+    ]
+
+varName = 'carbon_price'
+listModels = cross_plots.modelsid
+scale = 1
+xlabel = 'Carbon price (CHF/tCO2)'
+xmax = 500
+fileName = 'carbon_price'
+year = 2050
+
+scenario_list={
+    'nores': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-nores-phaseout','wacc_5'):'Phase-out',
+        ('abroad-nores-high','wacc_5'):'High cost',
+        ('abroad-nores-medium','wacc_5'):'Medium cost',
+        ('abroad-nores-low','wacc_5'):'Low cost',
+    },
+    'res': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-res-phaseout','wacc_5'):'Phase-out',
+        ('abroad-res-high','wacc_5'):'High cost',
+        ('abroad-res-medium','wacc_5'):'Medium cost',
+        ('abroad-res-low','wacc_5'):'Low cost',
+    },
+    'resnuc': {
+        # ('scenario-id','variant'): 'label'
+        ('abroad-resnuc-phaseout','wacc_5'):'Phase-out',
+        ('abroad-resnuc-high','wacc_5'):'High cost',
+        ('abroad-resnuc-medium','wacc_5'):'Medium cost',
+        ('abroad-resnuc-low','wacc_5'):'Low cost',
+    },
+    }
+
+
+for name, scenarios in scenario_list.items():
+    #cross_plots.plotBarHorizontal(
+    cross_plots.plotBarVertical(   
+        listModelsid=listModels, 
+        listSce=scenarios,
+        varName = varName, 
+        varList=varList_cost, 
+        year=year, 
+        scale=1,
+        label=xlabel, 
+        figmax = xmax,
+        fileName = fileName+'_'+name,
+        invert=False, legend=False, pos_legend="upper right",
+    #    width=5, height=12,
+        width=12, height=5,
+        group_by="scenario", # 'scenario' or 'model'
+        multi=False,          # <--- one plot
+    )
 
 #### Capacity vs. cost plot
 
