@@ -318,7 +318,21 @@ for name, scenarios in scenario_list.items():
         multi=False,          # <--- one plot
     )
 
-
+for name, scenarios in scenario_list.items():
+    cross_plots.plotScatter(
+        listModelsid=listModels,
+        listSce=scenarios,
+        varName=varName,
+        use_technology_fuel='',
+        year=year,
+        scale=1,
+        label=xlabel,
+        figmax=xmax,
+        fileName = fileName+'_'+name,
+        width=12, height=5,
+        orientation="vertical",
+        group_by="scenario",
+    )
 
 # Carbon price
 varList_cost = [
