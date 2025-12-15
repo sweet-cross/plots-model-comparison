@@ -516,252 +516,6 @@ class Plots:
             self.posNegData[season] = posNegData.set_index(["scenario",'index','timestep','model'])
             
      
-    def plotScatter(
-        self,
-        listModelsid,
-        listSce,
-        varName,
-        use_technology_fuel,
-        year,
-        scale,
-        label,          # label of value axis (x or y)
-        figmax,         # max of value axis (x or y)
-        fileName,
-        width,
-        height,
-        orientation="horizontal",   # 'horizontal' or 'vertical'
-        group_by="model",           # 'model' or 'scenario'
-    ):
-        """
-        Scatter plot of a variable by model and scenario/variant.
-    
-        Geometry and grouping follow the same logic as:
-          - plotBarHorizontal (for orientation='horizontal')
-          - plotBarVertical   (for orientation='vertical', multi=False)
-    
-        Behaviour:
-          - group_by='model':
-                groups   = models
-                within   = scenarios
-                primary ticks = scenarios (repeated per model)
-                group labels  = models (outside: right for horizontal, top for vertical)
-          - group_by='scenario':
-                groups   = scenarios
-                within   = models
-                primary ticks = models (repeated per scenario)
-                group labels  = scenarios (outside)
-        """
-        
-        # ----- Styling -----
-        sb.reset_defaults()
-        matplotlib.rcParams["font.family"] = "sans-serif"
-        matplotlib.rcParams["font.sans-serif"] = "Arial"
-    
-        # ===============================
-        # 1. Scenario selection + labels
-        # ===============================
-        if listSce is None:
-            # Expect self.sceVariants to be list of (scenario, variant)
-            sce_names = list(self.sceVariants)
-            sce_labels = [f"{s} ({v})" for s, v in sce_names]
-        elif isinstance(listSce, dict):
-            sce_names = list(listSce.keys())      # tuples (scenario, variant)
-            sce_labels = list(listSce.values())   # pretty labels
-        else:
-            # list-like; accept tuples or simple scenario IDs
-            sce_names = []
-            sce_labels = []
-            for item in listSce:
-                if isinstance(item, tuple) and len(item) == 2:
-                    s, v = item
-                else:
-                    s, v = item, "reference"
-                sce_names.append((s, v))
-                sce_labels.append(f"{s} ({v})")
-    
-        numSce   = len(sce_names)
-        nmodels  = len(listModelsid)
-        listModels = [self.models[k] for k in listModelsid if k in self.models]
-    
-        if group_by not in ("model", "scenario"):
-            raise ValueError("group_by must be 'model' or 'scenario'")
-    
-        is_horizontal = (orientation == "horizontal")
-    
-        # ====================================
-        # 2. Build values matrix [model, sce]
-        # ====================================
-        values = np.full((nmodels, numSce), np.nan)
-    
-        for im, m in enumerate(listModelsid):
-            for isce, (sce_id, variant) in enumerate(sce_names):
-                try:
-                    val = self.annualData.loc[
-                        (sce_id, variant, m, varName, use_technology_fuel, "annual", year),
-                        "value",
-                    ]
-                except KeyError:
-                    val = np.nan
-                if not np.isnan(val):
-                    values[im, isce] = val / scale
-    
-        # ============================================================
-        # 3. Grouping logic (same as bars)
-        # ============================================================
-        if group_by == "model":
-            nGroups = nmodels
-            nWithin = numSce
-            group_labels  = listModels        # printed outside
-            within_labels = sce_labels        # used for ticks
-    
-            def index_for(g, w):
-                # g = model index, w = scenario index
-                return g, w
-    
-        else:  # group_by == "scenario"
-            nGroups = numSce
-            nWithin = nmodels
-            group_labels  = sce_labels        # printed outside
-            within_labels = listModels        # used for ticks
-    
-            def index_for(g, w):
-                # g = scenario index, w = model index
-                return w, g
-    
-        # ============================================================
-        # 4. Geometry for category axis
-        #    (copy of horizontal / vertical bar logic)
-        # ============================================================
-        pos_grid = []  # group separators
-        pos_cols = []  # group centers
-        pos_bar  = []  # one per (group, within) point
-        
-        for g in range(nGroups):
-            ini = nGroups * nWithin / 2 - g * nWithin * 0.5 + 0.5 * (nGroups - g)
-            pos_grid.append(ini)
-            pos_cols.append(ini - nWithin / 4 - 0.25)
-            for w in range(nWithin):
-                # use the SAME formula for horizontal and vertical
-                pos = ini - w * 0.5 - 0.5
-                pos_bar.append(pos)
-        
-        pos_bar = np.array(pos_bar)
-    
-        # For vertical orientation, flip so first group is LEFT-most,
-        # mirroring your final plotBarVertical behaviour.
-        if not is_horizontal:
-            max_pos = pos_grid[0]
-            pos_grid = [max_pos - x for x in pos_grid]
-            pos_cols = [max_pos - x for x in pos_cols]
-            pos_bar  = max_pos - pos_bar
-        else:
-            max_pos = pos_grid[0]
-    
-        # ============================================================
-        # 5. Prepare figure & axis
-        # ============================================================
-        sb.set_style("white")
-        cm = 1 / 2.54
-        fig, ax = plt.subplots(1, figsize=(width * cm, height * cm))
-    
-        set_val_lim   = ax.set_xlim if is_horizontal else ax.set_ylim
-        set_cat_lim   = ax.set_ylim if is_horizontal else ax.set_xlim
-        val_grid      = ax.xaxis.grid if is_horizontal else ax.yaxis.grid
-        cat_minor_loc = ax.yaxis.set_minor_locator if is_horizontal else ax.xaxis.set_minor_locator
-        cat_minor_grid= ax.yaxis.grid if is_horizontal else ax.xaxis.grid
-        set_val_label = ax.set_xlabel if is_horizontal else ax.set_ylabel
-    
-        # ============================================================
-        # 6. Plot all points
-        # ============================================================
-        tick_pos = []      # within positions (for primary ticks)
-        tick_lab = []      # within labels repeated in group order
-    
-        k = 0
-        for g in range(nGroups):
-            for w in range(nWithin):
-                im, isce = index_for(g, w)
-                v = values[im, isce]
-                pos = pos_bar[k]
-                k += 1
-    
-                if not np.isnan(v):
-                    if is_horizontal:
-                        x, y = v, pos
-                    else:
-                        x, y = pos, v
-                    if group_by == "model":
-                        ax.scatter(x, y, c=self.sceColors[isce], s=20, zorder=2)
-                    else:  # group_by == "scenario"    
-                        ax.scatter(x, y, c=self.model_colors[im], s=20, zorder=2)
-    
-                tick_pos.append(pos)
-                tick_lab.append(within_labels[w])
-    
-        # ============================================================
-        # 7. Axes labels, ticks, grids
-        # ============================================================
-        # Value axis
-        set_val_lim(0, figmax)
-        val_grid(color="gray", linestyle="dashed")
-    
-        # Category axis range
-        set_cat_lim(0, max_pos)
-    
-        # Primary ticks = within labels (scenarios or models)
-        if is_horizontal:
-            ax.yaxis.set_major_locator(ticker.FixedLocator(tick_pos))
-            ax.set_yticklabels(tick_lab)
-            ax.tick_params(axis="y", which="major", length=0)
-        else:
-            ax.xaxis.set_major_locator(ticker.FixedLocator(tick_pos))
-            ax.set_xticklabels(tick_lab, rotation=90)
-            ax.tick_params(axis="x", which="major", length=0)
-    
-        # Group labels printed outside at group centers
-        if is_horizontal:
-            # text on the right
-            xmin, xmax = ax.get_xlim()
-            span = xmax - xmin
-            x_text = xmax + 0.02 * span
-            for y, lab in zip(pos_cols, group_labels):
-                ax.text(x_text, y, lab, va="center", ha="left")
-        else:
-            # text at the top
-            ymin, ymax = ax.get_ylim()
-            span = ymax - ymin
-            y_text = ymax + 0.02 * span
-            for x, lab in zip(pos_cols, group_labels):
-                ax.text(x, y_text, lab, va="bottom", ha="center")
-    
-        # Dotted group separators
-        cat_minor_loc(ticker.FixedLocator(pos_grid))
-        cat_minor_grid(color="gray", linestyle="dashed", which="minor")
-    
-        # Value label
-        set_val_label(label)
-    
-        # Spines & grid style (match bars)
-        ax.set_axisbelow(True)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        if is_horizontal:
-            ax.spines["left"].set_visible(False)
-        else:
-            ax.spines["bottom"].set_visible(False)
-    
-        # ============================================================
-        # 8. Save & show
-        # ============================================================
-        plt.savefig(self.folder_plots + "/" + fileName+ ".pdf", bbox_inches="tight")
-        plt.savefig(
-            self.folder_plots + "/" + fileName + ".png",
-            bbox_inches="tight",
-            dpi=300,
-        )
-        plt.show()
-
-
     def plotLineByScenario(
         self,
         listModelsid,
@@ -827,11 +581,7 @@ class Plots:
             If not None, fixed y-axis limits (ymin, ymax).
         
         """
-        import numpy as np
-        import matplotlib.pyplot as plt
-        import seaborn as sb
-        import matplotlib
-    
+        
         # ---- Styling ----
         sb.reset_defaults()
         matplotlib.rcParams["font.family"] = "sans-serif"
@@ -1604,3 +1354,122 @@ class Plots:
             signed=True,
             signedVarList=signedVarList,
         )
+
+
+    def plotScatter(
+        self,
+        listModelsid,
+        listSce,
+        varName,
+        use_technology_fuel,
+        year,
+        scale,
+        label,
+        figmax,
+        fileName,
+        width,
+        height,
+        orientation="horizontal",   # 'horizontal' or 'vertical'
+        group_by="model",           # 'model' or 'scenario'
+    ):
+        # ensure MI sorted for reliable lookup speed
+        if not self.allData.index.is_monotonic_increasing:
+            self.allData = self.allData.sort_index()
+    
+        is_horizontal = (orientation == "horizontal")
+    
+        # 1) scenarios + grouping (reused)
+        sce_names, sce_labels = self._resolve_scenarios(listSce)
+        nGroups, nWithin, group_labels, within_labels, flatten, slice_group = self._group_layout(
+            listModelsid, sce_names, sce_labels, group_by
+        )
+    
+        # 2) positions (same as bars, single-axis geometry)
+        orient = "horizontal" if is_horizontal else "vertical"
+        pos_bar, pos_grid, pos_cols, max_grid = self._positions_single_axis(nGroups, nWithin, orient)
+    
+        # 3) figure/axis
+        cm = 1 / 2.54
+        fig, ax = plt.subplots(1, figsize=(width * cm, height * cm))
+    
+        # 4) plotting (loop through bars in the same order as bar plots)
+        k = 0
+        tick_pos = []
+        tick_lab = []
+    
+        for g in range(nGroups):
+            for w in range(nWithin):
+                # map (g,w) -> (model_idx, scenario_idx) consistent with group_by
+                if group_by == "model":
+                    im, isce = g, w
+                else:
+                    im, isce = w, g
+    
+                m = listModelsid[im]
+                sce = sce_names[isce]
+                cat_pos = pos_bar[k]
+                k += 1
+    
+                # MultiIndex lookup
+                try:
+                    val = self.allData.loc[
+                        (sce[0], sce[1], m, varName, use_technology_fuel, "annual", year),
+                        "value",
+                    ]
+                except KeyError:
+                    val = np.nan
+    
+                if hasattr(val, "sum"):
+                    val = float(val.sum())
+                if not np.isnan(val):
+                    val = val / scale
+                    if is_horizontal:
+                        ax.scatter(val, cat_pos, s=20, zorder=2)
+                    else:
+                        ax.scatter(cat_pos, val, s=20, zorder=2)
+    
+                tick_pos.append(cat_pos)
+                tick_lab.append(within_labels[w])
+    
+        # 5) axes, ticks, grids
+        if is_horizontal:
+            ax.set_xlim(0, figmax)
+            ax.set_ylim(0, max_grid)
+            ax.yaxis.set_major_locator(ticker.FixedLocator(tick_pos))
+            ax.set_yticklabels(tick_lab)
+            ax.set_xlabel(label)
+    
+            # group labels outside (axes coords so it doesn't move)
+            for y, lab in zip(pos_cols, group_labels):
+                ax.text(1.01, y, lab, transform=ax.get_yaxis_transform(),
+                        va="center", ha="left")
+            ax.yaxis.set_minor_locator(ticker.FixedLocator(pos_grid))
+            ax.yaxis.grid(color="gray", linestyle="dashed", which="minor")
+            ax.xaxis.grid(color="gray", linestyle="dashed")
+    
+            ax.spines["left"].set_visible(False)
+    
+        else:
+            ax.set_ylim(0, figmax)
+            ax.set_xlim(0, max_grid)
+            ax.xaxis.set_major_locator(ticker.FixedLocator(tick_pos))
+            ax.set_xticklabels(tick_lab, rotation=90)
+            ax.set_ylabel(label)
+    
+            # group labels outside (axes coords so it doesn't move)
+            for x, lab in zip(pos_cols, group_labels):
+                ax.text(x, 1.02, lab, transform=ax.get_xaxis_transform(),
+                        va="bottom", ha="center")
+            ax.xaxis.set_minor_locator(ticker.FixedLocator(pos_grid))
+            ax.xaxis.grid(color="gray", linestyle="dashed", which="minor")
+            ax.yaxis.grid(color="gray", linestyle="dashed")
+    
+            ax.spines["bottom"].set_visible(False)
+    
+        ax.set_axisbelow(True)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+    
+        plt.savefig(self.folder_plots + "/" + fileName + ".pdf", bbox_inches="tight")
+        plt.savefig(self.folder_plots + "/" + fileName + ".png", bbox_inches="tight", dpi=300)
+        plt.show()
