@@ -1473,3 +1473,380 @@ class Plots:
         plt.savefig(self.folder_plots + "/" + fileName + ".pdf", bbox_inches="tight")
         plt.savefig(self.folder_plots + "/" + fileName + ".png", bbox_inches="tight", dpi=300)
         plt.show()
+
+
+
+    def plotHourlySignedProfile(
+        self,
+        *,
+        listModelsid,
+        listSce,
+        signedVarList,
+        day_by_model,              # dict: {model_id: "dd.mm.yyyy"} or pd.Timestamp/date-like
+        time_resolution="typical-day",  # or "hourly"
+        scale=1.0,
+        ylabel="Electricity (GW)",
+        fileName="hourly_signed",
+        width=18,
+        height=5,
+        ymin=None,                 # e.g. -60
+        ymax=None,                 # e.g. 100
+        legend=True,
+        pos_legend=None,           # dict or string (like your other plots)
+    ):
+        """
+        One subplot per model. X axis = hour 0..23. Signed stacked bars (positive/negative).
+    
+        signedVarList entries:
+          {"name": "...", "varName": "...", "techs": [...], "sign": +1/-1, "color": "..."}
+        """
+    
+        # --- scenario selection (same convention as your bar funcs) ---
+        if listSce is None:
+            sce_names = self.sceVariants
+            sce_labels = sce_names[:]
+        elif isinstance(listSce, dict):
+            sce_names = list(listSce.keys())
+            sce_labels = list(listSce.values())
+        else:
+            sce_names = list(listSce)
+            sce_labels = sce_names[:]
+    
+        if len(sce_names) != 1:
+            raise ValueError("Hourly profile plot expects exactly ONE scenario/variant (pass one tuple in listSce).")
+        sce = sce_names[0]  # (scenario_name, scenario_variant)
+    
+        # --- prepare figure ---
+        cm = 1 / 2.54
+        n = len(listModelsid)
+        fig, axes = plt.subplots(1, n, figsize=(width * cm, height * cm), sharey=True)
+        if n == 1:
+            axes = [axes]
+    
+        # proxy legend (always correct)
+        names = [v["name"] for v in signedVarList]
+        colors = {v["name"]: v["color"] for v in signedVarList}
+        proxies = [Patch(facecolor=colors[nm], edgecolor="none") for nm in names]
+    
+        for ax, m in zip(axes, listModelsid):
+            day_val = day_by_model.get(m, None)
+            if day_val is None:
+                raise ValueError(f"Missing day_by_model entry for model '{m}'")
+    
+            day = pd.to_datetime(day_val, dayfirst=True)
+            ts = pd.date_range(day.normalize(), periods=24, freq="H")
+    
+            # collect series per component
+            comp_vals = {}
+            for comp in signedVarList:
+                vname = comp["varName"]
+                techs = comp["techs"]
+                sgn = float(comp.get("sign", 1.0))
+    
+                arr = np.zeros(24, dtype=float)
+                for i, t in enumerate(ts):
+                    s = 0.0
+                    for tech in techs:
+                        try:
+                            val = self.allData.loc[(sce[0], sce[1], m, vname, tech, time_resolution, t), "value"]
+                        except KeyError:
+                            val = 0.0
+    
+                        if hasattr(val, "sum"):
+                            val = float(val.sum())
+                        s += 0.0 if np.isnan(val) else float(val)
+    
+                    arr[i] = sgn * (s / scale)
+    
+                comp_vals[comp["name"]] = arr
+    
+            # --- signed stacked bars ---
+            x = np.arange(24)
+            width_bar = 0.9
+            pos_base = np.zeros(24)
+            neg_base = np.zeros(24)
+    
+            for comp in signedVarList:
+                nm = comp["name"]
+                vals = comp_vals[nm]
+                pos = np.clip(vals, 0, None)
+                neg = np.clip(vals, None, 0)
+    
+                ax.bar(x, pos, width=width_bar, bottom=pos_base, color=colors[nm], edgecolor="none")
+                ax.bar(x, neg, width=width_bar, bottom=neg_base, color=colors[nm], edgecolor="none")
+    
+                pos_base += pos
+                neg_base += neg
+    
+            # --- cosmetics: black axes + black zero line ---
+            ax.axhline(0, color="black", linewidth=1.0)
+            for spine in ["left", "bottom"]:
+                ax.spines[spine].set_color("black")
+                ax.spines[spine].set_linewidth(1.0)
+            ax.spines["top"].set_visible(False)
+            ax.spines["right"].set_visible(False)
+            ax.tick_params(colors="black")
+    
+            ax.set_xticks([0, 6, 12, 18, 23])
+            ax.set_xlim(-0.5, 23.5)
+            ax.set_title(self.models.get(m, m), fontsize=10)
+            ax.grid(axis="y", linestyle="dashed", color="gray", alpha=0.6)
+    
+        # y-limits (asymmetric supported)
+        if ymin is None or ymax is None:
+            # autoscale from data if not provided
+            all_max = max(ax.get_ylim()[1] for ax in axes)
+            all_min = min(ax.get_ylim()[0] for ax in axes)
+            ymin = all_min if ymin is None else ymin
+            ymax = all_max if ymax is None else ymax
+    
+        for ax in axes:
+            ax.set_ylim(ymin, ymax)
+    
+        axes[0].set_ylabel(ylabel)
+    
+        # legend (figure-level, outside if you want)
+        if legend:
+            if pos_legend is None:
+                # decent default: outside bottom
+                pos_legend = {"loc": "lower center", "bbox_to_anchor": (0.5, -0.10), "ncol": min(len(names), 6)}
+            if isinstance(pos_legend, dict):
+                fig.legend(proxies, names, **pos_legend)
+            else:
+                fig.legend(proxies, names, loc=pos_legend, ncol=1)
+    
+        fig.tight_layout()
+        plt.savefig(self.folder_plots + "/" + fileName + ".pdf", bbox_inches="tight")
+        plt.savefig(self.folder_plots + "/" + fileName + ".png", bbox_inches="tight", dpi=300)
+        plt.show()
+        
+
+
+    def plotBarVerticalSignedFuels(
+        self,
+        *,
+        scenario,            # tuple: (scenario_name, scenario_variant)
+        listModelsid,
+        signedVarByFuel,     # dict: fuel -> list[component dicts]
+        year,
+        scale,
+        label,
+        ylim=None,           # e.g. (-60, 100). If None: symmetric (+/- figmax)
+        figmax=100,          # used if ylim is None
+        fileName="signed_fuels",
+        group_by="fuel",     # "fuel" or "model"
+        multi=False,
+        legend=True,
+        pos_legend="upper right",  # or dict for outside
+        width=12,
+        height=5,
+        invert=False,        # optional (kept for API consistency)
+    ):
+        """
+        Signed vertical bars for one scenario, with fuels as the "scenario dimension".
+        group_by:
+          - "fuel": groups are fuels, within are models
+          - "model": groups are models, within are fuels
+        """
+    
+        # Ensure sorted index for stable .loc performance
+        if not self.allData.index.is_monotonic_increasing:
+            self.allData = self.allData.sort_index()
+    
+        sce_name, sce_var = scenario
+        fuels = list(signedVarByFuel.keys())
+        nfuels = len(fuels)
+        nmodels = len(listModelsid)
+        model_labels = [self.models.get(m, m) for m in listModelsid]
+    
+        # Component names + colors (use first fuel as reference)
+        ref = signedVarByFuel[fuels[0]]
+        comp_names = [c["name"] for c in ref]
+        colors = {c["name"]: c["color"] for c in ref}
+    
+        # Build matrices: comp_name -> (nmodels, nfuels)
+        mats = {nm: np.zeros((nmodels, nfuels)) for nm in comp_names}
+    
+        for jf, fuel in enumerate(fuels):
+            comps = {c["name"]: c for c in signedVarByFuel[fuel]}
+            for im, m in enumerate(listModelsid):
+                for nm in comp_names:
+                    c = comps[nm]
+                    total = 0.0
+                    for tech in c["techs"]:
+                        try:
+                            val = self.allData.loc[
+                                (sce_name, sce_var, m, c["varName"], tech, "annual", year),
+                                "value"
+                            ]
+                        except KeyError:
+                            val = 0.0
+                        if hasattr(val, "sum"):
+                            val = float(val.sum())
+                        if not np.isnan(val):
+                            total += val
+                    mats[nm][im, jf] = float(c.get("sign", 1.0)) * (total / scale)
+    
+        # Grouping layout (fuels/models)
+        if group_by == "fuel":
+            nGroups, nWithin = nfuels, nmodels
+            group_labels = fuels
+            within_labels = model_labels
+    
+            def flatten(mat):      # (nmodels,nfuels) -> scenario-major equivalent (fuels major)
+                return mat.T.reshape(-1)
+    
+            def slice_group(mat, g):
+                return mat[:, g]   # models within this fuel
+    
+        elif group_by == "model":
+            nGroups, nWithin = nmodels, nfuels
+            group_labels = model_labels
+            within_labels = fuels
+    
+            def flatten(mat):
+                return mat.reshape(-1)
+    
+            def slice_group(mat, g):
+                return mat[g, :]   # fuels within this model
+        else:
+            raise ValueError("group_by must be 'fuel' or 'model'")
+    
+        # Positions (same as your vertical bar)
+        def _positions_single_axis(nGroups, nWithin):
+            pos_grid, pos_cols, pos_bar = [], [], []
+            for g in range(nGroups):
+                ini = nGroups * nWithin / 2 - g * nWithin * 0.5 + 0.5 * (nGroups - g)
+                pos_grid.append(ini)
+                pos_cols.append(ini - nWithin / 4 - 0.25)
+                for w in range(nWithin):
+                    pos = ini - (nWithin - 1 - w) * 0.5 - 0.5
+                    pos_bar.append(pos)
+            pos_bar = np.array(pos_bar)
+    
+            # flip so first group is left
+            max_grid = pos_grid[0]
+            pos_grid = [max_grid - x for x in pos_grid]
+            pos_cols = [max_grid - x for x in pos_cols]
+            pos_bar  = max_grid - pos_bar
+            return pos_bar, pos_grid, pos_cols, max_grid
+    
+        def _positions_within_only(nWithin):
+            ini = 1 * nWithin / 2 + 0.5
+            pos_bar = []
+            for w in range(nWithin):
+                pos_bar.append(ini - (nWithin - 1 - w) * 0.5 - 0.5)
+            return np.array(pos_bar), ini
+    
+        cm = 1 / 2.54
+    
+        # ---------- SINGLE AXIS ----------
+        if not multi:
+            fig, ax = plt.subplots(1, figsize=(width * cm, height * cm))
+            pos_bar, pos_grid, pos_cols, max_grid = _positions_single_axis(nGroups, nWithin)
+    
+            # signed stacking
+            off_pos = np.zeros(len(pos_bar))
+            off_neg = np.zeros(len(pos_bar))
+    
+            for nm in comp_names:
+                vals = flatten(mats[nm])
+                pos_vals = np.clip(vals, 0, None)
+                neg_vals = np.clip(vals, None, 0)
+    
+                ax.bar(pos_bar, pos_vals, 0.3, bottom=off_pos, color=colors[nm], edgecolor="none", zorder=1)
+                ax.bar(pos_bar, neg_vals, 0.3, bottom=off_neg, color=colors[nm], edgecolor="none", zorder=1)
+    
+                off_pos += pos_vals
+                off_neg += neg_vals
+    
+            # y-limits
+            if ylim is not None:
+                ax.set_ylim(ylim[0], ylim[1])
+            else:
+                ax.set_ylim(-figmax, figmax)
+    
+            ax.axhline(0, color="black", linewidth=1)  # black axis line
+    
+            # ticks
+            within_flat = []
+            for _ in range(nGroups):
+                within_flat.extend(within_labels)
+            ax.set_xticks(pos_bar)
+            ax.set_xticklabels(within_flat, rotation=90)
+    
+            # group labels pinned to axes top (won’t move with invert)
+            for x, glab in zip(pos_cols, group_labels):
+                ax.text(x, 1.02, glab, ha="center", va="bottom", transform=ax.get_xaxis_transform())
+    
+            ax.set_xlim(0, max_grid)
+            ax.xaxis.set_minor_locator(ticker.FixedLocator(pos_grid))
+            ax.xaxis.grid(color="gray", linestyle="dashed", which="minor")
+            ax.yaxis.grid(color="gray", linestyle="dashed")
+            ax.set_ylabel(label)
+    
+            # legend (proxy patches; correct for signed)
+            if legend:
+                proxies = [Patch(facecolor=colors[nm], edgecolor="none") for nm in comp_names]
+                if isinstance(pos_legend, dict):
+                    ax.legend(proxies, comp_names, **pos_legend)
+                else:
+                    ax.legend(proxies, comp_names, loc=pos_legend, ncol=1)
+    
+            plt.savefig(self.folder_plots + "/" + fileName + ".pdf", bbox_inches="tight")
+            plt.savefig(self.folder_plots + "/" + fileName + ".png", bbox_inches="tight", dpi=300)
+            plt.show()
+            return
+    
+        # ---------- MULTI: one subplot per group ----------
+        fig, axes = plt.subplots(1, nGroups, figsize=(width * cm, height * cm), sharey=True)
+        if nGroups == 1:
+            axes = [axes]
+    
+        local_pos_bar, local_max = _positions_within_only(nWithin)
+    
+        for g in range(nGroups):
+            ax = axes[g]
+            off_pos = np.zeros(nWithin)
+            off_neg = np.zeros(nWithin)
+    
+            for nm in comp_names:
+                vals = slice_group(mats[nm], g)
+                pos_vals = np.clip(vals, 0, None)
+                neg_vals = np.clip(vals, None, 0)
+    
+                ax.bar(local_pos_bar, pos_vals, 0.3, bottom=off_pos, color=colors[nm], edgecolor="none", zorder=1)
+                ax.bar(local_pos_bar, neg_vals, 0.3, bottom=off_neg, color=colors[nm], edgecolor="none", zorder=1)
+    
+                off_pos += pos_vals
+                off_neg += neg_vals
+    
+            if ylim is not None:
+                ax.set_ylim(ylim[0], ylim[1])
+            else:
+                ax.set_ylim(-figmax, figmax)
+    
+            ax.axhline(0, color="black", linewidth=1)
+            ax.set_xlim(0, local_max)
+            ax.set_xticks(local_pos_bar)
+            ax.set_xticklabels(within_labels, rotation=90)
+            ax.set_title(group_labels[g])
+            ax.yaxis.grid(color="gray", linestyle="dashed")
+    
+            if g == 0:
+                ax.set_ylabel(label)
+            else:
+                ax.tick_params(axis="y", labelleft=False)
+    
+        if legend:
+            proxies = [Patch(facecolor=colors[nm], edgecolor="none") for nm in comp_names]
+            if isinstance(pos_legend, dict):
+                fig.legend(proxies, comp_names, **pos_legend)
+            else:
+                fig.legend(proxies, comp_names, loc=pos_legend, ncol=1)
+    
+        fig.tight_layout()
+        plt.savefig(self.folder_plots + "/" + fileName + ".pdf", bbox_inches="tight")
+        plt.savefig(self.folder_plots + "/" + fileName + ".png", bbox_inches="tight", dpi=300)
+        plt.show()
+

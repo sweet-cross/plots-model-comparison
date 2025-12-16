@@ -589,3 +589,52 @@ for name, scenarios in scenario_list.items():
         group_by="scenario",  # or "model"
         multi=False,
     )
+
+
+
+
+signedVarByFuel = {
+    "Electricity": [
+        {"name": "Imports", "varName": "electricity_supply",      "techs": ["imports"], "sign": +1, "color": "#cccccc"},
+        {"name": "Exports", "varName": "electricity_consumption", "techs": ["exports"], "sign": -1, "color": "#CF4832"},
+    ],
+    "Hydrogen": [
+        {"name": "Imports", "varName": "h2_supply", "techs": ["imports"], "sign": +1, "color": "#cccccc"},
+        {"name": "Exports", "varName": "h2_fec",    "techs": ["exports"], "sign": -1, "color": "#CF4832"},
+    ],
+    "Liquids": [
+        {"name": "Imports", "varName": "liquids_supply", "techs": ["imports_diesel","imports_biodiesel"], "sign": +1, "color": "#cccccc"},
+        {"name": "Exports", "varName": "liquids_fec",    "techs": ["exports"], "sign": -1, "color": "#CF4832"},
+    ],
+    "Methane": [
+        {"name": "Imports", "varName": "methane_supply", "techs": ["imports_gas","imports_methane"], "sign": +1, "color": "#cccccc"},
+        {"name": "Exports", "varName": "methane_fec",    "techs": ["exports"], "sign": -1, "color": "#CF4832"},
+    ],
+    
+}
+listModels = cross_plots.modelsid
+
+
+cross_plots.plotBarVerticalSignedFuels(
+    scenario=('abroad-resnuc-high','wacc_5'),
+    listModelsid=listModels,
+    signedVarByFuel=signedVarByFuel,
+    year=2050,
+    scale=1,
+    label="Energy (TWh)",
+    ylim=(-100, 100),
+    fileName="imports_exports_by_fuel",
+    group_by="fuel",
+    multi=False,
+    legend=True,
+    #pos_legend="upper right",
+    pos_legend={# This puts the legend outside-right for vertical plots
+            "loc": "center left",
+            "bbox_to_anchor": (1.02, 0.5),
+            },
+    width=12,
+    height=5,
+)
+
+
+
