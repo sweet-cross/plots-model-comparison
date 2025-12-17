@@ -16,14 +16,6 @@ import inspect
 import os
 
 
-import warnings
-warnings.filterwarnings(
-    "ignore",
-    "indexing past lexsort depth may impact performance.",
-    category=pd.errors.PerformanceWarning,
-)
-
-
 class Plots:
 
     def __init__(self, fileResults,model_list,scenarios,sceColors,folder_plots):
