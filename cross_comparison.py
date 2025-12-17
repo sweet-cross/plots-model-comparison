@@ -21,7 +21,7 @@ model_list =  [
           #{'name': 'Expanse', 'file': 'resultsCross_Expanse','summer':'Jul 02','winter':'Jan 01','color':'#FF7D0D'},
            #{'name': 'Nexus-e+\nEP2050+', 'file': 'resultsCross_Nexuse-EP','summer':'Jul 02','winter':'Feb 08','color':'#BCBD21'},
           {'name': 'SecMod', 'id': 'secmod','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#9565BD'},
-          #{'name': 'SES', 'file': 'resultsCross_SES-epfl','summer':'Typical day','winter':'Typical day','color':'#1E75B3'},
+          {'name': 'SES', 'id': 'ses','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#1E75B3'},
           {'name': 'SES-ETH', 'id': 'seseth','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#2A9E2A'},
           {'name': 'STEM', 'id': 'stem','summer':'Week day','summerDay':'01.07.2050','winter':'Week day','winterDay':'01.02.2050','color':'#D52426'},
           {'name': 'ZEN-Garden','id':'zengarden', 'summer':'Week day','summerDay':'01.07.2050','winter':'Week day','winterDay':'01.02.2050','color':'#00BFC4'},
@@ -31,7 +31,7 @@ model_list =  [
 
 # Create the object that produces the plots and processes the data
 # Name of the csv file with the results 
-fileResults = "results/results_20251125_wodup"
+fileResults = "results/results_cross_2025_12_17"
 # Scenario names and corresponding colors 
 sce = ['abroad-res-full','abroad-res-lim','domestic-res-full','domestic-res-lim','abroad-nores-full','abroad-nores-lim','domestic-nores-full','domestic-nores-lim',]
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
@@ -41,7 +41,18 @@ folder_plots='presentation_latex/figures_2025_10_25'
 
 
 cross_plots = plots.Plots(fileResults,model_list,sce,sceColors,folder_plots) 
-
+year = 2050
+scenarios={
+        # ('scenario-id','variant'): 'label'
+        ('abroad-res-full','reference'):'abroad-res-full',
+        ('abroad-res-lim','reference'):'abroad-res-lim',
+        ('abroad-nores-full','reference'):'abroad-nores-full',
+        ('abroad-nores-lim','reference'):'abroad-nores-lim',
+        ('domestic-res-full','reference'):'domestic-res-full',
+        ('domestic-res-lim','reference'):'domestic-res-lim',
+        ('domestic-nores-full','reference'):'domestic-nores-full',
+        ('domestic-nores-lim','reference'):'domestic-nores-lim',
+    }
 
 # # Annual electricity supply with total imports and exports
 
@@ -51,18 +62,8 @@ varName = 'electricity_supply'
 use_technology_fuel = 'total'
 scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 100
+xmax = 120
 fileName = 'elecSupply'
-year = 2050
-scenarios={
-        # ('scenario-id','variant'): 'label'
-        ('abroad-res-full','reference'):'abroad-res-full',
-        ('abroad-res-lim','reference'):'abroad-res-lim',
-        ('domestic-res-full','reference'):'domestic-res-full',
-        ('domestic-res-lim','reference'):'domestic-res-lim',
-    }
-
-
 cross_plots.plotScatter(
     listModelsid=listModels,
     listSce=scenarios,
@@ -73,25 +74,14 @@ cross_plots.plotScatter(
     label="Electricity (TWh)",
     figmax=xmax,
     fileName=fileName,
-    width=5, height=12,
+    width=8, height=20,
     orientation="horizontal",
+    # width=20, height=8,
+    # orientation="vertical",
     group_by="scenario",
 )
 
-cross_plots.plotScatter(
-    listModelsid=listModels,
-    listSce=scenarios,
-    varName=varName,
-    use_technology_fuel=use_technology_fuel,
-    year=year,
-    scale=1,
-    label="Electricity (TWh)",
-    figmax=xmax,
-    fileName=fileName,
-    width=12, height=5,
-    orientation="vertical",
-    group_by="scenario",
-)
+
 
 
 # Annual electricity supply with net imports 
@@ -119,19 +109,11 @@ varList_supply_net = [
 varName = 'electricity_supply'
 listModels = cross_plots.modelsid
 xlabel = 'Electricity (TWh)'
-xmax = 101
+xmax = 120
 fileName = 'elecSupply_tech_net'
-year = 2050
-scenarios={
-        # ('scenario-id','variant'): 'label'
-        ('abroad-res-full','reference'):'abroad-res-full',
-        ('abroad-res-lim','reference'):'abroad-res-lim',
-        ('domestic-res-full','reference'):'domestic-res-full',
-        ('domestic-res-lim','reference'):'domestic-res-lim',
-    }
-
-
 cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
+
     listModelsid=listModels, 
     listSce=scenarios,
     varName = varName, 
@@ -142,27 +124,59 @@ cross_plots.plotBarHorizontal(
     figmax = xmax,
     fileName = fileName,
     invert=False, legend=False, pos_legend="upper right",
-    width=5, height=12,
+    width=8, height=20,
+    #width=12, height=5,
     group_by="scenario", # 'scenario' or 'model'
     multi=False,          # <--- one plot
 )
 
 
-cross_plots.plotBarVertical(
+# Electricity consumption by use with total exports
+# Available variables: https://sweet-cross.github.io/instructions-data/docs/sets/use_elec/
+
+varList_use_net = [
+#    {'name':'Total','data':['Electricity-consumption|Total demand'],'color':'#8E8900'},
+    {'name':'Base','data':['elec_appliances'],'color':'#097F6D'},
+    {'name':'Trains','data':['passenger_rail','freight_rail'],'color':'#066256'},
+    {'name':'Road transport','data':['road_public','road_private','truck','ldv'],'color':'#09c5c9'},
+    {'name':'Space heating','data':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'],'color':'#F2960E'},
+    {'name':'Process heat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
+    {'name':'Power to liquids','data':['power_to_liquid'],'color':'#4B4EFC'},
+    {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
+    {'name':'CCS','data':['dac'],'color':'#9751CB'},
+    #{'name':'Storage','data':['battery_in','phs_in'],'color':'#939CAC'},
+    # {'name':'Exports','data':['exports'],'color':'#CCCCCC'},
+    # {'name':'Losses','data':['grid_losses'],'color':'#8B5A2B'}
+    {'name':'Storage','data':['net_storage_in'],'color':'#939CAC'},
+    {'name':'Net-exports','data':['net_exports'],'color':'#CCCCCC'},
+    {'name':'Losses','data':['grid_losses','storage_losses'],'color':'#8B5A2B'}
+    ]
+
+varName = 'electricity_consumption'
+listModels = cross_plots.modelsid
+xlabel = 'Electricity (TWh)'
+xmax = 120
+fileName = 'elecUse_net'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
+
     listModelsid=listModels, 
     listSce=scenarios,
     varName = varName, 
-    varList=varList_supply_net, 
+    varList=varList_use_net, 
     year=year, 
     scale=1,
     label=xlabel, 
     figmax = xmax,
     fileName = fileName,
-    invert=False, legend=False, pos_legend="upper right",
-    width=12, height=5,
+    invert=True, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=20, height=8,
     group_by="scenario", # 'scenario' or 'model'
     multi=False,          # <--- one plot
 )
+
+
 
 
 
@@ -215,43 +229,6 @@ cross_plots.plotHourlySignedProfile(
 
 
 
-# Annual electricity supply with net imports 
-
-# name: name of the technology or group of technologies (valid names: https://sweet-cross.github.io/instructions-data/docs/sets/tech_generation/)
-# data: list with the technologies that correspond to this category
-# color: color to use for this category
-varList_supply_net = [
-    {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
-    {'name':'Nuclear','data':['nuclear'],'color':'#FF007F'},
-    {'name':'Solar','data':['spv'],'color':'#FAC748'},
-    {'name':'Wind','data':['wind'],'color':'#F2960E'},
-    {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
-    {'name':'Methane','data':["methane_pp",'fuel_cell_methane'],'color':'#1f6228'},
-    {'name':'Hydrogen','data':['hydrogen_pp','fuel_cell_h2'],'color':'#03CBA0'},
-    {'name':'Liquids','data':['liquids_pp'],'color':'#4B4EFC'},
-    {'name':'Waste','data':['waste_pp'],'color':'#b82222'},
-    {'name':'Wood','data':['wood_pp'],'color':'#a9807c'},
-    {'name':'Storage','data':['net_storage_out'],'color':'#939CAC'},
-    {'name':'Net-imports','data':['net_imports'],'color':'#CCCCCC'}
-   ]
-
-varName = 'electricity_supply'
-listModels = cross_plots.modelsid
-scale = 1
-xlabel = 'Electricity (TWh)'
-xmax = 101
-fileName = 'elecSupply_tech_net.pdf'
-right = False #True if model names have to go on the right
-legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''# 'total'
-year = '2050'
-height=15
-width=7
-
-cross_plots.plotBar(listModels,varName ,varList_supply_net,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
-
-
 # Distribution box plot of annual electricity supply by technology
 
 
@@ -275,79 +252,12 @@ listModels = cross_plots.modelsid
 order = ["Hydro",'Solar','Wind','Nuc.','Waste','Gas','Wood','Geoth.','H2','Liquids']
 ylabel = 'Electricity (TWh)'
 ymax = 70
-fileName = 'elecDist_tech.pdf'
+fileName = 'elecDist_tech'
 year = '2050'
 legend = False
 
 cross_plots.plotTechDist(listModels,varName,varList_supply,year,order,ylabel,ymax,fileName,legend)
 
-
-# Electricity consumption by use with total exports
-# Available variables: https://sweet-cross.github.io/instructions-data/docs/sets/use_elec/
-
-varList_use = [
-#    {'name':'Total','data':['Electricity-consumption|Total demand'],'color':'#8E8900'},
-    {'name':'Base','data':['elec_appliances'],'color':'#097F6D'},
-    {'name':'Trains','data':['passenger_rail','freight_rail'],'color':'#066256'},
-    {'name':'Road transport','data':['road_public','road_private','truck','ldv'],'color':'#09c5c9'},
-    {'name':'Space heating','data':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'],'color':'#F2960E'},
-    {'name':'Process heat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
-    {'name':'Power to liquids','data':['power_to_liquid'],'color':'#4B4EFC'},
-    {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
-    {'name':'CCS','data':['dac'],'color':'#9751CB'},
-    {'name':'Storage','data':['battery_in','phs_in'],'color':'#939CAC'},
-    {'name':'Exports','data':['exports'],'color':'#CCCCCC'},
-    {'name':'Losses','data':['grid_losses'],'color':'#8B5A2B'}
-    ]
-
-varName = 'electricity_consumption'
-listModels = cross_plots.modelsid
-scale = 1
-xlabel = 'Electricity (TWh)'
-xmax = 160
-fileName = 'elecUse.pdf'
-right = True #True if model names have to go on the right
-legend = False # True if legend has to be displayed
-pos_legend = 'lower left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-
-cross_plots.plotBar(listModels,varName ,varList_use,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
-
-
-# Electricity consumption by use with net exports
-# Available variables: https://sweet-cross.github.io/instructions-data/docs/sets/use_elec/
-varList_use_net = [
-    {'name':'Base','data':['elec_appliances'],'color':'#097F6D'},
-    {'name':'Trains','data':['passenger_rail','freight_rail'],'color':'#066256'},
-    {'name':'Road transport','data':['road_public','road_private','truck','ldv'],'color':'#09c5c9'},
-    {'name':'Space heating','data':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'],'color':'#F2960E'},
-    {'name':'Process heat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
-    {'name':'Power to liquids','data':['power_to_liquid'],'color':'#4B4EFC'},
-    {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
-    {'name':'Others','data':['dac','data_centers'],'color':'#9751CB'},
-    {'name':'Storage','data':['net_storage_in'],'color':'#939CAC'},
-    {'name':'Net-exports','data':['net_exports'],'color':'#CCCCCC'},
-    {'name':'Losses','data':['grid_losses','storage_losses'],'color':'#8B5A2B'}
-    ]
-
-varName = 'electricity_consumption'
-listModels = cross_plots.modelsid
-scale = 1
-xlabel = 'Electricity (TWh)'
-xmax = 101
-fileName = 'elecUse_net.pdf'
-right = True #True if model names have to go on the right
-legend = False # True if legend has to be displayed
-pos_legend = 'lower left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-
-cross_plots.plotBar(listModels,varName ,varList_use_net,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
 
 
 
@@ -369,7 +279,7 @@ listModels = cross_plots.modelsid
 order = ["Base",'Passenger','Freight','Space\nheating','Process\nheat','Electrolysis']
 ylabel = 'Electricity (TWh)'
 ymax =50
-fileName = 'elecUseDist_use.pdf'
+fileName = 'elecUseDist_use'
 year = '2050'
 legend = False
 
@@ -388,15 +298,26 @@ varName = 'h2_supply'
 listModels = cross_plots.modelsid
 xlabel = 'Hydrogen (TWh)'
 xmax = 15
-fileName = 'h2Supply_tech.pdf'
-right = False #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName ,varList_h2_supply,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+fileName = 'h2Supply_tech'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
+
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_h2_supply, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
+
 
  
 # Hydrogen consumption by use https://sweet-cross.github.io/instructions-data/docs/sets/use_hydrogen/
@@ -417,17 +338,25 @@ listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Hydrogen (TWh)'
 xmax = 15
-fileName = 'h2Use.pdf'
-right = True #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'lower left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName,varList_h2_consump,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+fileName = 'h2Use'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
-
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_h2_consump, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=True, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=20, height=8,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 # Methane supply by technology  https://sweet-cross.github.io/instructions-data/docs/sets/tech_methane/
 varList_methane_supply = [
@@ -441,16 +370,25 @@ varName = 'methane_supply'
 listModels = cross_plots.modelsid
 xlabel = 'Methane (TWh)'
 xmax = 20
-fileName = 'methaneSupply_tech.pdf'
-right = False #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName ,varList_methane_supply,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+fileName = 'methaneSupply_tech'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_methane_supply, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 # Methane consumption by use https://sweet-cross.github.io/instructions-data/docs/sets/use_methane/
 
@@ -470,15 +408,25 @@ listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Methane (TWh)'
 xmax = 20
-fileName = 'methaneUse.pdf'
-right = True #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'lower left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
+fileName = 'methaneUse'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
-cross_plots.plotBar(listModels,varName,varList_methane_consump,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
-
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_methane_consump, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=True, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=20, height=8,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 
 # Liquids supply by technology https://sweet-cross.github.io/instructions-data/docs/sets/tech_liquids/
@@ -492,16 +440,25 @@ varName = 'liquids_supply'
 listModels = cross_plots.modelsid
 xlabel = 'Liquid fuels (TWh)'
 xmax = 50
-fileName = 'liquidsSupply_tech.pdf'
-right = False #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName ,varList_liquids_supply,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+fileName = 'liquidsSupply_tech'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_liquids_supply, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 # Liquids consumption by use https://sweet-cross.github.io/instructions-data/docs/sets/use_liquids/
 
@@ -521,17 +478,25 @@ listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Liquid fuels (TWh)'
 xmax = 50
-fileName = 'liquidsUse.pdf'
-right = True #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'upper left' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName,varList_liquids_consump,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+fileName = 'liquidsUse'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
-
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_liquids_consump, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=True, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=20, height=8,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 # Space heating supply by technology https://sweet-cross.github.io/instructions-data/docs/sets/tech_heat/
 
@@ -553,17 +518,26 @@ varName = 'space_heat_useful_energy_supply'
 listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Space heating (TWh)'
-xmax = 60
-fileName = 'spaceHeating.pdf'
-right = False #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName,varList_spaceHeat,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+xmax = 80
+fileName = 'spaceHeating'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_spaceHeat, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 # Space heating distribution by technology
 varList_dist_spaceheat = [
@@ -582,10 +556,10 @@ varName = 'space_heat_useful_energy_supply'
 listModels = cross_plots.modelsid
 order = ["Heat\npumps",'Wood','Waste','Solar','Geoth.','Gas','H2','Heaters','Liquids']
 ylabel = 'Space heating (TWh)'
-ymax = 60
-fileName = 'spaceHeating_dist.pdf'
+ymax = 80
+fileName = 'spaceHeating_dist'
 legend = False
-year = '2050'
+
 
 cross_plots.plotTechDist(listModels,varName,varList_dist_spaceheat,year,order,ylabel,ymax,fileName,legend)
 
@@ -609,17 +583,26 @@ varName = 'district_heat_useful_energy_production'
 listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'District heating (TWh)'
-xmax = 60
-fileName = 'districtHeating.pdf'
-right = False #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'upper right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName,varList_distHeat,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+xmax = 80
+fileName = 'districtHeating'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_distHeat, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 # District heating distribution by technology
 varList_dist_distheat = [
@@ -639,7 +622,7 @@ listModels = cross_plots.modelsid
 order = ["Heat\npumps",'Wood','Waste','Solar','Geoth.','Gas','H2','Heaters','Liquids']
 ylabel = 'Space heating (TWh)'
 ymax = 60
-fileName = 'districtHeating_dist.pdf'
+fileName = 'districtHeating_dist'
 legend = False
 year = '2050'
 
@@ -665,16 +648,25 @@ listModels = cross_plots.modelsid
 scale = 1
 xlabel = 'Process heat (TWh)'
 xmax = 40
-fileName = 'processHeating.pdf'
-right = False #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName,varList_indHeat,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+fileName = 'processHeating'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_indHeat, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 # Industrial heat distribution by technology
 varList_indHeat_dist = [
@@ -694,7 +686,7 @@ listModels = cross_plots.modelsid
 order = ["Heat\npumps",'Wood','Waste','Solar','Geoth.','Gas','H2','Heaters','Liquid']
 ylabel = 'Industrial heat (TWh)'
 ymax = 25
-fileName = 'processHeating_dist.pdf'
+fileName = 'processHeating_dist'
 legend = False
 year = '2050'
 
@@ -712,64 +704,99 @@ varList_transport = [
     ]
 
 listModels = cross_plots.modelsid
-scale = 1
-right = False #True if model names have to go on the right, it invers the axis
-legend = False # True if legend has to be displayed
-pos_legend = 'lower right' # Options are 'upper left', 'upper right', 'lower left', 'lower right' 
-onTopVarName = ''
-year = '2050'
 
 
 varName = 'passenger_road_private_fec'
 xlabel = 'Passenger road private transport (TWh)'
 xmax = 30
-fileName = 'passenger_road_private_fec.pdf'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName,varList_transport,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+fileName = 'passenger_road_private_fec'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_transport, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 varName = 'passenger_road_public_fec'
 xlabel = 'Passenger road public transport (TWh)'
 xmax = 10
-fileName = 'passenger_road_public_fec.pdf'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName,varList_transport,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+fileName = 'passenger_road_public_fec'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_transport, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 varName = 'freight_road_fec'
 xlabel = 'Freight road transport (TWh)'
 xmax = 10
-fileName = 'freight_road_fec.pdf'
-height=15
-width=7
-cross_plots.plotBar(listModels,varName,varList_transport,year,scale,xlabel,xmax,fileName,right,legend,pos_legend,onTopVarName,width,height)
+fileName = 'freight_road_fec'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
 
-
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_transport, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, pos_legend="upper right",
+    width=8, height=20,
+    #width=12, height=5,
+    group_by="scenario", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
 
 # Transport distribution by technology
 order = ["Electricity",'Liquids','Hydrogen','Methane']
 legend = False
-year = '2050'
+
 
 varName = 'passenger_road_private_fec'
 ylabel = 'Passenger road private transport (TWh)'
 ymax = 20
-fileName = 'passenger_road_private_fec_dist.pdf'
+fileName = 'passenger_road_private_fec_dist'
 
 cross_plots.plotTechDist(listModels,varName,varList_transport,year,order,ylabel,ymax,fileName,legend)
 
 varName = 'passenger_road_public_fec'
 ylabel = 'Passenger road public transport (TWh)'
 ymax = 5
-fileName = 'passenger_road_public_fec_dist.pdf'
+fileName = 'passenger_road_public_fec_dist'
 
 cross_plots.plotTechDist(listModels,varName,varList_transport,year,order,ylabel,ymax,fileName,legend)
 
 varName = 'freight_road_fec'
 ylabel = 'Freight road transport (TWh)'
 ymax = 5
-fileName = 'freight_road_fec_dist.pdf'
+fileName = 'freight_road_fec_dist'
 
 cross_plots.plotTechDist(listModels,varName,varList_transport,year,order,ylabel,ymax,fileName,legend)
 

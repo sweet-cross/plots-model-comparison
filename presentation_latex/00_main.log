@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.29)  3 DEC 2025 16:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.29)  17 DEC 2025 23:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1243,12 +1243,12 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 [3
 
 ]
-<figures_2025_10_25//elecSupply.pdf, id=86, 366.8016pt x 377.9834pt>
+<figures_2025_10_25//elecSupply.pdf, id=86, 341.337pt x 473.7326pt>
 File: figures_2025_10_25//elecSupply.pdf Graphic file (type pdf)
 <use figures_2025_10_25//elecSupply.pdf>
 Package pdftex.def Info: figures_2025_10_25//elecSupply.pdf  used on input line
  8.
-(pdftex.def)             Requested size: 193.27893pt x 199.16928pt.
+(pdftex.def)             Requested size: 143.5064pt x 199.16928pt.
 
 Overfull \hbox (56.90549pt too wide) has occurred while \output is active
  [] 
@@ -1257,59 +1257,69 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 [4
 
  <./figures_2025_10_25//elecSupply.pdf>]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 18.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 22.
 
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 18.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 22.
 
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <10.95> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 18.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 22.
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <8> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 18.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 22.
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <6> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 18.
-<figures_2025_10_25//elecUse_legend.pdf, id=128, 107.99722pt x 160.77252pt>
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 22.
+<figures_2025_10_25//elecUse_legend.pdf, id=132, 107.99722pt x 160.77252pt>
 File: figures_2025_10_25//elecUse_legend.pdf Graphic file (type pdf)
 <use figures_2025_10_25//elecUse_legend.pdf>
 Package pdftex.def Info: figures_2025_10_25//elecUse_legend.pdf  used on input 
-line 18.
+line 22.
 (pdftex.def)             Requested size: 51.21504pt x 76.24261pt.
 
-Overfull \hbox (5.69046pt too wide) in paragraph at lines 18--18
+Overfull \hbox (5.69046pt too wide) in paragraph at lines 22--22
 [][] 
  []
 
-<figures_2025_10_25//elecUse_net.pdf, id=129, 178.44864pt x 372.72533pt>
+<figures_2025_10_25//elecUse_net.pdf, id=133, 194.3742pt x 470.21947pt>
 File: figures_2025_10_25//elecUse_net.pdf Graphic file (type pdf)
 <use figures_2025_10_25//elecUse_net.pdf>
 Package pdftex.def Info: figures_2025_10_25//elecUse_net.pdf  used on input lin
-e 18.
-(pdftex.def)             Requested size: 92.31528pt x 199.16928pt.
-<figures_2025_10_25//elecSupply_tech_net.pdf, id=130, 239.58328pt x 372.72533pt
+e 22.
+(pdftex.def)             Requested size: 78.71513pt x 199.16928pt.
+
+Overfull \hbox (1.89279pt too wide) in paragraph at lines 22--22
+[][] 
+ []
+
+<figures_2025_10_25//elecSupply_tech_net.pdf, id=134, 343.10106pt x 470.21947pt
 >
 File: figures_2025_10_25//elecSupply_tech_net.pdf Graphic file (type pdf)
 <use figures_2025_10_25//elecSupply_tech_net.pdf>
 Package pdftex.def Info: figures_2025_10_25//elecSupply_tech_net.pdf  used on i
-nput line 18.
-(pdftex.def)             Requested size: 124.98328pt x 199.16928pt.
+nput line 22.
+(pdftex.def)             Requested size: 145.3265pt x 199.16928pt.
 
-Overfull \hbox (9.59335pt too wide) in paragraph at lines 18--18
-[][][] 
+Overfull \hbox (3.06273pt too wide) in paragraph at lines 22--22
+[][] 
  []
 
-<figures_2025_10_25//elecSupply_legend.pdf, id=132, 89.58469pt x 174.8407pt>
+<figures_2025_10_25//elecSupply_legend.pdf, id=136, 89.58469pt x 174.8407pt>
 File: figures_2025_10_25//elecSupply_legend.pdf Graphic file (type pdf)
 <use figures_2025_10_25//elecSupply_legend.pdf>
 Package pdftex.def Info: figures_2025_10_25//elecSupply_legend.pdf  used on inp
-ut line 18.
+ut line 22.
 (pdftex.def)             Requested size: 42.67912pt x 83.29562pt.
+
+Overfull \hbox (0.19983pt too wide) in paragraph at lines 22--22
+ [] 
+ []
+
 
 Overfull \hbox (56.90549pt too wide) has occurred while \output is active
  [] 
@@ -1330,26 +1340,26 @@ pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2025_10_25//elecSu
 pply_legend.pdf): PDF inclusion: multiple pdfs with page group included in a si
 ngle page
 >]
-<figures_2025_10_25//elecUseDist_use.pdf, id=207, 350.40355pt x 346.06653pt>
+<figures_2025_10_25//elecUseDist_use.pdf, id=216, 350.40355pt x 346.06653pt>
 File: figures_2025_10_25//elecUseDist_use.pdf Graphic file (type pdf)
 <use figures_2025_10_25//elecUseDist_use.pdf>
 Package pdftex.def Info: figures_2025_10_25//elecUseDist_use.pdf  used on input
- line 27.
+ line 31.
 (pdftex.def)             Requested size: 155.87685pt x 156.49014pt.
-<figures_2025_10_25//elecDist_tech.pdf, id=208, 351.07394pt x 345.6551pt>
+<figures_2025_10_25//elecDist_tech.pdf, id=217, 351.07394pt x 345.6551pt>
 File: figures_2025_10_25//elecDist_tech.pdf Graphic file (type pdf)
 <use figures_2025_10_25//elecDist_tech.pdf>
 Package pdftex.def Info: figures_2025_10_25//elecDist_tech.pdf  used on input l
-ine 27.
+ine 31.
 (pdftex.def)             Requested size: 156.36972pt x 156.49014pt.
-<figures_2025_10_25//models.pdf, id=210, 227.0741pt x 15.25676pt>
+<figures_2025_10_25//models.pdf, id=219, 227.0741pt x 15.25676pt>
 File: figures_2025_10_25//models.pdf Graphic file (type pdf)
 <use figures_2025_10_25//models.pdf>
-Package pdftex.def Info: figures_2025_10_25//models.pdf  used on input line 27.
+Package pdftex.def Info: figures_2025_10_25//models.pdf  used on input line 31.
 
 (pdftex.def)             Requested size: 113.81102pt x 7.64674pt.
 
-Overfull \hbox (25.60815pt too wide) in paragraph at lines 27--27
+Overfull \hbox (25.60815pt too wide) in paragraph at lines 31--31
 [][]  
  []
 
@@ -1368,26 +1378,26 @@ pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2025_10_25//models
 >]) (./transport.tex (./00_main.toc) [7
 
 ]
-<figures_2025_10_25//passenger_road_private_fec.pdf, id=326, 238.3199pt x 372.7
-2533pt>
+<figures_2025_10_25//passenger_road_private_fec.pdf, id=335, 343.10106pt x 470.
+21947pt>
 File: figures_2025_10_25//passenger_road_private_fec.pdf Graphic file (type pdf
 )
 <use figures_2025_10_25//passenger_road_private_fec.pdf>
 Package pdftex.def Info: figures_2025_10_25//passenger_road_private_fec.pdf  us
 ed on input line 11.
-(pdftex.def)             Requested size: 124.30817pt x 199.16928pt.
+(pdftex.def)             Requested size: 142.9162pt x 199.16928pt.
 
-Overfull \hbox (10.49715pt too wide) in paragraph at lines 11--11
+Overfull \hbox (29.10518pt too wide) in paragraph at lines 11--11
 [][] 
  []
 
-<figures_2025_10_25//transport_legend.pdf, id=328, 80.66074pt x 61.16602pt>
+<figures_2025_10_25//transport_legend.pdf, id=337, 80.66074pt x 61.16602pt>
 File: figures_2025_10_25//transport_legend.pdf Graphic file (type pdf)
 <use figures_2025_10_25//transport_legend.pdf>
 Package pdftex.def Info: figures_2025_10_25//transport_legend.pdf  used on inpu
 t line 11.
 (pdftex.def)             Requested size: 36.98866pt x 28.04897pt.
-<figures_2025_10_25//passenger_road_private_fec_dist.pdf, id=329, 358.76071pt x
+<figures_2025_10_25//passenger_road_private_fec_dist.pdf, id=338, 358.76071pt x
  342.7044pt>
 File: figures_2025_10_25//passenger_road_private_fec_dist.pdf Graphic file (typ
 e pdf)
@@ -1420,16 +1430,16 @@ pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2025_10_25//transp
 ort_legend.pdf): PDF inclusion: multiple pdfs with page group included in a sin
 gle page
 >]
-<figures_2025_10_25//passenger_road_public_fec.pdf, id=418, 238.3199pt x 372.72
-533pt>
+<figures_2025_10_25//passenger_road_public_fec.pdf, id=432, 343.10106pt x 470.2
+1947pt>
 File: figures_2025_10_25//passenger_road_public_fec.pdf Graphic file (type pdf)
 
 <use figures_2025_10_25//passenger_road_public_fec.pdf>
 Package pdftex.def Info: figures_2025_10_25//passenger_road_public_fec.pdf  use
 d on input line 20.
-(pdftex.def)             Requested size: 124.30817pt x 199.16928pt.
+(pdftex.def)             Requested size: 142.9162pt x 199.16928pt.
 
-Overfull \hbox (10.49715pt too wide) in paragraph at lines 20--20
+Overfull \hbox (29.10518pt too wide) in paragraph at lines 20--20
 [][] 
  []
 
@@ -1438,7 +1448,7 @@ File: figures_2025_10_25//transport_legend.pdf Graphic file (type pdf)
 Package pdftex.def Info: figures_2025_10_25//transport_legend.pdf  used on inpu
 t line 20.
 (pdftex.def)             Requested size: 36.98866pt x 28.04897pt.
-<figures_2025_10_25//passenger_road_public_fec_dist.pdf, id=420, 341.28073pt x 
+<figures_2025_10_25//passenger_road_public_fec_dist.pdf, id=434, 341.28073pt x 
 345.36153pt>
 File: figures_2025_10_25//passenger_road_public_fec_dist.pdf Graphic file (type
  pdf)
@@ -1465,14 +1475,14 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
  <./figures_2025_10_25//passenger_road_public_fec.pdf> <./figures_2025_10_25//p
 assenger_road_public_fec_dist.pdf>]
-<figures_2025_10_25//freight_road_fec.pdf, id=511, 238.3199pt x 372.72533pt>
+<figures_2025_10_25//freight_road_fec.pdf, id=527, 343.10106pt x 470.21947pt>
 File: figures_2025_10_25//freight_road_fec.pdf Graphic file (type pdf)
 <use figures_2025_10_25//freight_road_fec.pdf>
 Package pdftex.def Info: figures_2025_10_25//freight_road_fec.pdf  used on inpu
 t line 29.
-(pdftex.def)             Requested size: 124.30817pt x 199.16928pt.
+(pdftex.def)             Requested size: 142.9162pt x 199.16928pt.
 
-Overfull \hbox (10.49715pt too wide) in paragraph at lines 29--29
+Overfull \hbox (29.10518pt too wide) in paragraph at lines 29--29
 [][] 
  []
 
@@ -1481,7 +1491,7 @@ File: figures_2025_10_25//transport_legend.pdf Graphic file (type pdf)
 Package pdftex.def Info: figures_2025_10_25//transport_legend.pdf  used on inpu
 t line 29.
 (pdftex.def)             Requested size: 36.98866pt x 28.04897pt.
-<figures_2025_10_25//freight_road_fec_dist.pdf, id=513, 351.84546pt x 345.36153
+<figures_2025_10_25//freight_road_fec_dist.pdf, id=529, 351.84546pt x 345.36153
 pt>
 File: figures_2025_10_25//freight_road_fec_dist.pdf Graphic file (type pdf)
 <use figures_2025_10_25//freight_road_fec_dist.pdf>
@@ -1509,29 +1519,29 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 ad_fec_dist.pdf>]) (./heat.tex (./00_main.toc) [11
 
 ]
-<figures_2025_10_25//spaceHeating.pdf, id=608, 238.3199pt x 372.72533pt>
+<figures_2025_10_25//spaceHeating.pdf, id=629, 343.10106pt x 470.21947pt>
 File: figures_2025_10_25//spaceHeating.pdf Graphic file (type pdf)
 <use figures_2025_10_25//spaceHeating.pdf>
 Package pdftex.def Info: figures_2025_10_25//spaceHeating.pdf  used on input li
 ne 11.
-(pdftex.def)             Requested size: 124.30817pt x 199.16928pt.
+(pdftex.def)             Requested size: 142.9162pt x 199.16928pt.
 
-Overfull \hbox (10.49715pt too wide) in paragraph at lines 11--11
+Overfull \hbox (29.10518pt too wide) in paragraph at lines 11--11
 [][] 
  []
 
-<figures_2025_10_25//districtHeating.pdf, id=610, 238.3199pt x 372.72533pt>
+<figures_2025_10_25//districtHeating.pdf, id=631, 343.10106pt x 470.21947pt>
 File: figures_2025_10_25//districtHeating.pdf Graphic file (type pdf)
 <use figures_2025_10_25//districtHeating.pdf>
 Package pdftex.def Info: figures_2025_10_25//districtHeating.pdf  used on input
  line 11.
-(pdftex.def)             Requested size: 124.30817pt x 199.16928pt.
+(pdftex.def)             Requested size: 142.9162pt x 199.16928pt.
 
-Overfull \hbox (10.49715pt too wide) in paragraph at lines 11--11
+Overfull \hbox (29.10518pt too wide) in paragraph at lines 11--11
 [][] 
  []
 
-<figures_2025_10_25//heat_legend.pdf, id=612, 105.18987pt x 146.20245pt>
+<figures_2025_10_25//heat_legend.pdf, id=633, 105.18987pt x 146.20245pt>
 File: figures_2025_10_25//heat_legend.pdf Graphic file (type pdf)
 <use figures_2025_10_25//heat_legend.pdf>
 Package pdftex.def Info: figures_2025_10_25//heat_legend.pdf  used on input lin
@@ -1551,13 +1561,13 @@ pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2025_10_25//heat_l
 egend.pdf): PDF inclusion: multiple pdfs with page group included in a single p
 age
 >]
-<figures_2025_10_25//spaceHeating_dist.pdf, id=691, 350.38567pt x 346.16791pt>
+<figures_2025_10_25//spaceHeating_dist.pdf, id=725, 350.38567pt x 346.16791pt>
 File: figures_2025_10_25//spaceHeating_dist.pdf Graphic file (type pdf)
 <use figures_2025_10_25//spaceHeating_dist.pdf>
 Package pdftex.def Info: figures_2025_10_25//spaceHeating_dist.pdf  used on inp
 ut line 20.
 (pdftex.def)             Requested size: 141.66254pt x 142.26378pt.
-<figures_2025_10_25//districtHeating_dist.pdf, id=693, 350.38567pt x 346.16791p
+<figures_2025_10_25//districtHeating_dist.pdf, id=727, 350.38567pt x 346.16791p
 t>
 File: figures_2025_10_25//districtHeating_dist.pdf Graphic file (type pdf)
 <use figures_2025_10_25//districtHeating_dist.pdf>
@@ -1583,14 +1593,14 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
  <./figures_2025_10_25//spaceHeating_dist.pdf> <./figures_2025_10_25//districtH
 eating_dist.pdf>]
-<figures_2025_10_25//processHeating.pdf, id=800, 238.3199pt x 372.72533pt>
+<figures_2025_10_25//processHeating.pdf, id=834, 343.10106pt x 470.21947pt>
 File: figures_2025_10_25//processHeating.pdf Graphic file (type pdf)
 <use figures_2025_10_25//processHeating.pdf>
 Package pdftex.def Info: figures_2025_10_25//processHeating.pdf  used on input 
 line 29.
-(pdftex.def)             Requested size: 124.30817pt x 199.16928pt.
+(pdftex.def)             Requested size: 142.9162pt x 199.16928pt.
 
-Overfull \hbox (10.49715pt too wide) in paragraph at lines 29--29
+Overfull \hbox (29.10518pt too wide) in paragraph at lines 29--29
 [][] 
  []
 
@@ -1599,7 +1609,7 @@ File: figures_2025_10_25//heat_legend.pdf Graphic file (type pdf)
 Package pdftex.def Info: figures_2025_10_25//heat_legend.pdf  used on input lin
 e 29.
 (pdftex.def)             Requested size: 42.67912pt x 59.31874pt.
-<figures_2025_10_25//processHeating_dist.pdf, id=802, 350.38567pt x 346.16791pt
+<figures_2025_10_25//processHeating_dist.pdf, id=836, 350.38567pt x 346.16791pt
 >
 File: figures_2025_10_25//processHeating_dist.pdf Graphic file (type pdf)
 <use figures_2025_10_25//processHeating_dist.pdf>
@@ -1627,7 +1637,7 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 ng_dist.pdf>]) (./fuels.tex (./00_main.toc) [15
 
 ]
-<figures_2025_10_25//fuelUse_legend.pdf, id=897, 101.3317pt x 118.56796pt>
+<figures_2025_10_25//fuelUse_legend.pdf, id=937, 101.3317pt x 118.56796pt>
 File: figures_2025_10_25//fuelUse_legend.pdf Graphic file (type pdf)
 <use figures_2025_10_25//fuelUse_legend.pdf>
 Package pdftex.def Info: figures_2025_10_25//fuelUse_legend.pdf  used on input 
@@ -1638,23 +1648,23 @@ Overfull \hbox (5.69046pt too wide) in paragraph at lines 12--12
 [][] 
  []
 
-<figures_2025_10_25//h2Use.pdf, id=898, 177.18524pt x 372.72533pt>
+<figures_2025_10_25//h2Use.pdf, id=938, 199.95757pt x 470.21947pt>
 File: figures_2025_10_25//h2Use.pdf Graphic file (type pdf)
 <use figures_2025_10_25//h2Use.pdf>
 Package pdftex.def Info: figures_2025_10_25//h2Use.pdf  used on input line 12.
-(pdftex.def)             Requested size: 91.64015pt x 199.16928pt.
-<figures_2025_10_25//h2Supply_tech.pdf, id=899, 238.3199pt x 372.72533pt>
+(pdftex.def)             Requested size: 82.28523pt x 199.16928pt.
+<figures_2025_10_25//h2Supply_tech.pdf, id=939, 343.10106pt x 470.21947pt>
 File: figures_2025_10_25//h2Supply_tech.pdf Graphic file (type pdf)
 <use figures_2025_10_25//h2Supply_tech.pdf>
 Package pdftex.def Info: figures_2025_10_25//h2Supply_tech.pdf  used on input l
 ine 12.
-(pdftex.def)             Requested size: 124.30817pt x 199.16928pt.
+(pdftex.def)             Requested size: 142.9162pt x 199.16928pt.
 
-Overfull \hbox (8.24312pt too wide) in paragraph at lines 12--12
+Overfull \hbox (17.49623pt too wide) in paragraph at lines 12--12
 [][][] 
  []
 
-<figures_2025_10_25//h2Supply_legend.pdf, id=901, 111.33784pt x 75.48514pt>
+<figures_2025_10_25//h2Supply_legend.pdf, id=941, 111.33784pt x 75.48514pt>
 File: figures_2025_10_25//h2Supply_legend.pdf Graphic file (type pdf)
 <use figures_2025_10_25//h2Supply_legend.pdf>
 Package pdftex.def Info: figures_2025_10_25//h2Supply_legend.pdf  used on input
@@ -1689,25 +1699,26 @@ Overfull \hbox (5.69046pt too wide) in paragraph at lines 23--23
 [][] 
  []
 
-<figures_2025_10_25//methaneUse.pdf, id=964, 177.18524pt x 372.72533pt>
+<figures_2025_10_25//methaneUse.pdf, id=1012, 199.95757pt x 470.21947pt>
 File: figures_2025_10_25//methaneUse.pdf Graphic file (type pdf)
 <use figures_2025_10_25//methaneUse.pdf>
 Package pdftex.def Info: figures_2025_10_25//methaneUse.pdf  used on input line
  23.
-(pdftex.def)             Requested size: 91.64015pt x 199.16928pt.
-<figures_2025_10_25//methaneSupply_tech.pdf, id=965, 238.3199pt x 372.72533pt>
+(pdftex.def)             Requested size: 82.28523pt x 199.16928pt.
+<figures_2025_10_25//methaneSupply_tech.pdf, id=1013, 343.10106pt x 470.21947pt
+>
 File: figures_2025_10_25//methaneSupply_tech.pdf Graphic file (type pdf)
 <use figures_2025_10_25//methaneSupply_tech.pdf>
 Package pdftex.def Info: figures_2025_10_25//methaneSupply_tech.pdf  used on in
 put line 23.
-(pdftex.def)             Requested size: 124.30817pt x 199.16928pt.
+(pdftex.def)             Requested size: 142.9162pt x 199.16928pt.
 
-Overfull \hbox (8.24312pt too wide) in paragraph at lines 23--23
+Overfull \hbox (17.49623pt too wide) in paragraph at lines 23--23
 [][][] 
  []
 
-<figures_2025_10_25//methaneSupply_legend.pdf, id=967, 125.31192pt x 60.91508pt
->
+<figures_2025_10_25//methaneSupply_legend.pdf, id=1015, 125.31192pt x 60.91508p
+t>
 File: figures_2025_10_25//methaneSupply_legend.pdf Graphic file (type pdf)
 <use figures_2025_10_25//methaneSupply_legend.pdf>
 Package pdftex.def Info: figures_2025_10_25//methaneSupply_legend.pdf  used on 
@@ -1742,25 +1753,25 @@ Overfull \hbox (5.69046pt too wide) in paragraph at lines 34--34
 [][] 
  []
 
-<figures_2025_10_25//liquidsUse.pdf, id=1026, 177.18524pt x 372.72533pt>
+<figures_2025_10_25//liquidsUse.pdf, id=1081, 177.18524pt x 372.72533pt>
 File: figures_2025_10_25//liquidsUse.pdf Graphic file (type pdf)
 <use figures_2025_10_25//liquidsUse.pdf>
 Package pdftex.def Info: figures_2025_10_25//liquidsUse.pdf  used on input line
  34.
 (pdftex.def)             Requested size: 91.64015pt x 199.16928pt.
-<figures_2025_10_25//liquidsSupply_tech.pdf, id=1027, 238.3199pt x 372.72533pt>
-
+<figures_2025_10_25//liquidsSupply_tech.pdf, id=1082, 343.10106pt x 470.21947pt
+>
 File: figures_2025_10_25//liquidsSupply_tech.pdf Graphic file (type pdf)
 <use figures_2025_10_25//liquidsSupply_tech.pdf>
 Package pdftex.def Info: figures_2025_10_25//liquidsSupply_tech.pdf  used on in
 put line 34.
-(pdftex.def)             Requested size: 124.30817pt x 199.16928pt.
+(pdftex.def)             Requested size: 142.9162pt x 199.16928pt.
 
-Overfull \hbox (8.24312pt too wide) in paragraph at lines 34--34
+Overfull \hbox (26.85115pt too wide) in paragraph at lines 34--34
 [][][] 
  []
 
-<figures_2025_10_25//liquidsSupply_legend.pdf, id=1029, 109.09508pt x 46.72144p
+<figures_2025_10_25//liquidsSupply_legend.pdf, id=1084, 109.09508pt x 46.72144p
 t>
 File: figures_2025_10_25//liquidsSupply_legend.pdf Graphic file (type pdf)
 <use figures_2025_10_25//liquidsSupply_legend.pdf>
@@ -1805,7 +1816,7 @@ Package rerunfilecheck Info: File `00_main.out' has not changed.
 Here is how much of TeX's memory you used:
  28886 strings out of 477529
  612325 string characters out of 5825602
- 871022 words of memory out of 5000000
+ 872022 words of memory out of 5000000
  47091 multiletter control sequences out of 15000+600000
  489608 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1813,9 +1824,9 @@ Here is how much of TeX's memory you used:
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/
 2022/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on 00_main.pdf (19 pages, 503896 bytes).
+Output written on 00_main.pdf (19 pages, 551606 bytes).
 PDF statistics:
- 1146 PDF objects out of 1200 (max. 8388607)
+ 1204 PDF objects out of 1440 (max. 8388607)
  320 compressed objects within 4 object streams
  43 named destinations out of 1000 (max. 500000)
  387 words of extra memory for PDF output out of 10000 (max. 10000000)

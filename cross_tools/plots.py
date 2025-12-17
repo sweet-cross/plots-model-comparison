@@ -31,11 +31,20 @@ class Plots:
             folder_plots: path to folder_plots
         """
         
+        # ---- Styling ----
+        matplotlib.rcParams["font.family"] = "sans-serif"
+        matplotlib.rcParams["font.sans-serif"] = "Arial"
 
-        # Get the models names
-        self.models = {f['id']: f['name'] for f in model_list}
-        self.modelsid = [ f['id'] for f in model_list ]
-        self.model_colors = [ f['color'] for f in model_list ]
+        # Models metadata (single source of truth keyed by model_id)
+        # Stored as an insertion-ordered dict, so iteration preserves the order of model_list.
+        self.models = {
+            f["id"]: {"name": f.get("name", f["id"]), "color": f.get("color")}
+            for f in model_list
+        }
+        # Get the models ids, this can be deleted later
+        self.modelsid = list(self.models.keys())
+        
+        
         self.typicalDays = {}
         self.typicalDays['summer'] = {
                                     'name':  {f['id']: f['summer'] for f in model_list},
@@ -58,8 +67,6 @@ class Plots:
         self.sceColors = sceColors
         self.sceModel = self.__getReportedScenariosByModel()
         self.sceVariants= self.__getReportedSceVariants()
-        
-        
         #Calculate net imports and exports
         self.__calculateNets()
         
@@ -67,7 +74,6 @@ class Plots:
         # We make sure that if the var 'cat' wasn't reported, we calculate it from the subcategories
         # The variable '(varName,cat)' will be created and can be used later in the code
         # This guarantees that we can compare even if models report different levels of aggregation 
-
         subcats = [
             {'varName':'electricity_supply',
              'time_resolution':['annual','typical-day'],
@@ -99,10 +105,11 @@ class Plots:
                  {'cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']},
                  ]},
             ]
-
-
         self.__checkSubcategories(subcats)
         
+        # For the following variables we do a pre-processing:
+        # These variables dont have a set along which they are defined 
+        # so we replace whatever model submitted in tech_use_fuel with ''  
         variables = ['total_system_costs','carbon_price']
         self.__checkVariablesNoSub(variables)
         
@@ -123,6 +130,15 @@ class Plots:
         
         self.annualData = self.allData.loc[(slice(None),slice(None),slice(None),slice(None),slice(None),'annual',slice(None)),'value'].to_frame()
         
+        
+        @property
+        def model_name(self, model_id):
+            """Return display name for a model id."""
+            return self.models.get(model_id, {}).get("name", model_id)
+        
+        def model_color(self, model_id, default=None):
+            """Return color for a model id (or default if missing)."""
+            return self.models.get(model_id, {}).get("color", default)
         
         
         # ---- Print info for the user ----
@@ -164,14 +180,14 @@ class Plots:
         data.drop(columns=['scenario_group','uploaded_by','uploaded_at','country'],inplace=True)
                         
         # Get the annual values and make them numeric instead of text
-        data['value']=pd.to_numeric(data['value'])
+        data['value']=pd.to_numeric(data['value'], errors='coerce')
         
         # Correct the unit
         data['value']=data.apply(lambda x: x.value * self.__correctUnit(x.time_resolution,x.unit),axis=1)
         data = data.drop(['unit'], axis=1)
 
         # Make timestamp either an int for annual or a datetime for hourly data 
-        # annual → int year
+        # annual -> int year
         mask_annual = data['time_resolution'] == 'annual'
         data.loc[mask_annual, 'timestamp'] = (
             data.loc[mask_annual, 'timestamp']
@@ -186,7 +202,7 @@ class Plots:
                 dayfirst=True,
                 errors='coerce'
             )
-            .dt.floor('min')
+            .dt.floor('H')
         )
        
         return data
@@ -194,16 +210,17 @@ class Plots:
     def __correctUnit(self,timeResolution,unit):
         annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000,'gw':1,'mw':1/1000,'bchf':1,'mchf':1/1000,'chf/tco2':1}
         hourly_factors = {'gw':1,'gwh/h':1, 'mw':1/1000,'mwh/h':1/1000}
+        
         if timeResolution == 'annual':
             if unit.lower() in annual_factors.keys():
                 return annual_factors[unit.lower()]
             else:
-                return 0
-        elif timeResolution == 'typical-day':
+                return np.nan
+        elif timeResolution in(['typical-day', 'hourly']):
             if unit.lower() in hourly_factors.keys():
                 return hourly_factors[unit.lower()]
             else: 
-                return 0
+                return np.nan
             
     def __getReportedYearsByModel(self):
         years =  {}
@@ -871,7 +888,7 @@ class Plots:
     def _group_layout(self, listModelsid, sce_names, sce_labels, group_by):
         nmodels = len(listModelsid)
         nscen   = len(sce_names)
-        listModels = [self.models[k] for k in listModelsid if k in self.models]
+        listModels = [self.models[k]['name'] for k in listModelsid if k in self.models]
     
         if group_by == "model":
             nGroups, nWithin = nmodels, nscen
@@ -915,13 +932,14 @@ class Plots:
         pos_bar = np.array(pos_bar)
     
         # keep your vertical "flip so first group on left"
+        max_grid = pos_grid[0]
+        
         if orientation == "vertical":
             max_grid = pos_grid[0]
             pos_grid = [max_grid - x for x in pos_grid]
             pos_cols = [max_grid - x for x in pos_cols]
             pos_bar  = max_grid - pos_bar
-        else:
-            max_grid = pos_grid[0]
+        
     
         return pos_bar, pos_grid, pos_cols, max_grid
     
@@ -1076,9 +1094,25 @@ class Plots:
                     ax.axhline(0, color="black", linewidth=1)
                 else:
                     ax.set_ylim(0, figmax)
+                    
                     if invert:
                         ax.invert_yaxis()
-                        ax.set_ylim(figmax, 0)
+                        
+                        # Make 0 be on the TOP (bars extend left)
+                        ax.set_ylim(figmax, 0)   
+                    
+                        # Move minor labels to the top
+                        ax.xaxis.tick_top()
+                        ax.xaxis.set_label_position("top")
+                    
+                        # ensure tick labels are on the top only
+                        ax.tick_params(axis="x", labeltop=True, labelbottom=False)
+                    
+                        # Optional: make the "main" spine look like it's on the top
+                        ax.spines["top"].set_visible(True)
+                        ax.spines["bottom"].set_visible(False)
+                    else:
+                        ax.spines["top"].set_visible(False)
     
                 # within labels
                 within_flat = []
@@ -1096,9 +1130,9 @@ class Plots:
                 ax.tick_params(axis="y", which="major", length=0)
     
                 # ---- Group labels (fixed position in axes coords) ----
-                y_axes = 1.02      # always above plot
-                va = "bottom"
-                
+                y_axes = -0.1 if invert else 1.02    # always above plot
+                va = "bottom"  if invert else "top"
+                    
                 for x, group_label in zip(pos_cols, group_labels):
                     ax.text(
                         x,
@@ -1113,7 +1147,7 @@ class Plots:
                 ax.xaxis.grid(color="gray", linestyle="dashed", which="minor")
                 ax.yaxis.grid(color="gray", linestyle="dashed")
                 ax.spines["right"].set_visible(False)
-                ax.spines["top"].set_visible(False if not invert else True)
+                
     
             else:  # horizontal
                 if signed:
@@ -1123,7 +1157,22 @@ class Plots:
                     ax.set_xlim(0, figmax)
                     if invert:
                         ax.invert_xaxis()
-                        ax.set_xlim(figmax, 0)
+                        # Make 0 be on the RIGHT (bars extend left)
+                        ax.set_xlim(figmax, 0)   # or ax.invert_xaxis() after setting normal limits
+                    
+                        # Move minor labels (y ticks) to the RIGHT side
+                        ax.yaxis.tick_right()
+                        ax.yaxis.set_label_position("right")
+                    
+                        # Optional: ensure tick labels are on the right only
+                        ax.tick_params(axis="y", labelright=False, labelleft=False)
+                    
+                        # Optional: make the "main" spine look like it's on the right
+                        ax.spines["right"].set_visible(True)
+                        ax.spines["left"].set_visible(False)
+                    else:
+                        ax.spines["right"].set_visible(False)
+                        
     
                 within_flat = []
                 if group_by == "model":
@@ -1139,23 +1188,22 @@ class Plots:
                 ax.set_xlabel(label)
                 ax.tick_params(axis="x", which="major", length=0)
     
-                x_axes = 1.02
-                ha = "left"
+                # x_axes = -0.02 if invert else 1.02
+                # ha = "right" if invert else "left"
                 
-                for y, group_label in zip(pos_cols, group_labels):
-                    ax.text(
-                        x_axes,
-                        y,
-                        group_label,
-                        va="center",
-                        ha=ha,
-                        transform=ax.get_yaxis_transform(),  # y in data, x in axes
-                    )
+                # for y, group_label in zip(pos_cols, group_labels):
+                #     ax.text(
+                #         x_axes,
+                #         y,
+                #         group_label,
+                #         va="center",
+                #         ha=ha,
+                #         transform=ax.get_yaxis_transform(),  # y in data, x in axes
+                #     )
     
                 ax.yaxis.set_minor_locator(ticker.FixedLocator(pos_grid))
                 ax.yaxis.grid(color="gray", linestyle="dashed", which="minor")
                 ax.xaxis.grid(color="gray", linestyle="dashed")
-                ax.spines["right"].set_visible(False)
                 ax.spines["top"].set_visible(False)
     
             if legend:
@@ -1370,7 +1418,7 @@ class Plots:
     
         is_horizontal = (orientation == "horizontal")
     
-        # 1) scenarios + grouping (reused)
+        # 1) scenarios + grouping 
         sce_names, sce_labels = self._resolve_scenarios(listSce)
         nGroups, nWithin, group_labels, within_labels, flatten, slice_group = self._group_layout(
             listModelsid, sce_names, sce_labels, group_by
@@ -1416,9 +1464,9 @@ class Plots:
                 if not np.isnan(val):
                     val = val / scale
                     if is_horizontal:
-                        ax.scatter(val, cat_pos, s=20, zorder=2)
+                        ax.scatter(val, cat_pos, s=20, zorder=2,color=self.models[m]["color"])
                     else:
-                        ax.scatter(cat_pos, val, s=20, zorder=2)
+                        ax.scatter(cat_pos, val, s=20, zorder=2,color=self.models[m]["color"])
     
                 tick_pos.append(cat_pos)
                 tick_lab.append(within_labels[w])
