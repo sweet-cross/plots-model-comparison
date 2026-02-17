@@ -31,7 +31,7 @@ model_list =  [
 
 # Create the object that produces the plots and processes the data
 # Name of the csv file with the results 
-fileResults = "results/nuclear_results_20251211"
+fileResults = "results/results_nuclear_2026_02_16"
 # Scenario names and corresponding colors 
 sce = ['abroad-resnuc-high','abroad-resnuc-medium','abroad-resnuc-low','abroad-resnuc-phaseout','abroad-res-high','abroad-res-medium','abroad-res-low','abroad-res-phaseout','abroad-nores-high','abroad-nores-medium','abroad-nores-low','abroad-nores-phaseout']
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E','#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
@@ -638,3 +638,34 @@ cross_plots.plotBarVerticalSignedFuels(
 
 
 
+#Calculate relative cost changes
+varName =  'total_system_costs'
+
+listModels = cross_plots.modelsid
+year=2050
+
+# Get only the costs from the annual data
+costs = cross_plots.annualData.loc[(slice(None),slice(None),slice(None),varName,'','annual',year)]
+# Reshape the dataframe so we have one scenario variant per column
+costs = costs.unstack(level=[1,0]).droplevel(level=0,axis=1)
+costs_change = costs.copy()
+
+variant_list = ['wacc_5','wacc_8']
+
+scenario_groups = {
+    'nores': {'base': 'abroad-nores-phaseout','compare': ['abroad-nores-low','abroad-nores-medium','abroad-nores-high']},
+    'res': {'base': 'abroad-res-phaseout','compare': ['abroad-res-low','abroad-res-medium','abroad-res-high']},
+    'resnuc': {'base': 'abroad-resnuc-phaseout','compare': ['abroad-resnuc-low','abroad-resnuc-medium','abroad-resnuc-high']},
+    } 
+
+for variant in variant_list:
+    for name, scenarios in scenario_groups.items():
+        base_scenario = scenarios['base']
+        cost_base = costs.loc[:,(variant,base_scenario)]
+        costs_change.loc[:,(variant,base_scenario)] = 0
+        for s in scenarios['compare']:
+            costs_change.loc[:,(variant,s)] = 100*(costs_change.loc[:,(variant,s)]-cost_base)/cost_base
+        
+print(costs_change)
+# Export to csv
+costs_change.to_csv('cost_change.csv')
