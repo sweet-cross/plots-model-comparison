@@ -9,7 +9,6 @@ import pandas as pd
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
 import seaborn as sb
 from matplotlib.patches import Patch
 import inspect
@@ -523,6 +522,9 @@ class Plots:
         height,
         ylim=None,
         extra_values=None, 
+        ncols=1,
+        subplot_titles=None, 
+        show_point_labels=True
     ):
         """
         Line plot of a variable by scenario/variant, with custom x-positions.
@@ -614,7 +616,16 @@ class Plots:
     
         # ---- Figure ----
         cm = 1 / 2.54
-        fig, ax = plt.subplots(1, figsize=(width * cm, height * cm))
+        fig, axes = plt.subplots(
+            1,
+            ncols,
+            figsize=(width * cm, height * cm),
+            sharey=True
+        )
+        
+        # Make sure axes is always iterable
+        if ncols == 1:
+            axes = [axes]
     
         # Simple color mapping for models
         # If you already have self.modelColors, you can replace this.
@@ -635,57 +646,70 @@ class Plots:
         line_handles  = {}
     
         # ---- Plot each model & line ----
-        for im, m in enumerate(listModelsid):
-            for il, line_id in enumerate(line_ids):
-                pts = values[m][line_id]
-                if not pts:
-                    continue
-    
-                # sort by x
-                pts = sorted(pts, key=lambda t: t[0])
-                xs = [p[0] for p in pts]
-                ys = [p[1] for p in pts]
-    
-                color = model_colors[m]
-                marker = marker_cycle[il % len(marker_cycle)]
-                ls = line_styles[il % len(line_styles)]
-    
-                # line + markers
-                h = ax.plot(
-                    xs,
-                    ys,
-                    linestyle=ls,
-                    marker=marker,
-                    color=color,
-                    label=self.models.get(m, m),
-                )[0]
-    
-                # store handles for potential legends
-                model_handles.setdefault(m, h)
-                line_handles.setdefault(line_id, h)
-    
-                # annotate each point: "x: y GW"
-                for x_val, y_val in zip(xs, ys):
-                    text = f"{int(x_val)}: {y_val:.1f} GW"
-                    ax.text(
-                        x_val,
-                        y_val,
-                        text,
-                        fontsize=8,
-                        va="bottom",
-                        ha="center",
-                        bbox=dict(
-                            boxstyle="round,pad=0.2",
-                            edgecolor=color,
-                            facecolor="white",
-                            linewidth=1,
-                        ),
-                    )
+        for col, ax in enumerate(axes):
+        
+            # split line_ids across subplots
+            lines_for_this_subplot = line_ids[col::ncols]
+        
+            for im, m in enumerate(listModelsid):
+                for il, line_id in enumerate(lines_for_this_subplot):
+                    pts = values[m][line_id]
+                    if not pts:
+                        continue
+        
+                    # sort by x
+                    pts = sorted(pts, key=lambda t: t[0])
+                    xs = [p[0] for p in pts]
+                    ys = [p[1] for p in pts]
+        
+                    color = model_colors[m]
+                    marker = marker_cycle[il % len(marker_cycle)]
+                    ls = line_styles[il % len(line_styles)]
+        
+                    # line + markers
+                    h = ax.plot(
+                        xs,
+                        ys,
+                        linestyle=ls,
+                        marker=marker,
+                        color=color,
+                        label=self.models.get(m, m),
+                    )[0]
+        
+                    # store handles for potential legends
+                    model_handles.setdefault(m, h)
+                    line_handles.setdefault(line_id, h)
+        
+                    # annotate each point: "x: y GW"
+                    if show_point_labels:
+                        for x_val, y_val in zip(xs, ys):
+                            text = f"{int(x_val)}: {y_val:.1f} GW"
+                            ax.text(
+                                x_val,
+                                y_val,
+                                text,
+                                fontsize=8,
+                                va="bottom",
+                                ha="center",
+                                bbox=dict(
+                                    boxstyle="round,pad=0.2",
+                                    edgecolor=color,
+                                    facecolor="white",
+                                    linewidth=1,
+                                ),
+                            )
     
         # ---- Axes, grid, labels ----
-        ax.set_xlabel(xlabel)
-        ax.set_ylabel(ylabel)
-        ax.grid(True, linestyle="--", alpha=0.5)
+        for i, ax in enumerate(axes):
+            ax.set_xlabel(xlabel)
+            ax.grid(True, linestyle="--", alpha=0.5)
+            # ---- Titles ----
+            if subplot_titles is not None:
+                if i < len(subplot_titles):
+                    ax.set_title(subplot_titles[i], fontsize=11, pad=8)
+        
+        axes[0].set_ylabel(ylabel)
+    
     
         # Optional: small padding around x
         all_x = [x for m_dict in values.values() for line_pts in m_dict.values() for (x, _) in line_pts]
@@ -721,21 +745,22 @@ class Plots:
                 combined_labels.append(self.models.get(m, m))
         
         # 2. Line-group entries  (black line + marker + linestyle)
-        for il, lid in enumerate(line_ids):
-            marker = marker_cycle[il % len(marker_cycle)]
-            ls     = line_styles[il % len(line_styles)]
-        
-            h = Line2D(
-                [], [],
-                linestyle=ls,
-                color='DARKGREY',
-                marker='None',
-                markersize=8,
-                linewidth=1.5,
-            )
-        
-            combined_handles.append(h)
-            combined_labels.append(lid)
+        if ncols==1:
+            for il, lid in enumerate(line_ids):
+                marker = marker_cycle[il % len(marker_cycle)]
+                ls     = line_styles[il % len(line_styles)]
+            
+                h = Line2D(
+                    [], [],
+                    linestyle=ls,
+                    color='DARKGREY',
+                    marker='None',
+                    markersize=8,
+                    linewidth=1.5,
+                )
+            
+                combined_handles.append(h)
+                combined_labels.append(lid)
         
         # ---- Draw combined legend ----
         ax.legend(

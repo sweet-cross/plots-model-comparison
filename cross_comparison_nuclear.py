@@ -516,6 +516,9 @@ for group_name, cfg in scenario_groups.items():
         height = 10,
         ylim = (0,5),
         extra_values        = cfg["extra_values"], 
+        ncols=2,
+        subplot_titles=["5% WACC", "8% WACC"],
+        show_point_labels=False
     )
 
 
