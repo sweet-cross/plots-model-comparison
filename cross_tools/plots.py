@@ -18,7 +18,7 @@ import os
 
 class Plots:
 
-    def __init__(self, fileResults,model_list,scenarios,sceColors,folder_plots):
+    def __init__(self, fileResults,model_list,scenarios,folder_plots):
 
         """ 
         Generic class to upload the data and produce the plots for the model comparison
@@ -26,8 +26,7 @@ class Plots:
         Attributes:
             fileResults: Name of the file with the results
             model_list: list of dictionary with model names and the color to use for each model
-            scenarios: list with the scenario names
-            sceColors: list with the color for the scenarios
+            scenarios: list of dictionary with scenarios names and the color to use for each scenario
             folder_plots: path to folder_plots
         """
         
@@ -43,8 +42,7 @@ class Plots:
         }
         # Get the models ids, this can be deleted later
         self.modelsid = list(self.models.keys())
-        
-        
+       
         self.typicalDays = {}
         self.typicalDays['summer'] = {
                                     'name':  {f['id']: f['summer'] for f in model_list},
@@ -64,7 +62,6 @@ class Plots:
         
         self.yearsModel = self.__getReportedYearsByModel()
         self.sce = scenarios
-        self.sceColors = sceColors
         self.sceModel = self.__getReportedScenariosByModel()
         self.sceVariants= self.__getReportedSceVariants()
         #Calculate net imports and exports
@@ -487,43 +484,7 @@ class Plots:
         
         self.allData = pd.concat([self.allData, total], ignore_index=True)
            
-    
-    
-    def __extractPositiveNegative(self,positive_variables,negative_variables):
-        
-        positive_labels = [d['name'] for d in positive_variables]
-        negative_labels=[d['name'] for d in negative_variables]
-        
-        timesteps = self.hourlyData['summer'].index.get_level_values(level=2).unique()
-        
-        for season in self.seasons:
-            allData_h = self.hourlyData[season].copy()
-            
-            posNegData=pd.DataFrame(index=pd.MultiIndex.from_product([self.sce,positive_labels+negative_labels,timesteps] ,names=('scenario','index','timestep')),columns=self.models)
-            posNegData.sort_index(inplace=True)
-            posNegData.loc[(slice(None),slice(None),slice(None)),:] = 0
-            
-            for v in positive_variables:
-                for s in self.sce:
-                    for t in timesteps:
-                        for subv in v['data']:
-                            try:
-                                posNegData.loc[(s,v['name'],t),:] += allData_h.loc[(s,subv.lower(),t),:]
-                            except KeyError:
-                                posNegData.loc[(s,v['name'],t),:] = posNegData.loc[(s,v['name'],t),:] 
-            for v in negative_variables:
-                for s in self.sce:
-                    for t in timesteps:
-                        for subv in v['data']:
-                            try:
-                                posNegData.loc[(s,v['name'],t),:] -= allData_h.loc[(s,subv.lower(),t),:]
-                            except KeyError:
-                                posNegData.loc[(s,v['name'],t),:] = posNegData.loc[(s,v['name'],t),:] 
-            
-            posNegData = posNegData.reset_index().melt(id_vars=["scenario",'index','timestep'])
-            posNegData.rename(columns={'variable':'model','value':'Electricity (GW)'},inplace=True)
-            self.posNegData[season] = posNegData.set_index(["scenario",'index','timestep','model'])
-            
+       
      
     def plotLineByScenario(
         self,
@@ -635,14 +596,10 @@ class Plots:
     
         # Simple color mapping for models
         # If you already have self.modelColors, you can replace this.
-        color_cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
         model_colors = {}
         for i, m in enumerate(listModelsid):
-            if hasattr(self, "modelColors") and m in self.modelColors:
-                model_colors[m] = self.modelColors[m]
-            else:
-                model_colors[m] = color_cycle[i % len(color_cycle)]
-    
+            model_colors[m] = self.models[m]["color"]
+        
         # Some markers for different line_ids so they are distinguishable
         marker_cycle = ["o", "s", "^", "D", "v", "P", "X"]
         line_styles = ["-", "--", "-.", ":"]
@@ -761,10 +718,7 @@ class Plots:
             loc="upper right",
             frameon=True,
         )
-
-
-
-    
+  
         plt.tight_layout()
         plt.savefig(self.folder_plots + "/" + fileName+ ".pdf", bbox_inches="tight")
         plt.savefig(
@@ -775,103 +729,224 @@ class Plots:
         plt.show()
 
 
-
-    def plotTechDist(self,listModelsid,varName,varList,year,order,ylabel,ymax,fileName,legend):
-        """ 
-        Plots the distribution by technology
-        Parameters:
-        ----------
-        listModelsid: list of models id to plot
-        varName: str, variable name in the data template
-        varList: list of dictionaries with 
-            name: name of the technology or group of technologies,
-            data: list with the technologies that correspond to this category
-            color: color to use for this category
-        year: year for the plot
-        order: list with the technology order 
-        ylabel: str, label for y-axis
-        ymax: int, maximum level y-axis
-        fileName: str, file name for the plot
-        legend: True if legend has to be displayed
+    
+    def plotTechDistGrouped(
+        self,
+        listModelsid,
+        varName,
+        varList,
+        year,
+        order,
+        ylabel,
+        ymax,
+        fileName,
+        width, 
+        height,
+        legend=True,
+        group_by="scenario_group",          # "scenario_group" or "model"
+        scenario_groups=None,               # dict: {group_name: [(sce, variant), ...]}
+        scenarios=None,                          # optional list of (sce,variant):sce_name to use for group_by="model"
+    ):
+        """
+        Distribution by technology categories with flexible faceting.
+    
+        - group_by="scenario_group":
+            One subplot per scenario group, hue = Model.
+            scenario_groups is required.
+    
+        - group_by="model":
+            One subplot per model, hue = Scenario (variant included).
+            scenario_groups ignored.
+            scenarios optional; if None uses self.sceVariants.
         """
     
-        variables =[v['name'] for v in varList]
-        dataNew =pd.DataFrame (index=pd.MultiIndex.from_product([self.sce,variables] ,names=('scenario','index')), columns=listModelsid)
-
-        for v in varList:
-            var =  v['name']
-            for s in self.sce:
-                for m in listModelsid:
-                    dataNew.loc[(s,var),m] = np.nan
-                    for subv in v['data']:
-                        datasubv = np.nan
-                        try:
-                            datasubv = self.annualData.loc[(s,m,varName,subv,'annual',year),'value']
-                        except:
-                            datasubv = np.nan
-                        if not np.isnan(datasubv):
-                            if not np.isnan(dataNew.loc[(s,var),m]):    
-                                dataNew.loc[(s,var),m] = dataNew.loc[(s,var),m] + datasubv
-                            else:
-                                dataNew.loc[(s,var),m] = datasubv
-
-        dataNew=dataNew.dropna(how='all')
-        # Remove scenarios not existent
-        dataNew.reset_index(inplace=True)
-
-        dataNew=dataNew.melt(id_vars=["scenario", "index"], 
-                var_name="Model", 
-                value_name="value")
-
-        # Rename the models using the name instead of the modelid
-        dataNew=dataNew.replace({'Model': self.models})
-        
-        # Remove  non-existent scenarios
-        dataNew_unmelted = dataNew.pivot(index=['scenario','Model'], columns='index')
-        dataNew_unmelted=dataNew_unmelted.loc[(dataNew_unmelted!=0).any(axis=1)]
-        dataNew_unmelted.columns= dataNew_unmelted.columns.droplevel()
-
-        dataNew_unmelted.reset_index(inplace=True)
-        
-        
-        dataPlot=dataNew_unmelted.melt(id_vars=["scenario", "Model"], 
-                    var_name="index", 
-                    value_name="value")
-
-        sb.set_style("whitegrid")
-
-        PROPS = {
-            'boxprops':{'facecolor':'none', 'edgecolor':'grey'},
-            'medianprops':{'color':'grey'},
-            'whiskerprops':{'color':'grey'},
-            'capprops':{'color':'grey'}
-        }
-        
-        #Get the color of the models in the list
-        colors = [ self.model_colors[self.  modelsid.index(m)] for m in listModelsid ]
-        #Get the names from the ids
-        listModels = [self.models[x] for x in listModelsid]
-
-        g1 = sb.catplot(x="index", y="value",hue='Model',hue_order=listModels,palette=sb.color_palette(colors), alpha=.8, data=dataPlot, 
-                             order=order);
-        if legend==False:
-            g1._legend.remove()
-        
-        g1.set(xlabel='', ylabel=ylabel )
-        g1.set(ylim=(0, ymax))
-        
-        g2 = sb.boxplot(x="index", y="value", data=dataPlot, order=order,
-                        showfliers=False,
-                        linewidth=0.75,
-                        **PROPS);
-        g2.set(xlabel='', ylabel=ylabel )
-        g2.set(ylim=(0, ymax))
-        
-        plt.savefig(self.folder_plots+'/'+fileName,bbox_inches='tight')
-        plt.savefig(self.folder_plots+'/'+fileName+'.png',bbox_inches='tight', dpi=300)
-        plt.show()
+        # ---- guardrails ----
+        if group_by not in ("scenario_group", "model"):
+            raise ValueError("group_by must be 'scenario_group' or 'model'")
     
-        
+        if group_by == "scenario_group" and not scenario_groups:
+            raise ValueError("scenario_groups must be provided when group_by='scenario_group'")
+    
+        # Ensure fast MI access
+        if not self.allData.index.is_monotonic_increasing:
+            self.allData = self.allData.sort_index()
+    
+        # tech category definitions
+        cat_defs = [(v["name"], v["data"]) for v in varList]
+    
+        # scenario selection
+        if group_by == "model":
+            # enforce tuple form
+            sce_list = list(scenarios.keys())
+            
+    
+        # model labels + colors (fallback to seaborn palette if missing)
+        model_label = {}
+        for m in listModelsid:
+            try:
+                model_label[m] = self.models[m]["name"]
+            except Exception:
+                pass
+    
+        rows = []
+    
+        # ---- build long dataframe: one row per (facet, xcat, hue) ----
+        if group_by == "scenario_group":
+            # facet = group_name ; hue = Model ; x = tech category ; y = value
+            for gname, g_scenarios in scenario_groups.items():
+                for (sce, variant) in g_scenarios:
+                    for m in listModelsid:
+                        for cat_name, techs in cat_defs:
+                            total = 0.0
+                            found_any = False
+                            for tech in techs:
+                                try:
+                                    v = self.allData.loc[(sce, variant, m, varName, tech, "annual", year), "value"]
+                                except KeyError:
+                                    v = 0.0
+                                # handle scalar or Series
+                                v = float(v.sum()) if hasattr(v, "sum") else float(v)
+                                if not np.isnan(v):
+                                    total += v
+                                    found_any = True
+    
+                            # keep NaN if nothing found at all (so box/strip behave nicely)
+                            y = total if found_any else np.nan
+    
+                            rows.append({
+                                "facet": gname,
+                                "category": cat_name,
+                                "hue": model_label[m],
+                                "value": y,
+                            })
+    
+        else:  # group_by == "model"
+            # facet = model ; hue = scenario ; x = tech category ; y = value
+            for m in listModelsid:
+                for (sce, variant) in sce_list:
+                    for cat_name, techs in cat_defs:
+                        total = 0.0
+                        found_any = False
+                        for tech in techs:
+                            try:
+                                v = self.allData.loc[(sce, variant, m, varName, tech, "annual", year), "value"]
+                            except KeyError:
+                                v = 0.0
+                            v = float(v.sum()) if hasattr(v, "sum") else float(v)
+                            if not np.isnan(v):
+                                total += v
+                                found_any = True
+    
+                        y = total if found_any else np.nan
+    
+                        rows.append({
+                            "facet": model_label[m],
+                            "category": cat_name,
+                            "hue": scenarios[(sce, variant)],
+                            "value": y,
+                        })
+    
+        dataPlot = pd.DataFrame(rows).dropna(subset=["value"])
+    
+        # if nothing to plot
+        if dataPlot.empty:
+            return
+    
+        # ---- subplot layout ----
+        facets = list(dict.fromkeys(dataPlot["facet"].tolist()))
+        n = len(facets)
+        ncols = min(n, 4)
+        nrows = int(np.ceil(n / ncols))
+    
+        cm = 1 / 2.54
+        fig, axes = plt.subplots(nrows, ncols, figsize=(width * cm, height * cm), sharey=True)
+        axes = np.array(axes).reshape(-1)
+    
+        # hue order + palette
+        hue_vals = list(dict.fromkeys(dataPlot["hue"].tolist()))
+        if group_by == "scenario_group":
+            # hue = model
+            model_colors = {}
+            for m in listModelsid:
+                try:
+                    model_colors[model_label[m]] = self.models[m]["color"]
+                except Exception:
+                    pass
+            palette = model_colors 
+        else:
+            # hue = scenario
+            palette = sb.color_palette("tab10", n_colors=len(hue_vals))
+    
+        for i, facet in enumerate(facets):
+            ax = axes[i]
+            d = dataPlot.loc[dataPlot["facet"] == facet]
+            
+            # strip (points)
+            sb.stripplot(
+                data=d, x="category", y="value",
+                hue="hue", order=order, hue_order=hue_vals,
+                dodge=False, alpha=0.85, size=4,
+                palette=palette,
+                ax=ax,
+                jitter=True
+            )
+            
+            # box (overall distribution per category, no hue)
+            sb.boxplot(
+                data=d, x="category", y="value",
+                order=order,
+                showfliers=False,
+                linewidth=0.65,
+                width=.7,
+                boxprops={"facecolor":"none", "edgecolor":"grey"},
+                medianprops={"color":"grey"},
+                whiskerprops={"color":"grey"},
+                capprops={"color":"grey"},
+                ax=ax
+            )
+    
+            if n>1:
+                ax.set_title(facet)
+            ax.set_xlabel("")
+            ax.set_ylabel(ylabel if i % ncols == 0 else "")
+            ax.set_ylim(0, ymax)
+            ax.tick_params(axis="x", rotation=0)
+            # ax.grid(True, linestyle="--", alpha=0.5)
+            #ax.xaxis.grid(color="gray", linestyle="dashed", alpha=0.5)
+            ax.yaxis.grid(color="gray", linestyle="dashed", alpha=0.5)
+            ax.spines["right"].set_visible(False)
+            ax.spines["top"].set_visible(False)
+            
+    
+            # remove per-axes legends (we'll make one figure legend)
+            leg = ax.get_legend()
+            if leg:
+                leg.remove()
+    
+        # hide unused axes
+        for j in range(len(facets), len(axes)):
+            axes[j].axis("off")
+            
+        # figure legend
+        if legend:
+            # build legend from the first axis’ artists
+            handles, labels = axes[0].get_legend_handles_labels()
+            if handles:
+                fig.legend(handles[:len(hue_vals)], labels[:len(hue_vals)],
+                           loc="lower center", ncol=min(len(hue_vals), 6),
+                           bbox_to_anchor=(0.5, -0.06),handlelength=0.8,       # shorter handle (less wide)
+                           handletextpad=0.4,
+                           columnspacing=1.0,
+                           borderaxespad=0.0,)
+    
+                # make room so legend doesn't cover x ticks
+                fig.subplots_adjust(bottom=0.22)
+    
+        fig.tight_layout()
+        plt.savefig(self.folder_plots + "/" + fileName + ".pdf", bbox_inches="tight")
+        plt.savefig(self.folder_plots + "/" + fileName + ".png", bbox_inches="tight", dpi=300)
+        plt.show()
+
 
     def _resolve_scenarios(self, listSce):
         if listSce is None:
@@ -1165,7 +1240,7 @@ class Plots:
                         ax.yaxis.set_label_position("right")
                     
                         # Optional: ensure tick labels are on the right only
-                        ax.tick_params(axis="y", labelright=False, labelleft=False)
+                        ax.tick_params(axis="y", labelright=True, labelleft=False)
                     
                         # Optional: make the "main" spine look like it's on the right
                         ax.spines["right"].set_visible(True)
@@ -1188,18 +1263,18 @@ class Plots:
                 ax.set_xlabel(label)
                 ax.tick_params(axis="x", which="major", length=0)
     
-                # x_axes = -0.02 if invert else 1.02
-                # ha = "right" if invert else "left"
+                x_axes = -0.02 if invert else 1.02
+                ha = "right" if invert else "left"
                 
-                # for y, group_label in zip(pos_cols, group_labels):
-                #     ax.text(
-                #         x_axes,
-                #         y,
-                #         group_label,
-                #         va="center",
-                #         ha=ha,
-                #         transform=ax.get_yaxis_transform(),  # y in data, x in axes
-                #     )
+                for y, group_label in zip(pos_cols, group_labels):
+                    ax.text(
+                        x_axes,
+                        y,
+                        group_label,
+                        va="center",
+                        ha=ha,
+                        transform=ax.get_yaxis_transform(),  # y in data, x in axes
+                    )
     
                 ax.yaxis.set_minor_locator(ticker.FixedLocator(pos_grid))
                 ax.yaxis.grid(color="gray", linestyle="dashed", which="minor")
@@ -1571,52 +1646,53 @@ class Plots:
         for ax, m in zip(axes, listModelsid):
             day_val = day_by_model.get(m, None)
             if day_val is None:
-                raise ValueError(f"Missing day_by_model entry for model '{m}'")
-    
-            day = pd.to_datetime(day_val, dayfirst=True)
-            ts = pd.date_range(day.normalize(), periods=24, freq="H")
-    
-            # collect series per component
-            comp_vals = {}
-            for comp in signedVarList:
-                vname = comp["varName"]
-                techs = comp["techs"]
-                sgn = float(comp.get("sign", 1.0))
-    
-                arr = np.zeros(24, dtype=float)
-                for i, t in enumerate(ts):
-                    s = 0.0
-                    for tech in techs:
-                        try:
-                            val = self.allData.loc[(sce[0], sce[1], m, vname, tech, time_resolution, t), "value"]
-                        except KeyError:
-                            val = 0.0
-    
-                        if hasattr(val, "sum"):
-                            val = float(val.sum())
-                        s += 0.0 if np.isnan(val) else float(val)
-    
-                    arr[i] = sgn * (s / scale)
-    
-                comp_vals[comp["name"]] = arr
-    
-            # --- signed stacked bars ---
-            x = np.arange(24)
-            width_bar = 0.9
-            pos_base = np.zeros(24)
-            neg_base = np.zeros(24)
-    
-            for comp in signedVarList:
-                nm = comp["name"]
-                vals = comp_vals[nm]
-                pos = np.clip(vals, 0, None)
-                neg = np.clip(vals, None, 0)
-    
-                ax.bar(x, pos, width=width_bar, bottom=pos_base, color=colors[nm], edgecolor="none")
-                ax.bar(x, neg, width=width_bar, bottom=neg_base, color=colors[nm], edgecolor="none")
-    
-                pos_base += pos
-                neg_base += neg
+                print(f"Warning: Missing day_by_model entry for model '{m}', skipping.")
+            
+            else:
+                day = pd.to_datetime(day_val, dayfirst=True)
+                ts = pd.date_range(day.normalize(), periods=24, freq="H")
+        
+                # collect series per component
+                comp_vals = {}
+                for comp in signedVarList:
+                    vname = comp["varName"]
+                    techs = comp["techs"]
+                    sgn = float(comp.get("sign", 1.0))
+        
+                    arr = np.zeros(24, dtype=float)
+                    for i, t in enumerate(ts):
+                        s = 0.0
+                        for tech in techs:
+                            try:
+                                val = self.allData.loc[(sce[0], sce[1], m, vname, tech, time_resolution, t), "value"]
+                            except KeyError:
+                                val = 0.0
+        
+                            if hasattr(val, "sum"):
+                                val = float(val.sum())
+                            s += 0.0 if np.isnan(val) else float(val)
+        
+                        arr[i] = sgn * (s / scale)
+        
+                    comp_vals[comp["name"]] = arr
+        
+                # --- signed stacked bars ---
+                x = np.arange(24)
+                width_bar = 0.9
+                pos_base = np.zeros(24)
+                neg_base = np.zeros(24)
+        
+                for comp in signedVarList:
+                    nm = comp["name"]
+                    vals = comp_vals[nm]
+                    pos = np.clip(vals, 0, None)
+                    neg = np.clip(vals, None, 0)
+        
+                    ax.bar(x, pos, width=width_bar, bottom=pos_base, color=colors[nm], edgecolor="none")
+                    ax.bar(x, neg, width=width_bar, bottom=neg_base, color=colors[nm], edgecolor="none")
+        
+                    pos_base += pos
+                    neg_base += neg
     
             # --- cosmetics: black axes + black zero line ---
             ax.axhline(0, color="black", linewidth=1.0)
@@ -1627,9 +1703,9 @@ class Plots:
             ax.spines["right"].set_visible(False)
             ax.tick_params(colors="black")
     
-            ax.set_xticks([0, 6, 12, 18, 23])
-            ax.set_xlim(-0.5, 23.5)
-            ax.set_title(self.models.get(m, m), fontsize=10)
+            ax.set_xticks([0, 6, 12, 18, 24])
+            ax.set_xlim(-0.5, 24.5)
+            ax.set_title(self.models[m]['name'], fontsize=10)
             ax.grid(axis="y", linestyle="dashed", color="gray", alpha=0.6)
     
         # y-limits (asymmetric supported)
