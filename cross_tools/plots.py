@@ -101,6 +101,30 @@ class Plots:
                  {'cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
                  {'cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']},
                  ]},
+            {'varName':'h2_fec',
+             'time_resolution':['annual'],
+             'data':[
+                 {'cat':'passenger','subcats':['passenger_road_public','passenger_road_private']}, 
+                 {'cat':'freight_road','subcats':['truck','ldv']}, 
+                 {'cat':'storage','subcats':['h2_short_storage','h2_long_storage']}, 
+                 ]},
+            {'varName':'methane_fec',
+             'time_resolution':['annual'],
+             'data':[
+                 {'cat':'passenger','subcats':['passenger_road_public','passenger_road_private']}, 
+                 {'cat':'freight_road','subcats':['truck','ldv']}, 
+                 ]},
+            {'varName':'methane_supply',
+             'time_resolution':['annual'],
+             'data':[
+                 {'cat':'gasification_methane','subcats':['wood_gasification_methane','waste_gasification_methane']}, 
+                 ]},
+            {'varName':'liquids_fec',
+             'time_resolution':['annual'],
+             'data':[
+                 {'cat':'passenger','subcats':['passenger_road_public','passenger_road_private']}, 
+                 {'cat':'freight_road','subcats':['truck','ldv']}, 
+                 ]},
             ]
         self.__checkSubcategories(subcats)
         
@@ -193,16 +217,34 @@ class Plots:
         
         # Hourly-based → datetime (minute precision)
         mask_hourly = data['time_resolution'].isin(['typical-day', 'hourly'])
-        data.loc[mask_hourly, 'timestamp'] = (
-            pd.to_datetime(
-                data.loc[mask_hourly, 'timestamp'],
-                dayfirst=True,
-                errors='coerce'
-            )
-            .dt.floor('H')
-        )
+        parsed = self.__parse_datetime(data.loc[mask_hourly, "timestamp"])
+        data.loc[mask_hourly, "timestamp"] = parsed.dt.floor("h")
        
         return data
+    
+    def __parse_datetime(series: pd.Series):
+        s = series.astype("string").str.strip()
+    
+        # light normalization 
+        s = s.str.replace("T", " ", regex=False)          # 2050-07-01T19:00 -> 2050-07-01 19:00
+        s = s.str.replace(r"\s+", " ", regex=True)        # collapse whitespace
+    
+        # Pass 1: ISO 
+        dt = pd.to_datetime(s, errors="coerce")
+    
+        # Pass 2: day-first interpretation (for EU-style like 01.02.2050 00:00, 01/02/2050, etc.)
+        dt2 = pd.to_datetime(s, errors="coerce", dayfirst=True)
+    
+        dt = dt.fillna(dt2)
+    
+        # Optional Pass 3: try a few explicit formats you often see
+        for fmt in ("%d.%m.%Y %H:%M", "%d.%m.%Y", "%Y-%m-%d %H:%M", "%Y/%m/%d %H:%M"):
+            still = dt.isna()
+            if not still.any():
+                break
+            dt.loc[still] = pd.to_datetime(s.loc[still], format=fmt, errors="coerce")
+    
+        return dt
     
     def __correctUnit(self,timeResolution,unit):
         annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000,'gw':1,'mw':1/1000,'bchf':1,'mchf':1/1000,'chf/tco2':1}
@@ -1616,16 +1658,14 @@ class Plots:
           {"name": "...", "varName": "...", "techs": [...], "sign": +1/-1, "color": "..."}
         """
     
-        # --- scenario selection (same convention as your bar funcs) ---
+        # --- scenario selection ---
         if listSce is None:
             sce_names = self.sceVariants
-            sce_labels = sce_names[:]
         elif isinstance(listSce, dict):
             sce_names = list(listSce.keys())
-            sce_labels = list(listSce.values())
         else:
             sce_names = list(listSce)
-            sce_labels = sce_names[:]
+            
     
         if len(sce_names) != 1:
             raise ValueError("Hourly profile plot expects exactly ONE scenario/variant (pass one tuple in listSce).")
@@ -1652,7 +1692,7 @@ class Plots:
                 day = pd.to_datetime(day_val, dayfirst=True)
                 ts = pd.date_range(day.normalize(), periods=24, freq="H")
         
-                # collect series per component
+                # collect series per technology/use
                 comp_vals = {}
                 for comp in signedVarList:
                     vname = comp["varName"]
@@ -1661,16 +1701,16 @@ class Plots:
         
                     arr = np.zeros(24, dtype=float)
                     for i, t in enumerate(ts):
-                        s = 0.0
+                        s = 0
                         for tech in techs:
                             try:
-                                val = self.allData.loc[(sce[0], sce[1], m, vname, tech, time_resolution, t), "value"]
+                                val = cross_plots.allData.loc[(sce[0], sce[1], m, vname, tech, time_resolution, t), "value"]
                             except KeyError:
-                                val = 0.0
+                                val = 0
         
                             if hasattr(val, "sum"):
                                 val = float(val.sum())
-                            s += 0.0 if np.isnan(val) else float(val)
+                            s += 0 if np.isnan(val) else float(val)
         
                         arr[i] = sgn * (s / scale)
         

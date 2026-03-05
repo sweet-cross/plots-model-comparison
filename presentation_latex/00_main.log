@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.29)  16 FEB 2026 22:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.29)  3 MAR 2026 22:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1243,10 +1243,10 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 [3
 
 ]
-<figures_2026_02_16//elecSupply.pdf, id=93, 341.337pt x 581.14178pt>
-File: figures_2026_02_16//elecSupply.pdf Graphic file (type pdf)
-<use figures_2026_02_16//elecSupply.pdf>
-Package pdftex.def Info: figures_2026_02_16//elecSupply.pdf  used on input line
+<figures_2026_03_03//elecSupply.pdf, id=93, 341.337pt x 581.14178pt>
+File: figures_2026_03_03//elecSupply.pdf Graphic file (type pdf)
+<use figures_2026_03_03//elecSupply.pdf>
+Package pdftex.def Info: figures_2026_03_03//elecSupply.pdf  used on input line
  8.
 (pdftex.def)             Requested size: 116.98534pt x 199.16928pt.
 
@@ -1256,7 +1256,7 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [4
 
- <./figures_2026_02_16//elecSupply.pdf>]
+ <./figures_2026_03_03//elecSupply.pdf>]
 LaTeX Font Info:    Trying to load font information for U+msa on input line 21.
 
 
@@ -1275,10 +1275,10 @@ LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <8> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 21.
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <6> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 21.
-<figures_2026_02_16//elecUse_legend.pdf, id=140, 107.99722pt x 160.77252pt>
-File: figures_2026_02_16//elecUse_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//elecUse_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//elecUse_legend.pdf  used on input 
+<figures_2026_03_03//elecUse_legend.pdf, id=143, 107.99722pt x 160.77252pt>
+File: figures_2026_03_03//elecUse_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//elecUse_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//elecUse_legend.pdf  used on input 
 line 21.
 (pdftex.def)             Requested size: 51.21504pt x 76.24261pt.
 
@@ -1286,23 +1286,23 @@ Overfull \hbox (5.69046pt too wide) in paragraph at lines 21--21
 [][] 
  []
 
-<figures_2026_02_16//elecUse_net.pdf, id=141, 343.10106pt x 577.62866pt>
-File: figures_2026_02_16//elecUse_net.pdf Graphic file (type pdf)
-<use figures_2026_02_16//elecUse_net.pdf>
-Package pdftex.def Info: figures_2026_02_16//elecUse_net.pdf  used on input lin
+<figures_2026_03_03//elecUse_net.pdf, id=144, 343.10106pt x 577.62866pt>
+File: figures_2026_03_03//elecUse_net.pdf Graphic file (type pdf)
+<use figures_2026_03_03//elecUse_net.pdf>
+Package pdftex.def Info: figures_2026_03_03//elecUse_net.pdf  used on input lin
 e 21.
 (pdftex.def)             Requested size: 115.35876pt x 199.16928pt.
-<figures_2026_02_16//elecSupply_tech_net.pdf, id=142, 343.10106pt x 577.62866pt
+<figures_2026_03_03//elecSupply_tech_net.pdf, id=145, 343.10106pt x 577.62866pt
 >
-File: figures_2026_02_16//elecSupply_tech_net.pdf Graphic file (type pdf)
-<use figures_2026_02_16//elecSupply_tech_net.pdf>
-Package pdftex.def Info: figures_2026_02_16//elecSupply_tech_net.pdf  used on i
+File: figures_2026_03_03//elecSupply_tech_net.pdf Graphic file (type pdf)
+<use figures_2026_03_03//elecSupply_tech_net.pdf>
+Package pdftex.def Info: figures_2026_03_03//elecSupply_tech_net.pdf  used on i
 nput line 21.
 (pdftex.def)             Requested size: 118.30193pt x 199.16928pt.
-<figures_2026_02_16//elecSupply_legend.pdf, id=144, 89.58469pt x 174.8407pt>
-File: figures_2026_02_16//elecSupply_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//elecSupply_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//elecSupply_legend.pdf  used on inp
+<figures_2026_03_03//elecSupply_legend.pdf, id=147, 89.58469pt x 174.8407pt>
+File: figures_2026_03_03//elecSupply_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//elecSupply_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//elecSupply_legend.pdf  used on inp
 ut line 21.
 (pdftex.def)             Requested size: 42.67912pt x 83.29562pt.
 
@@ -1317,42 +1317,42 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [5
 
- <./figures_2026_02_16//elecSupply_tech_net.pdf> <./figures_2026_02_16//elecUse
+ <./figures_2026_03_03//elecSupply_tech_net.pdf> <./figures_2026_03_03//elecUse
 _legend.pdf
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//elecUs
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//elecUs
 e_legend.pdf): PDF inclusion: multiple pdfs with page group included in a singl
 e page
-> <./figures_2026_02_16//elecUse_net.pdf> <./figures_2026_02_16//elecSupply_leg
+> <./figures_2026_03_03//elecUse_net.pdf> <./figures_2026_03_03//elecSupply_leg
 end.pdf
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//elecSu
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//elecSu
 pply_legend.pdf): PDF inclusion: multiple pdfs with page group included in a si
 ngle page
 >]
-<figures_2026_02_16//elecUseDist_use.pdf, id=242, 332.56732pt x 334.8491pt>
-File: figures_2026_02_16//elecUseDist_use.pdf Graphic file (type pdf)
-<use figures_2026_02_16//elecUseDist_use.pdf>
-Package pdftex.def Info: figures_2026_02_16//elecUseDist_use.pdf  used on input
+<figures_2026_03_03//elecUseDist_use.pdf, id=251, 332.56732pt x 334.8491pt>
+File: figures_2026_03_03//elecUseDist_use.pdf Graphic file (type pdf)
+<use figures_2026_03_03//elecUseDist_use.pdf>
+Package pdftex.def Info: figures_2026_03_03//elecUseDist_use.pdf  used on input
  line 30.
 (pdftex.def)             Requested size: 138.8784pt x 142.26378pt.
-<figures_2026_02_16//elecDist_tech.pdf, id=243, 390.75383pt x 334.55112pt>
-File: figures_2026_02_16//elecDist_tech.pdf Graphic file (type pdf)
-<use figures_2026_02_16//elecDist_tech.pdf>
-Package pdftex.def Info: figures_2026_02_16//elecDist_tech.pdf  used on input l
+<figures_2026_03_03//elecDist_tech.pdf, id=252, 390.6911pt x 334.55112pt>
+File: figures_2026_03_03//elecDist_tech.pdf Graphic file (type pdf)
+<use figures_2026_03_03//elecDist_tech.pdf>
+Package pdftex.def Info: figures_2026_03_03//elecDist_tech.pdf  used on input l
 ine 30.
-(pdftex.def)             Requested size: 163.7408pt x 142.26378pt.
+(pdftex.def)             Requested size: 163.71413pt x 142.26378pt.
 
-Overfull \hbox (7.25066pt too wide) in paragraph at lines 30--30
+Overfull \hbox (7.22398pt too wide) in paragraph at lines 30--30
 [][] 
  []
 
-<figures_2026_02_16//models.pdf, id=245, 294.6163pt x 18.20865pt>
-File: figures_2026_02_16//models.pdf Graphic file (type pdf)
-<use figures_2026_02_16//models.pdf>
-Package pdftex.def Info: figures_2026_02_16//models.pdf  used on input line 30.
+<figures_2026_03_03//models.pdf, id=254, 430.05318pt x 22.38664pt>
+File: figures_2026_03_03//models.pdf Graphic file (type pdf)
+<use figures_2026_03_03//models.pdf>
+Package pdftex.def Info: figures_2026_03_03//models.pdf  used on input line 30.
 
-(pdftex.def)             Requested size: 128.0374pt x 7.91318pt.
+(pdftex.def)             Requested size: 156.49014pt x 8.14594pt.
 
 Overfull \hbox (56.90549pt too wide) has occurred while \output is active
  [] 
@@ -1360,61 +1360,61 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [6
 
- <./figures_2026_02_16//elecDist_tech.pdf> <./figures_2026_02_16//elecUseDist_u
-se.pdf> <./figures_2026_02_16//models.pdf
+ <./figures_2026_03_03//elecDist_tech.pdf> <./figures_2026_03_03//elecUseDist_u
+se.pdf> <./figures_2026_03_03//models.pdf
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//models
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//models
 .pdf): PDF inclusion: multiple pdfs with page group included in a single page
 >]) (./electricity_h.tex (./00_main.toc) [7
 
 ]
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <5> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 14.
-<figures_2026_02_16//electricity_hourly_signed_abroad-nores-full_summer.pdf, id
-=361, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_abroad-nores-full_summer.pd
+<figures_2026_03_03//electricity_hourly_signed_abroad-nores-full_summer.pdf, id
+=368, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_abroad-nores-full_summer.pd
 f Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_abroad-nores-full_summer.pdf
+<use figures_2026_03_03//electricity_hourly_signed_abroad-nores-full_summer.pdf
 >
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_abroad-n
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_abroad-n
 ores-full_summer.pdf  used on input line 14.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_abroad-res-full_summer.pdf, id=3
-62, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_abroad-res-full_summer.pdf 
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_abroad-res-full_summer.pdf, id=3
+69, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_abroad-res-full_summer.pdf 
 Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_abroad-res-full_summer.pdf>
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_abroad-r
+<use figures_2026_03_03//electricity_hourly_signed_abroad-res-full_summer.pdf>
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_abroad-r
 es-full_summer.pdf  used on input line 14.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_abroad-nores-lim_summer.pdf, id=
-363, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_abroad-nores-lim_summer.pdf
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_abroad-nores-lim_summer.pdf, id=
+370, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_abroad-nores-lim_summer.pdf
  Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_abroad-nores-lim_summer.pdf>
+<use figures_2026_03_03//electricity_hourly_signed_abroad-nores-lim_summer.pdf>
 
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_abroad-n
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_abroad-n
 ores-lim_summer.pdf  used on input line 14.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_abroad-res-lim_summer.pdf, id=36
-4, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_abroad-res-lim_summer.pdf G
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_abroad-res-lim_summer.pdf, id=37
+1, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_abroad-res-lim_summer.pdf G
 raphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_abroad-res-lim_summer.pdf>
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_abroad-r
+<use figures_2026_03_03//electricity_hourly_signed_abroad-res-lim_summer.pdf>
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_abroad-r
 es-lim_summer.pdf  used on input line 14.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//legend_supply_2rows.pdf, id=365, 246.28352pt x 61.26366pt>
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//legend_supply_2rows.pdf, id=372, 246.28352pt x 61.26366pt>
 
-File: figures_2026_02_16//legend_supply_2rows.pdf Graphic file (type pdf)
-<use figures_2026_02_16//legend_supply_2rows.pdf>
-Package pdftex.def Info: figures_2026_02_16//legend_supply_2rows.pdf  used on i
+File: figures_2026_03_03//legend_supply_2rows.pdf Graphic file (type pdf)
+<use figures_2026_03_03//legend_supply_2rows.pdf>
+Package pdftex.def Info: figures_2026_03_03//legend_supply_2rows.pdf  used on i
 nput line 14.
 (pdftex.def)             Requested size: 114.3816pt x 28.45274pt.
-<figures_2026_02_16//legend_use_2rows.pdf, id=366, 296.71968pt x 60.6659pt>
-File: figures_2026_02_16//legend_use_2rows.pdf Graphic file (type pdf)
-<use figures_2026_02_16//legend_use_2rows.pdf>
-Package pdftex.def Info: figures_2026_02_16//legend_use_2rows.pdf  used on inpu
+<figures_2026_03_03//legend_use_2rows.pdf, id=373, 296.71968pt x 60.6659pt>
+File: figures_2026_03_03//legend_use_2rows.pdf Graphic file (type pdf)
+<use figures_2026_03_03//legend_use_2rows.pdf>
+Package pdftex.def Info: figures_2026_03_03//legend_use_2rows.pdf  used on inpu
 t line 14.
 (pdftex.def)             Requested size: 139.16397pt x 28.45274pt.
 
@@ -1424,61 +1424,61 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [8
 
- <./figures_2026_02_16//electricity_hourly_signed_abroad-nores-full_summer.pdf>
- <./figures_2026_02_16//electricity_hourly_signed_abroad-res-full_summer.pdf> <
-./figures_2026_02_16//electricity_hourly_signed_abroad-nores-lim_summer.pdf> <.
-/figures_2026_02_16//electricity_hourly_signed_abroad-res-lim_summer.pdf> <./fi
-gures_2026_02_16//legend_supply_2rows.pdf> <./figures_2026_02_16//legend_use_2r
+ <./figures_2026_03_03//electricity_hourly_signed_abroad-nores-full_summer.pdf>
+ <./figures_2026_03_03//electricity_hourly_signed_abroad-res-full_summer.pdf> <
+./figures_2026_03_03//electricity_hourly_signed_abroad-nores-lim_summer.pdf> <.
+/figures_2026_03_03//electricity_hourly_signed_abroad-res-lim_summer.pdf> <./fi
+gures_2026_03_03//legend_supply_2rows.pdf> <./figures_2026_03_03//legend_use_2r
 ows.pdf
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//legend
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//legend
 _use_2rows.pdf): PDF inclusion: multiple pdfs with page group included in a sin
 gle page
 >]
-<figures_2026_02_16//electricity_hourly_signed_domestic-nores-full_summer.pdf, 
-id=539, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_domestic-nores-full_summer.
+<figures_2026_03_03//electricity_hourly_signed_domestic-nores-full_summer.pdf, 
+id=562, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_domestic-nores-full_summer.
 pdf Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_domestic-nores-full_summer.p
+<use figures_2026_03_03//electricity_hourly_signed_domestic-nores-full_summer.p
 df>
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_domestic
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_domestic
 -nores-full_summer.pdf  used on input line 27.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_domestic-res-full_summer.pdf, id
-=540, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_domestic-res-full_summer.pd
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_domestic-res-full_summer.pdf, id
+=563, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_domestic-res-full_summer.pd
 f Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_domestic-res-full_summer.pdf
+<use figures_2026_03_03//electricity_hourly_signed_domestic-res-full_summer.pdf
 >
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_domestic
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_domestic
 -res-full_summer.pdf  used on input line 27.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_domestic-nores-lim_summer.pdf, i
-d=541, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_domestic-nores-lim_summer.p
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_domestic-nores-lim_summer.pdf, i
+d=564, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_domestic-nores-lim_summer.p
 df Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_domestic-nores-lim_summer.pd
+<use figures_2026_03_03//electricity_hourly_signed_domestic-nores-lim_summer.pd
 f>
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_domestic
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_domestic
 -nores-lim_summer.pdf  used on input line 27.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_domestic-res-lim_summer.pdf, id=
-542, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_domestic-res-lim_summer.pdf
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_domestic-res-lim_summer.pdf, id=
+565, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_domestic-res-lim_summer.pdf
  Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_domestic-res-lim_summer.pdf>
+<use figures_2026_03_03//electricity_hourly_signed_domestic-res-lim_summer.pdf>
 
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_domestic
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_domestic
 -res-lim_summer.pdf  used on input line 27.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-File: figures_2026_02_16//legend_supply_2rows.pdf Graphic file (type pdf)
-<use figures_2026_02_16//legend_supply_2rows.pdf>
-Package pdftex.def Info: figures_2026_02_16//legend_supply_2rows.pdf  used on i
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+File: figures_2026_03_03//legend_supply_2rows.pdf Graphic file (type pdf)
+<use figures_2026_03_03//legend_supply_2rows.pdf>
+Package pdftex.def Info: figures_2026_03_03//legend_supply_2rows.pdf  used on i
 nput line 27.
 (pdftex.def)             Requested size: 114.3816pt x 28.45274pt.
-File: figures_2026_02_16//legend_use_2rows.pdf Graphic file (type pdf)
-<use figures_2026_02_16//legend_use_2rows.pdf>
-Package pdftex.def Info: figures_2026_02_16//legend_use_2rows.pdf  used on inpu
+File: figures_2026_03_03//legend_use_2rows.pdf Graphic file (type pdf)
+<use figures_2026_03_03//legend_use_2rows.pdf>
+Package pdftex.def Info: figures_2026_03_03//legend_use_2rows.pdf  used on inpu
 t line 27.
 (pdftex.def)             Requested size: 139.16397pt x 28.45274pt.
 
@@ -1488,53 +1488,53 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [9
 
- <./figures_2026_02_16//electricity_hourly_signed_domestic-nores-full_summer.pd
-f> <./figures_2026_02_16//electricity_hourly_signed_domestic-res-full_summer.pd
-f> <./figures_2026_02_16//electricity_hourly_signed_domestic-nores-lim_summer.p
-df> <./figures_2026_02_16//electricity_hourly_signed_domestic-res-lim_summer.pd
+ <./figures_2026_03_03//electricity_hourly_signed_domestic-nores-full_summer.pd
+f> <./figures_2026_03_03//electricity_hourly_signed_domestic-res-full_summer.pd
+f> <./figures_2026_03_03//electricity_hourly_signed_domestic-nores-lim_summer.p
+df> <./figures_2026_03_03//electricity_hourly_signed_domestic-res-lim_summer.pd
 f>]
-<figures_2026_02_16//electricity_hourly_signed_abroad-nores-full_winter.pdf, id
-=712, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_abroad-nores-full_winter.pd
+<figures_2026_03_03//electricity_hourly_signed_abroad-nores-full_winter.pdf, id
+=751, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_abroad-nores-full_winter.pd
 f Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_abroad-nores-full_winter.pdf
+<use figures_2026_03_03//electricity_hourly_signed_abroad-nores-full_winter.pdf
 >
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_abroad-n
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_abroad-n
 ores-full_winter.pdf  used on input line 40.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_abroad-res-full_winter.pdf, id=7
-13, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_abroad-res-full_winter.pdf 
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_abroad-res-full_winter.pdf, id=7
+52, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_abroad-res-full_winter.pdf 
 Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_abroad-res-full_winter.pdf>
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_abroad-r
+<use figures_2026_03_03//electricity_hourly_signed_abroad-res-full_winter.pdf>
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_abroad-r
 es-full_winter.pdf  used on input line 40.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_abroad-nores-lim_winter.pdf, id=
-714, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_abroad-nores-lim_winter.pdf
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_abroad-nores-lim_winter.pdf, id=
+753, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_abroad-nores-lim_winter.pdf
  Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_abroad-nores-lim_winter.pdf>
+<use figures_2026_03_03//electricity_hourly_signed_abroad-nores-lim_winter.pdf>
 
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_abroad-n
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_abroad-n
 ores-lim_winter.pdf  used on input line 40.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_abroad-res-lim_winter.pdf, id=71
-5, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_abroad-res-lim_winter.pdf G
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_abroad-res-lim_winter.pdf, id=75
+4, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_abroad-res-lim_winter.pdf G
 raphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_abroad-res-lim_winter.pdf>
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_abroad-r
+<use figures_2026_03_03//electricity_hourly_signed_abroad-res-lim_winter.pdf>
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_abroad-r
 es-lim_winter.pdf  used on input line 40.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-File: figures_2026_02_16//legend_supply_2rows.pdf Graphic file (type pdf)
-<use figures_2026_02_16//legend_supply_2rows.pdf>
-Package pdftex.def Info: figures_2026_02_16//legend_supply_2rows.pdf  used on i
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+File: figures_2026_03_03//legend_supply_2rows.pdf Graphic file (type pdf)
+<use figures_2026_03_03//legend_supply_2rows.pdf>
+Package pdftex.def Info: figures_2026_03_03//legend_supply_2rows.pdf  used on i
 nput line 40.
 (pdftex.def)             Requested size: 114.3816pt x 28.45274pt.
-File: figures_2026_02_16//legend_use_2rows.pdf Graphic file (type pdf)
-<use figures_2026_02_16//legend_use_2rows.pdf>
-Package pdftex.def Info: figures_2026_02_16//legend_use_2rows.pdf  used on inpu
+File: figures_2026_03_03//legend_use_2rows.pdf Graphic file (type pdf)
+<use figures_2026_03_03//legend_use_2rows.pdf>
+Package pdftex.def Info: figures_2026_03_03//legend_use_2rows.pdf  used on inpu
 t line 40.
 (pdftex.def)             Requested size: 139.16397pt x 28.45274pt.
 
@@ -1544,54 +1544,54 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [10
 
- <./figures_2026_02_16//electricity_hourly_signed_abroad-nores-full_winter.pdf>
- <./figures_2026_02_16//electricity_hourly_signed_abroad-res-full_winter.pdf> <
-./figures_2026_02_16//electricity_hourly_signed_abroad-nores-lim_winter.pdf> <.
-/figures_2026_02_16//electricity_hourly_signed_abroad-res-lim_winter.pdf>]
-<figures_2026_02_16//electricity_hourly_signed_domestic-nores-full_winter.pdf, 
-id=885, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_domestic-nores-full_winter.
+ <./figures_2026_03_03//electricity_hourly_signed_abroad-nores-full_winter.pdf>
+ <./figures_2026_03_03//electricity_hourly_signed_abroad-res-full_winter.pdf> <
+./figures_2026_03_03//electricity_hourly_signed_abroad-nores-lim_winter.pdf> <.
+/figures_2026_03_03//electricity_hourly_signed_abroad-res-lim_winter.pdf>]
+<figures_2026_03_03//electricity_hourly_signed_domestic-nores-full_winter.pdf, 
+id=940, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_domestic-nores-full_winter.
 pdf Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_domestic-nores-full_winter.p
+<use figures_2026_03_03//electricity_hourly_signed_domestic-nores-full_winter.p
 df>
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_domestic
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_domestic
 -nores-full_winter.pdf  used on input line 53.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_domestic-res-full_winter.pdf, id
-=886, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_domestic-res-full_winter.pd
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_domestic-res-full_winter.pdf, id
+=941, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_domestic-res-full_winter.pd
 f Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_domestic-res-full_winter.pdf
+<use figures_2026_03_03//electricity_hourly_signed_domestic-res-full_winter.pdf
 >
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_domestic
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_domestic
 -res-full_winter.pdf  used on input line 53.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_domestic-nores-lim_winter.pdf, i
-d=887, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_domestic-nores-lim_winter.p
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_domestic-nores-lim_winter.pdf, i
+d=942, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_domestic-nores-lim_winter.p
 df Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_domestic-nores-lim_winter.pd
+<use figures_2026_03_03//electricity_hourly_signed_domestic-nores-lim_winter.pd
 f>
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_domestic
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_domestic
 -nores-lim_winter.pdf  used on input line 53.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-<figures_2026_02_16//electricity_hourly_signed_domestic-res-lim_winter.pdf, id=
-888, 505.04796pt x 220.69304pt>
-File: figures_2026_02_16//electricity_hourly_signed_domestic-res-lim_winter.pdf
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+<figures_2026_03_03//electricity_hourly_signed_domestic-res-lim_winter.pdf, id=
+943, 505.10797pt x 220.69304pt>
+File: figures_2026_03_03//electricity_hourly_signed_domestic-res-lim_winter.pdf
  Graphic file (type pdf)
-<use figures_2026_02_16//electricity_hourly_signed_domestic-res-lim_winter.pdf>
+<use figures_2026_03_03//electricity_hourly_signed_domestic-res-lim_winter.pdf>
 
-Package pdftex.def Info: figures_2026_02_16//electricity_hourly_signed_domestic
+Package pdftex.def Info: figures_2026_03_03//electricity_hourly_signed_domestic
 -res-lim_winter.pdf  used on input line 53.
-(pdftex.def)             Requested size: 156.2704pt x 68.28644pt.
-File: figures_2026_02_16//legend_supply_2rows.pdf Graphic file (type pdf)
-<use figures_2026_02_16//legend_supply_2rows.pdf>
-Package pdftex.def Info: figures_2026_02_16//legend_supply_2rows.pdf  used on i
+(pdftex.def)             Requested size: 156.28897pt x 68.28644pt.
+File: figures_2026_03_03//legend_supply_2rows.pdf Graphic file (type pdf)
+<use figures_2026_03_03//legend_supply_2rows.pdf>
+Package pdftex.def Info: figures_2026_03_03//legend_supply_2rows.pdf  used on i
 nput line 53.
 (pdftex.def)             Requested size: 114.3816pt x 28.45274pt.
-File: figures_2026_02_16//legend_use_2rows.pdf Graphic file (type pdf)
-<use figures_2026_02_16//legend_use_2rows.pdf>
-Package pdftex.def Info: figures_2026_02_16//legend_use_2rows.pdf  used on inpu
+File: figures_2026_03_03//legend_use_2rows.pdf Graphic file (type pdf)
+<use figures_2026_03_03//legend_use_2rows.pdf>
+Package pdftex.def Info: figures_2026_03_03//legend_use_2rows.pdf  used on inpu
 t line 53.
 (pdftex.def)             Requested size: 139.16397pt x 28.45274pt.
 
@@ -1601,19 +1601,19 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [11
 
- <./figures_2026_02_16//electricity_hourly_signed_domestic-nores-full_winter.pd
-f> <./figures_2026_02_16//electricity_hourly_signed_domestic-res-full_winter.pd
-f> <./figures_2026_02_16//electricity_hourly_signed_domestic-nores-lim_winter.p
-df> <./figures_2026_02_16//electricity_hourly_signed_domestic-res-lim_winter.pd
+ <./figures_2026_03_03//electricity_hourly_signed_domestic-nores-full_winter.pd
+f> <./figures_2026_03_03//electricity_hourly_signed_domestic-res-full_winter.pd
+f> <./figures_2026_03_03//electricity_hourly_signed_domestic-nores-lim_winter.p
+df> <./figures_2026_03_03//electricity_hourly_signed_domestic-res-lim_winter.pd
 f>]) (./transport.tex (./00_main.toc) [12
 
 ]
-<figures_2026_02_16//passenger_road_private_fec.pdf, id=1068, 343.10106pt x 577
+<figures_2026_03_03//passenger_road_private_fec.pdf, id=1139, 343.10106pt x 577
 .62866pt>
-File: figures_2026_02_16//passenger_road_private_fec.pdf Graphic file (type pdf
+File: figures_2026_03_03//passenger_road_private_fec.pdf Graphic file (type pdf
 )
-<use figures_2026_02_16//passenger_road_private_fec.pdf>
-Package pdftex.def Info: figures_2026_02_16//passenger_road_private_fec.pdf  us
+<use figures_2026_03_03//passenger_road_private_fec.pdf>
+Package pdftex.def Info: figures_2026_03_03//passenger_road_private_fec.pdf  us
 ed on input line 11.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
 
@@ -1621,25 +1621,30 @@ Overfull \hbox (2.52881pt too wide) in paragraph at lines 11--11
 [][] 
  []
 
-<figures_2026_02_16//transport_legend.pdf, id=1070, 80.66074pt x 61.16602pt>
-File: figures_2026_02_16//transport_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//transport_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//transport_legend.pdf  used on inpu
+<figures_2026_03_03//transport_legend.pdf, id=1141, 80.66074pt x 61.16602pt>
+File: figures_2026_03_03//transport_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//transport_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//transport_legend.pdf  used on inpu
 t line 11.
 (pdftex.def)             Requested size: 36.98866pt x 28.04897pt.
-<figures_2026_02_16//passenger_road_private_fec_dist.pdf, id=1071, 234.85669pt 
+<figures_2026_03_03//passenger_road_private_fec_dist.pdf, id=1142, 234.85669pt 
 x 334.55112pt>
-File: figures_2026_02_16//passenger_road_private_fec_dist.pdf Graphic file (typ
+File: figures_2026_03_03//passenger_road_private_fec_dist.pdf Graphic file (typ
 e pdf)
-<use figures_2026_02_16//passenger_road_private_fec_dist.pdf>
-Package pdftex.def Info: figures_2026_02_16//passenger_road_private_fec_dist.pd
+<use figures_2026_03_03//passenger_road_private_fec_dist.pdf>
+Package pdftex.def Info: figures_2026_03_03//passenger_road_private_fec_dist.pd
 f  used on input line 11.
 (pdftex.def)             Requested size: 97.44853pt x 142.26378pt.
-File: figures_2026_02_16//models.pdf Graphic file (type pdf)
-<use figures_2026_02_16//models.pdf>
-Package pdftex.def Info: figures_2026_02_16//models.pdf  used on input line 11.
+File: figures_2026_03_03//models.pdf Graphic file (type pdf)
+<use figures_2026_03_03//models.pdf>
+Package pdftex.def Info: figures_2026_03_03//models.pdf  used on input line 11.
 
-(pdftex.def)             Requested size: 128.0374pt x 7.91318pt.
+(pdftex.def)             Requested size: 156.49014pt x 8.14594pt.
+
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 11--11
+ [][] 
+ []
+
 
 Overfull \hbox (56.90549pt too wide) has occurred while \output is active
  [] 
@@ -1647,20 +1652,20 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [13
 
- <./figures_2026_02_16//passenger_road_private_fec.pdf> <./figures_2026_02_16//
-passenger_road_private_fec_dist.pdf> <./figures_2026_02_16//transport_legend.pd
+ <./figures_2026_03_03//passenger_road_private_fec.pdf> <./figures_2026_03_03//
+passenger_road_private_fec_dist.pdf> <./figures_2026_03_03//transport_legend.pd
 f
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//transp
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//transp
 ort_legend.pdf): PDF inclusion: multiple pdfs with page group included in a sin
 gle page
 >]
-<figures_2026_02_16//passenger_road_public_fec.pdf, id=1169, 343.10106pt x 577.
+<figures_2026_03_03//passenger_road_public_fec.pdf, id=1240, 343.10106pt x 577.
 62866pt>
-File: figures_2026_02_16//passenger_road_public_fec.pdf Graphic file (type pdf)
+File: figures_2026_03_03//passenger_road_public_fec.pdf Graphic file (type pdf)
 
-<use figures_2026_02_16//passenger_road_public_fec.pdf>
-Package pdftex.def Info: figures_2026_02_16//passenger_road_public_fec.pdf  use
+<use figures_2026_03_03//passenger_road_public_fec.pdf>
+Package pdftex.def Info: figures_2026_03_03//passenger_road_public_fec.pdf  use
 d on input line 20.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
 
@@ -1668,24 +1673,29 @@ Overfull \hbox (2.52881pt too wide) in paragraph at lines 20--20
 [][] 
  []
 
-File: figures_2026_02_16//transport_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//transport_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//transport_legend.pdf  used on inpu
+File: figures_2026_03_03//transport_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//transport_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//transport_legend.pdf  used on inpu
 t line 20.
 (pdftex.def)             Requested size: 36.98866pt x 28.04897pt.
-<figures_2026_02_16//passenger_road_public_fec_dist.pdf, id=1171, 234.95079pt x
+<figures_2026_03_03//passenger_road_public_fec_dist.pdf, id=1242, 234.95079pt x
  334.55112pt>
-File: figures_2026_02_16//passenger_road_public_fec_dist.pdf Graphic file (type
+File: figures_2026_03_03//passenger_road_public_fec_dist.pdf Graphic file (type
  pdf)
-<use figures_2026_02_16//passenger_road_public_fec_dist.pdf>
-Package pdftex.def Info: figures_2026_02_16//passenger_road_public_fec_dist.pdf
+<use figures_2026_03_03//passenger_road_public_fec_dist.pdf>
+Package pdftex.def Info: figures_2026_03_03//passenger_road_public_fec_dist.pdf
   used on input line 20.
 (pdftex.def)             Requested size: 97.48854pt x 142.26378pt.
-File: figures_2026_02_16//models.pdf Graphic file (type pdf)
-<use figures_2026_02_16//models.pdf>
-Package pdftex.def Info: figures_2026_02_16//models.pdf  used on input line 20.
+File: figures_2026_03_03//models.pdf Graphic file (type pdf)
+<use figures_2026_03_03//models.pdf>
+Package pdftex.def Info: figures_2026_03_03//models.pdf  used on input line 20.
 
-(pdftex.def)             Requested size: 128.0374pt x 7.91318pt.
+(pdftex.def)             Requested size: 156.49014pt x 8.14594pt.
+
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 20--20
+ [][] 
+ []
+
 
 Overfull \hbox (56.90549pt too wide) has occurred while \output is active
  [] 
@@ -1693,12 +1703,12 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [14
 
- <./figures_2026_02_16//passenger_road_public_fec.pdf> <./figures_2026_02_16//p
+ <./figures_2026_03_03//passenger_road_public_fec.pdf> <./figures_2026_03_03//p
 assenger_road_public_fec_dist.pdf>]
-<figures_2026_02_16//freight_road_fec.pdf, id=1267, 343.10106pt x 577.62866pt>
-File: figures_2026_02_16//freight_road_fec.pdf Graphic file (type pdf)
-<use figures_2026_02_16//freight_road_fec.pdf>
-Package pdftex.def Info: figures_2026_02_16//freight_road_fec.pdf  used on inpu
+<figures_2026_03_03//freight_road_fec.pdf, id=1338, 343.10106pt x 577.62866pt>
+File: figures_2026_03_03//freight_road_fec.pdf Graphic file (type pdf)
+<use figures_2026_03_03//freight_road_fec.pdf>
+Package pdftex.def Info: figures_2026_03_03//freight_road_fec.pdf  used on inpu
 t line 29.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
 
@@ -1706,23 +1716,28 @@ Overfull \hbox (2.52881pt too wide) in paragraph at lines 29--29
 [][] 
  []
 
-File: figures_2026_02_16//transport_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//transport_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//transport_legend.pdf  used on inpu
+File: figures_2026_03_03//transport_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//transport_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//transport_legend.pdf  used on inpu
 t line 29.
 (pdftex.def)             Requested size: 36.98866pt x 28.04897pt.
-<figures_2026_02_16//freight_road_fec_dist.pdf, id=1269, 234.95079pt x 334.5511
+<figures_2026_03_03//freight_road_fec_dist.pdf, id=1340, 234.95079pt x 334.5511
 2pt>
-File: figures_2026_02_16//freight_road_fec_dist.pdf Graphic file (type pdf)
-<use figures_2026_02_16//freight_road_fec_dist.pdf>
-Package pdftex.def Info: figures_2026_02_16//freight_road_fec_dist.pdf  used on
+File: figures_2026_03_03//freight_road_fec_dist.pdf Graphic file (type pdf)
+<use figures_2026_03_03//freight_road_fec_dist.pdf>
+Package pdftex.def Info: figures_2026_03_03//freight_road_fec_dist.pdf  used on
  input line 29.
 (pdftex.def)             Requested size: 97.48854pt x 142.26378pt.
-File: figures_2026_02_16//models.pdf Graphic file (type pdf)
-<use figures_2026_02_16//models.pdf>
-Package pdftex.def Info: figures_2026_02_16//models.pdf  used on input line 29.
+File: figures_2026_03_03//models.pdf Graphic file (type pdf)
+<use figures_2026_03_03//models.pdf>
+Package pdftex.def Info: figures_2026_03_03//models.pdf  used on input line 29.
 
-(pdftex.def)             Requested size: 128.0374pt x 7.91318pt.
+(pdftex.def)             Requested size: 156.49014pt x 8.14594pt.
+
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 29--29
+ [][] 
+ []
+
 
 Overfull \hbox (56.90549pt too wide) has occurred while \output is active
  [] 
@@ -1730,14 +1745,14 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [15
 
- <./figures_2026_02_16//freight_road_fec.pdf> <./figures_2026_02_16//freight_ro
+ <./figures_2026_03_03//freight_road_fec.pdf> <./figures_2026_03_03//freight_ro
 ad_fec_dist.pdf>]) (./heat.tex (./00_main.toc) [16
 
 ]
-<figures_2026_02_16//spaceHeating.pdf, id=1373, 343.10106pt x 577.62866pt>
-File: figures_2026_02_16//spaceHeating.pdf Graphic file (type pdf)
-<use figures_2026_02_16//spaceHeating.pdf>
-Package pdftex.def Info: figures_2026_02_16//spaceHeating.pdf  used on input li
+<figures_2026_03_03//spaceHeating.pdf, id=1444, 343.10106pt x 577.62866pt>
+File: figures_2026_03_03//spaceHeating.pdf Graphic file (type pdf)
+<use figures_2026_03_03//spaceHeating.pdf>
+Package pdftex.def Info: figures_2026_03_03//spaceHeating.pdf  used on input li
 ne 11.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
 
@@ -1745,10 +1760,10 @@ Overfull \hbox (2.52881pt too wide) in paragraph at lines 11--11
 [][] 
  []
 
-<figures_2026_02_16//districtHeating.pdf, id=1375, 343.10106pt x 577.62866pt>
-File: figures_2026_02_16//districtHeating.pdf Graphic file (type pdf)
-<use figures_2026_02_16//districtHeating.pdf>
-Package pdftex.def Info: figures_2026_02_16//districtHeating.pdf  used on input
+<figures_2026_03_03//districtHeating.pdf, id=1446, 343.10106pt x 577.62866pt>
+File: figures_2026_03_03//districtHeating.pdf Graphic file (type pdf)
+<use figures_2026_03_03//districtHeating.pdf>
+Package pdftex.def Info: figures_2026_03_03//districtHeating.pdf  used on input
  line 11.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
 
@@ -1756,10 +1771,10 @@ Overfull \hbox (2.52881pt too wide) in paragraph at lines 11--11
 [][] 
  []
 
-<figures_2026_02_16//heat_legend.pdf, id=1377, 105.18987pt x 146.20245pt>
-File: figures_2026_02_16//heat_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//heat_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//heat_legend.pdf  used on input lin
+<figures_2026_03_03//heat_legend.pdf, id=1448, 105.18987pt x 146.20245pt>
+File: figures_2026_03_03//heat_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//heat_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//heat_legend.pdf  used on input lin
 e 11.
 (pdftex.def)             Requested size: 42.67912pt x 59.31874pt.
 
@@ -1769,32 +1784,32 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [17
 
- <./figures_2026_02_16//spaceHeating.pdf> <./figures_2026_02_16//districtHeatin
-g.pdf> <./figures_2026_02_16//heat_legend.pdf
+ <./figures_2026_03_03//spaceHeating.pdf> <./figures_2026_03_03//districtHeatin
+g.pdf> <./figures_2026_03_03//heat_legend.pdf
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//heat_l
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//heat_l
 egend.pdf): PDF inclusion: multiple pdfs with page group included in a single p
 age
 >]
-<figures_2026_02_16//spaceHeating_dist.pdf, id=1471, 362.79108pt x 334.59818pt>
+<figures_2026_03_03//spaceHeating_dist.pdf, id=1542, 362.79108pt x 334.59818pt>
 
-File: figures_2026_02_16//spaceHeating_dist.pdf Graphic file (type pdf)
-<use figures_2026_02_16//spaceHeating_dist.pdf>
-Package pdftex.def Info: figures_2026_02_16//spaceHeating_dist.pdf  used on inp
+File: figures_2026_03_03//spaceHeating_dist.pdf Graphic file (type pdf)
+<use figures_2026_03_03//spaceHeating_dist.pdf>
+Package pdftex.def Info: figures_2026_03_03//spaceHeating_dist.pdf  used on inp
 ut line 20.
 (pdftex.def)             Requested size: 151.82838pt x 142.26378pt.
-<figures_2026_02_16//districtHeating_dist.pdf, id=1473, 362.79108pt x 334.59818
+<figures_2026_03_03//districtHeating_dist.pdf, id=1544, 362.79108pt x 334.59818
 pt>
-File: figures_2026_02_16//districtHeating_dist.pdf Graphic file (type pdf)
-<use figures_2026_02_16//districtHeating_dist.pdf>
-Package pdftex.def Info: figures_2026_02_16//districtHeating_dist.pdf  used on 
+File: figures_2026_03_03//districtHeating_dist.pdf Graphic file (type pdf)
+<use figures_2026_03_03//districtHeating_dist.pdf>
+Package pdftex.def Info: figures_2026_03_03//districtHeating_dist.pdf  used on 
 input line 20.
 (pdftex.def)             Requested size: 151.82838pt x 142.26378pt.
-File: figures_2026_02_16//models.pdf Graphic file (type pdf)
-<use figures_2026_02_16//models.pdf>
-Package pdftex.def Info: figures_2026_02_16//models.pdf  used on input line 20.
+File: figures_2026_03_03//models.pdf Graphic file (type pdf)
+<use figures_2026_03_03//models.pdf>
+Package pdftex.def Info: figures_2026_03_03//models.pdf  used on input line 20.
 
-(pdftex.def)             Requested size: 113.81102pt x 7.03409pt.
+(pdftex.def)             Requested size: 156.49014pt x 8.14594pt.
 
 Overfull \hbox (25.60815pt too wide) in paragraph at lines 20--20
 [][]  
@@ -1807,12 +1822,12 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [18
 
- <./figures_2026_02_16//spaceHeating_dist.pdf> <./figures_2026_02_16//districtH
+ <./figures_2026_03_03//spaceHeating_dist.pdf> <./figures_2026_03_03//districtH
 eating_dist.pdf>]
-<figures_2026_02_16//processHeating.pdf, id=1582, 343.10106pt x 577.62866pt>
-File: figures_2026_02_16//processHeating.pdf Graphic file (type pdf)
-<use figures_2026_02_16//processHeating.pdf>
-Package pdftex.def Info: figures_2026_02_16//processHeating.pdf  used on input 
+<figures_2026_03_03//processHeating.pdf, id=1653, 343.10106pt x 577.62866pt>
+File: figures_2026_03_03//processHeating.pdf Graphic file (type pdf)
+<use figures_2026_03_03//processHeating.pdf>
+Package pdftex.def Info: figures_2026_03_03//processHeating.pdf  used on input 
 line 29.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
 
@@ -1820,23 +1835,23 @@ Overfull \hbox (2.52881pt too wide) in paragraph at lines 29--29
 [][] 
  []
 
-File: figures_2026_02_16//heat_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//heat_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//heat_legend.pdf  used on input lin
+File: figures_2026_03_03//heat_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//heat_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//heat_legend.pdf  used on input lin
 e 29.
 (pdftex.def)             Requested size: 42.67912pt x 59.31874pt.
-<figures_2026_02_16//processHeating_dist.pdf, id=1584, 362.92543pt x 334.59818p
+<figures_2026_03_03//processHeating_dist.pdf, id=1655, 362.92543pt x 334.59818p
 t>
-File: figures_2026_02_16//processHeating_dist.pdf Graphic file (type pdf)
-<use figures_2026_02_16//processHeating_dist.pdf>
-Package pdftex.def Info: figures_2026_02_16//processHeating_dist.pdf  used on i
+File: figures_2026_03_03//processHeating_dist.pdf Graphic file (type pdf)
+<use figures_2026_03_03//processHeating_dist.pdf>
+Package pdftex.def Info: figures_2026_03_03//processHeating_dist.pdf  used on i
 nput line 29.
 (pdftex.def)             Requested size: 151.88551pt x 142.26378pt.
-File: figures_2026_02_16//models.pdf Graphic file (type pdf)
-<use figures_2026_02_16//models.pdf>
-Package pdftex.def Info: figures_2026_02_16//models.pdf  used on input line 29.
+File: figures_2026_03_03//models.pdf Graphic file (type pdf)
+<use figures_2026_03_03//models.pdf>
+Package pdftex.def Info: figures_2026_03_03//models.pdf  used on input line 29.
 
-(pdftex.def)             Requested size: 113.81102pt x 7.03409pt.
+(pdftex.def)             Requested size: 156.49014pt x 8.14594pt.
 
 Overfull \hbox (25.6086pt too wide) in paragraph at lines 29--29
 [][]  
@@ -1849,43 +1864,48 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [19
 
- <./figures_2026_02_16//processHeating.pdf> <./figures_2026_02_16//processHeati
+ <./figures_2026_03_03//processHeating.pdf> <./figures_2026_03_03//processHeati
 ng_dist.pdf>]) (./fuels.tex (./00_main.toc) [20
 
 ]
-<figures_2026_02_16//fuelUse_legend.pdf, id=1688, 80.66074pt x 61.04054pt>
-File: figures_2026_02_16//fuelUse_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//fuelUse_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//fuelUse_legend.pdf  used on input 
+<figures_2026_03_03//fuelUse_legend.pdf, id=1759, 101.33171pt x 118.56796pt>
+File: figures_2026_03_03//fuelUse_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//fuelUse_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//fuelUse_legend.pdf  used on input 
 line 12.
-(pdftex.def)             Requested size: 51.21504pt x 38.75658pt.
+(pdftex.def)             Requested size: 51.21504pt x 59.9279pt.
 
 Overfull \hbox (5.69046pt too wide) in paragraph at lines 12--12
 [][] 
  []
 
-<figures_2026_02_16//h2Use.pdf, id=1689, 343.10106pt x 577.62866pt>
-File: figures_2026_02_16//h2Use.pdf Graphic file (type pdf)
-<use figures_2026_02_16//h2Use.pdf>
-Package pdftex.def Info: figures_2026_02_16//h2Use.pdf  used on input line 12.
+<figures_2026_03_03//h2Use.pdf, id=1760, 343.10106pt x 577.62866pt>
+File: figures_2026_03_03//h2Use.pdf Graphic file (type pdf)
+<use figures_2026_03_03//h2Use.pdf>
+Package pdftex.def Info: figures_2026_03_03//h2Use.pdf  used on input line 12.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
-<figures_2026_02_16//h2Supply_tech.pdf, id=1690, 343.10106pt x 577.62866pt>
-File: figures_2026_02_16//h2Supply_tech.pdf Graphic file (type pdf)
-<use figures_2026_02_16//h2Supply_tech.pdf>
-Package pdftex.def Info: figures_2026_02_16//h2Supply_tech.pdf  used on input l
+<figures_2026_03_03//h2Supply_tech.pdf, id=1761, 343.10106pt x 577.62866pt>
+File: figures_2026_03_03//h2Supply_tech.pdf Graphic file (type pdf)
+<use figures_2026_03_03//h2Supply_tech.pdf>
+Package pdftex.def Info: figures_2026_03_03//h2Supply_tech.pdf  used on input l
 ine 12.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
 
-Overfull \hbox (24.97446pt too wide) in paragraph at lines 12--12
+Overfull \hbox (7.90306pt too wide) in paragraph at lines 12--12
 [][][] 
  []
 
-<figures_2026_02_16//h2Supply_legend.pdf, id=1692, 111.33784pt x 75.48514pt>
-File: figures_2026_02_16//h2Supply_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//h2Supply_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//h2Supply_legend.pdf  used on input
+<figures_2026_03_03//h2Supply_legend.pdf, id=1763, 111.33784pt x 75.48514pt>
+File: figures_2026_03_03//h2Supply_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//h2Supply_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//h2Supply_legend.pdf  used on input
  line 12.
 (pdftex.def)             Requested size: 51.21504pt x 34.72241pt.
+
+Overfull \hbox (11.38223pt too wide) in paragraph at lines 12--12
+[][]  
+ []
+
 
 Overfull \hbox (56.90549pt too wide) has occurred while \output is active
  [] 
@@ -1893,55 +1913,55 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [21
 
- <./figures_2026_02_16//h2Supply_tech.pdf> <./figures_2026_02_16//fuelUse_legen
+ <./figures_2026_03_03//h2Supply_tech.pdf> <./figures_2026_03_03//fuelUse_legen
 d.pdf
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//fuelUs
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//fuelUs
 e_legend.pdf): PDF inclusion: multiple pdfs with page group included in a singl
 e page
-> <./figures_2026_02_16//h2Use.pdf> <./figures_2026_02_16//h2Supply_legend.pdf
+> <./figures_2026_03_03//h2Use.pdf> <./figures_2026_03_03//h2Supply_legend.pdf
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//h2Supp
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//h2Supp
 ly_legend.pdf): PDF inclusion: multiple pdfs with page group included in a sing
 le page
 >]
-File: figures_2026_02_16//fuelUse_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//fuelUse_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//fuelUse_legend.pdf  used on input 
+File: figures_2026_03_03//fuelUse_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//fuelUse_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//fuelUse_legend.pdf  used on input 
 line 23.
-(pdftex.def)             Requested size: 51.21504pt x 38.75658pt.
+(pdftex.def)             Requested size: 51.21504pt x 59.9279pt.
 
 Overfull \hbox (5.69046pt too wide) in paragraph at lines 23--23
 [][] 
  []
 
-<figures_2026_02_16//methaneUse.pdf, id=1787, 343.10106pt x 577.62866pt>
-File: figures_2026_02_16//methaneUse.pdf Graphic file (type pdf)
-<use figures_2026_02_16//methaneUse.pdf>
-Package pdftex.def Info: figures_2026_02_16//methaneUse.pdf  used on input line
+<figures_2026_03_03//methaneUse.pdf, id=1855, 343.10106pt x 577.62866pt>
+File: figures_2026_03_03//methaneUse.pdf Graphic file (type pdf)
+<use figures_2026_03_03//methaneUse.pdf>
+Package pdftex.def Info: figures_2026_03_03//methaneUse.pdf  used on input line
  23.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
-<figures_2026_02_16//methaneSupply_tech.pdf, id=1788, 343.10106pt x 577.62866pt
+<figures_2026_03_03//methaneSupply_tech.pdf, id=1856, 343.10106pt x 577.62866pt
 >
-File: figures_2026_02_16//methaneSupply_tech.pdf Graphic file (type pdf)
-<use figures_2026_02_16//methaneSupply_tech.pdf>
-Package pdftex.def Info: figures_2026_02_16//methaneSupply_tech.pdf  used on in
+File: figures_2026_03_03//methaneSupply_tech.pdf Graphic file (type pdf)
+<use figures_2026_03_03//methaneSupply_tech.pdf>
+Package pdftex.def Info: figures_2026_03_03//methaneSupply_tech.pdf  used on in
 put line 23.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
 
-Overfull \hbox (24.97446pt too wide) in paragraph at lines 23--23
+Overfull \hbox (7.90306pt too wide) in paragraph at lines 23--23
 [][][] 
  []
 
-<figures_2026_02_16//methaneSupply_legend.pdf, id=1790, 125.31192pt x 60.91508p
+<figures_2026_03_03//methaneSupply_legend.pdf, id=1858, 125.31192pt x 60.91508p
 t>
-File: figures_2026_02_16//methaneSupply_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//methaneSupply_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//methaneSupply_legend.pdf  used on 
+File: figures_2026_03_03//methaneSupply_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//methaneSupply_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//methaneSupply_legend.pdf  used on 
 input line 23.
 (pdftex.def)             Requested size: 59.75095pt x 29.04556pt.
 
-Overfull \hbox (2.84674pt too wide) in paragraph at lines 23--23
+Overfull \hbox (19.91814pt too wide) in paragraph at lines 23--23
 [][]  
  []
 
@@ -1952,48 +1972,53 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [22
 
- <./figures_2026_02_16//methaneSupply_tech.pdf> <./figures_2026_02_16//methaneU
-se.pdf> <./figures_2026_02_16//methaneSupply_legend.pdf
+ <./figures_2026_03_03//methaneSupply_tech.pdf> <./figures_2026_03_03//methaneU
+se.pdf> <./figures_2026_03_03//methaneSupply_legend.pdf
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//methan
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//methan
 eSupply_legend.pdf): PDF inclusion: multiple pdfs with page group included in a
  single page
 >]
-File: figures_2026_02_16//fuelUse_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//fuelUse_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//fuelUse_legend.pdf  used on input 
+File: figures_2026_03_03//fuelUse_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//fuelUse_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//fuelUse_legend.pdf  used on input 
 line 34.
-(pdftex.def)             Requested size: 51.21504pt x 38.75658pt.
+(pdftex.def)             Requested size: 51.21504pt x 59.9279pt.
 
 Overfull \hbox (5.69046pt too wide) in paragraph at lines 34--34
 [][] 
  []
 
-<figures_2026_02_16//liquidsUse.pdf, id=1876, 343.10106pt x 577.62866pt>
-File: figures_2026_02_16//liquidsUse.pdf Graphic file (type pdf)
-<use figures_2026_02_16//liquidsUse.pdf>
-Package pdftex.def Info: figures_2026_02_16//liquidsUse.pdf  used on input line
+<figures_2026_03_03//liquidsUse.pdf, id=1944, 343.10106pt x 577.62866pt>
+File: figures_2026_03_03//liquidsUse.pdf Graphic file (type pdf)
+<use figures_2026_03_03//liquidsUse.pdf>
+Package pdftex.def Info: figures_2026_03_03//liquidsUse.pdf  used on input line
  34.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
-<figures_2026_02_16//liquidsSupply_tech.pdf, id=1877, 343.10106pt x 577.62866pt
+<figures_2026_03_03//liquidsSupply_tech.pdf, id=1945, 343.10106pt x 577.62866pt
 >
-File: figures_2026_02_16//liquidsSupply_tech.pdf Graphic file (type pdf)
-<use figures_2026_02_16//liquidsSupply_tech.pdf>
-Package pdftex.def Info: figures_2026_02_16//liquidsSupply_tech.pdf  used on in
+File: figures_2026_03_03//liquidsSupply_tech.pdf Graphic file (type pdf)
+<use figures_2026_03_03//liquidsSupply_tech.pdf>
+Package pdftex.def Info: figures_2026_03_03//liquidsSupply_tech.pdf  used on in
 put line 34.
 (pdftex.def)             Requested size: 116.33983pt x 199.16928pt.
 
-Overfull \hbox (24.97446pt too wide) in paragraph at lines 34--34
+Overfull \hbox (7.90306pt too wide) in paragraph at lines 34--34
 [][][] 
  []
 
-<figures_2026_02_16//liquidsSupply_legend.pdf, id=1879, 109.09508pt x 46.72144p
+<figures_2026_03_03//liquidsSupply_legend.pdf, id=1947, 109.09508pt x 46.72144p
 t>
-File: figures_2026_02_16//liquidsSupply_legend.pdf Graphic file (type pdf)
-<use figures_2026_02_16//liquidsSupply_legend.pdf>
-Package pdftex.def Info: figures_2026_02_16//liquidsSupply_legend.pdf  used on 
+File: figures_2026_03_03//liquidsSupply_legend.pdf Graphic file (type pdf)
+<use figures_2026_03_03//liquidsSupply_legend.pdf>
+Package pdftex.def Info: figures_2026_03_03//liquidsSupply_legend.pdf  used on 
 input line 34.
 (pdftex.def)             Requested size: 51.21504pt x 21.9334pt.
+
+Overfull \hbox (11.38223pt too wide) in paragraph at lines 34--34
+[][]  
+ []
+
 
 Overfull \hbox (56.90549pt too wide) has occurred while \output is active
  [] 
@@ -2001,10 +2026,10 @@ Overfull \hbox (56.90549pt too wide) has occurred while \output is active
 
 [23
 
- <./figures_2026_02_16//liquidsSupply_tech.pdf> <./figures_2026_02_16//liquidsU
-se.pdf> <./figures_2026_02_16//liquidsSupply_legend.pdf
+ <./figures_2026_03_03//liquidsSupply_tech.pdf> <./figures_2026_03_03//liquidsU
+se.pdf> <./figures_2026_03_03//liquidsSupply_legend.pdf
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_02_16//liquid
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures_2026_03_03//liquid
 sSupply_legend.pdf): PDF inclusion: multiple pdfs with page group included in a
  single page
 >]) (./final.tex
@@ -2032,7 +2057,7 @@ Package rerunfilecheck Info: File `00_main.out' has not changed.
 Here is how much of TeX's memory you used:
  29091 strings out of 477529
  624254 string characters out of 5825602
- 872023 words of memory out of 5000000
+ 872021 words of memory out of 5000000
  47259 multiletter control sequences out of 15000+600000
  492982 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -2040,10 +2065,10 @@ Here is how much of TeX's memory you used:
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/
 2022/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on 00_main.pdf (24 pages, 1132824 bytes).
+Output written on 00_main.pdf (24 pages, 1823888 bytes).
 PDF statistics:
- 2017 PDF objects out of 2073 (max. 8388607)
- 438 compressed objects within 5 object streams
+ 2085 PDF objects out of 2487 (max. 8388607)
+ 436 compressed objects within 5 object streams
  54 named destinations out of 1000 (max. 500000)
  485 words of extra memory for PDF output out of 10000 (max. 10000000)
 
