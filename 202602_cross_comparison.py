@@ -8,7 +8,7 @@ import pandas as pd
 
 #  List of files with:
 # name: name to be displayed in the plots
-# id:  model_id in CROSSHubhttps://www.dropbox.com/scl/fo/shc5n6517j6v1hklws1x4/AKYZjNrliYD7ChaX8HMa6gE?rlkey=31odqrp28kb7xx0h4a2quukhw&dl=0
+# id:  model_id in CROSSHub https://www.dropbox.com/scl/fo/shc5n6517j6v1hklws1x4/AKYZjNrliYD7ChaX8HMa6gE?rlkey=31odqrp28kb7xx0h4a2quukhw&dl=0
 # summer: name of the summer day reported by the model
 # summerDay: data of the summer typical day in the format dd.mm.yyyy
 # winter: name of the winter day reported by the model
@@ -31,7 +31,7 @@ model_list =  [
 
 # Create the object that produces the plots and processes the data
 # Name of the csv file with the results 
-fileResults = "results/results_cross_2026_03_04"
+fileResults = "results/results_cross_2026_03_08"
 # Scenario names and corresponding colors 
 sce = [
        {'name': 'abroad-res-full', 'id': 'abroad-res-full','color':'#9FBA3D'},
@@ -43,11 +43,7 @@ sce = [
        {'name': 'abroad-nores-lim', 'id': 'domestic-res-full','color':'#F1C40F'},
        {'name': 'domestic-nores-lim', 'id': 'domestic-res-full','color':'#34495E'},
    ]   
-scenario_groups = {
-#    "RES target": [("abroad-res-full","reference"), ("abroad-res-lim","reference"),("domestic-res-full","reference"), ("domestic-res-lim","reference")],
-#    "No-RES target": [("abroad-nores-full","reference"),("abroad-nores-lim","reference"),("domestic-nores-full","reference"),("domestic-nores-lim","reference")],
-    "All": [("abroad-res-full","reference"), ("abroad-res-lim","reference"),("domestic-res-full","reference"), ("domestic-res-lim","reference"),("abroad-nores-full","reference"),("abroad-nores-lim","reference"),("domestic-nores-full","reference"),("domestic-nores-lim","reference")],
-}     
+  
 
 # Folders where the plots will be created
 folder_plots='presentation_workshop2026'
@@ -71,7 +67,7 @@ scenarios={
 
 # Effect of renewable target
 
-scenarios={
+scenarios_target={
         # ('scenario-id','variant'): 'label'
         ('abroad-res-full','reference'):'Target',
         ('abroad-nores-full','reference'):'No-target',
@@ -109,7 +105,7 @@ cross_plots.plotBarHorizontal(
 #cross_plots.plotBarVertical(
 
     listModelsid=listModels, 
-    listSce=scenarios,
+    listSce=scenarios_target,
     varName = varName, 
     varList=varList_supply_net, 
     year=year, 
@@ -128,6 +124,50 @@ cross_plots.plotBarHorizontal(
     multi=False,          # <--- one plot
 )
 
+
+scenario_groups = {
+    "Target": [("abroad-res-full","reference"), ("abroad-res-lim","reference"),("domestic-res-full","reference"), ("domestic-res-lim","reference")],
+    "No target": [("abroad-nores-full","reference"),("abroad-nores-lim","reference"),("domestic-nores-full","reference"),("domestic-nores-lim","reference")],
+}   
+
+# name: name of the technology or group of technologies (valid names: https://sweet-cross.github.io/instructions-data/docs/sets/tech_generation/)
+# data: list with the technologies that correspond to this category
+# color: color to use for this category
+varList_supply_net_dist = [
+    {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
+    {'name':'Nuc.','data':['nuclear'],'color':'#FF007F'},
+    {'name':'Solar','data':['spv'],'color':'#FAC748'},
+    {'name':'Wind','data':['wind'],'color':'#F2960E'},
+    {'name':'Geo.','data':['geothermal_pp'],'color':'#ac79c4'},
+    {'name':'Methane','data':["methane_pp",'fuel_cell_methane'],'color':'#1f6228'},
+    {'name':'H2','data':['hydrogen_pp','fuel_cell_h2'],'color':'#03CBA0'},
+    {'name':'Liquids','data':['liquids_pp'],'color':'#4B4EFC'},
+    {'name':'Waste','data':['waste_pp'],'color':'#b82222'},
+    {'name':'Wood','data':['wood_pp'],'color':'#a9807c'},
+    #{'name':'Storage','data':['net_storage_out'],'color':'#939CAC'},
+    #{'name':'Net-imports','data':['net_imports'],'color':'#CCCCCC'}
+   ]
+order=["Hydro","Solar","Wind","Nuc.","Waste","Methane","Wood","Geo.","H2",'Liquids']
+varName = 'electricity_supply'
+listModels = cross_plots.modelsid
+ylabel = 'Electricity (TWh)'
+ymax = 60
+fileName = 'elecDist_tech_res'
+cross_plots.plotTechDistGrouped(
+    listModelsid=cross_plots.modelsid,
+    varName=varName,
+    varList=varList_supply_net_dist,
+    year=year,
+    order=order,
+    ylabel=ylabel,
+    ymax=ymax,
+    fileName=fileName,
+    width=30, height=12,
+    legend=False,
+    group_by="scenario_group",   #scenario_group or "model"
+    scenario_groups=scenario_groups,
+    scenarios = scenarios
+)
 
 renewables = [{'name':'Solar','data':['spv'],'color':'#FAC748'},
     {'name':'Wind','data':['wind'],'color':'#F2960E'},
@@ -355,7 +395,7 @@ cross_plots.plotBarHorizontal(
     label=xlabel, 
     figmax = xmax,
     fileName = fileName,
-    invert=False, legend=True, pos_legend="lower right",
+    invert=False, legend=False, pos_legend="upper right",
     width=8, height=12,
     #width=12, height=5,
     group_by="model", # 'scenario' or 'model'
@@ -422,7 +462,7 @@ cross_plots.plotBarHorizontal(
     label=xlabel, 
     figmax = xmax,
     fileName = fileName,
-    invert=False, legend=True, pos_legend="lower right",
+    invert=False, legend=False, pos_legend="lower right",
     width=5, height=12,
     #width=12, height=5,
     group_by="model", # 'scenario' or 'model'
@@ -442,6 +482,42 @@ cross_plots.plotBarHorizontal(
     listSce=scenarios,
     varName = varName, 
     varList=varList_supply_net, 
+    year=year, 
+    scale=1,
+    label=xlabel, 
+    figmax = xmax,
+    fileName = fileName,
+    invert=False, legend=False, 
+    pos_legend={# This puts the legend outside-right for vertical plots
+                "loc": "center left",
+                "bbox_to_anchor": (1.02, 0.5),
+                },#"upper right",
+    width=8, height=12,
+    #width=12, height=5,
+    group_by="model", # 'scenario' or 'model'
+    multi=False,          # <--- one plot
+)
+
+
+varList_storage = [
+ #    {'name':'Storage','data':['net_storage_out'],'color':'#939CAC'},
+ #   {'name':'Net-imports','data':['net_imports'],'color':'#CCCCCC'}
+         {'name':'Storage','data':['battery_out','phs_out'],'color':'#939CAC'},
+         {'name':'Imports','data':['imports'],'color':'#CCCCCC'}
+    ]
+
+varName = 'electricity_supply'
+listModels = cross_plots.modelsid
+xlabel = 'Electricity (TWh)'
+xmax = 100
+fileName = 'storage_ev'
+cross_plots.plotBarHorizontal(
+#cross_plots.plotBarVertical(
+
+    listModelsid=listModels, 
+    listSce=scenarios,
+    varName = varName, 
+    varList=varList_storage, 
     year=year, 
     scale=1,
     label=xlabel, 

@@ -193,6 +193,63 @@ class Plots:
        
     #  Reads the annual data from the csv file from CROSSHub
     #  returns a dataFrame with all the data
+    
+    def __parse_datetime(self, series: pd.Series) -> pd.Series:
+        s = series.astype("string").str.strip()
+    
+        # Normalize common problems
+        s = (s
+             .str.replace("\u00a0", " ", regex=False)      # NBSP -> normal space
+             .str.replace("\u200b", "", regex=False)       # zero-width space
+             .str.replace("T", " ", regex=False)
+             .str.replace(r"\s+", " ", regex=True)
+        )
+    
+        # Try explicit known formats first (fast + reliable)
+        formats = (
+            "%Y-%m-%d %H:%M:%S",
+            "%Y-%m-%d %H:%M",
+            "%d.%m.%Y %H:%M:%S",
+            "%d.%m.%Y %H:%M",
+            "%d.%m.%Y",                # date only
+            "%d/%m/%Y %H:%M:%S",
+            "%d/%m/%Y %H:%M",
+            "%d/%m/%Y",
+        )
+    
+        dt = pd.Series(pd.NaT, index=s.index, dtype="datetime64[ns]")
+    
+        for fmt in formats:
+            still = dt.isna()
+            if not still.any():
+                break
+            dt.loc[still] = pd.to_datetime(s.loc[still], format=fmt, errors="coerce")
+    
+        # Final fallback: let pandas/dateutil try to infer (covers extra variants)
+        still = dt.isna()
+        if still.any():
+            dt.loc[still] = pd.to_datetime(s.loc[still], errors="coerce")
+            still2 = dt.isna()
+            if still2.any():
+                dt.loc[still2] = pd.to_datetime(s.loc[still2], errors="coerce", dayfirst=True)
+
+        return dt
+    
+    def __correctUnit(self,timeResolution,unit):
+        annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000,'gw':1,'mw':1/1000,'bchf':1,'mchf':1/1000,'chf/tco2':1}
+        hourly_factors = {'gw':1,'gwh/h':1, 'mw':1/1000,'mwh/h':1/1000}
+        
+        if timeResolution == 'annual':
+            if unit.lower() in annual_factors.keys():
+                return annual_factors[unit.lower()]
+            else:
+                return np.nan
+        elif timeResolution in(['typical-day', 'hourly']):
+            if unit.lower() in hourly_factors.keys():
+                return hourly_factors[unit.lower()]
+            else: 
+                return np.nan
+    
     def __readData(self,fileResults):
         
         data = pd.read_csv(fileResults+'.csv', index_col=[],header=[0])
@@ -221,45 +278,7 @@ class Plots:
         data.loc[mask_hourly, "timestamp"] = parsed.dt.floor("h")
        
         return data
-    
-    def __parse_datetime(series: pd.Series):
-        s = series.astype("string").str.strip()
-    
-        # light normalization 
-        s = s.str.replace("T", " ", regex=False)          # 2050-07-01T19:00 -> 2050-07-01 19:00
-        s = s.str.replace(r"\s+", " ", regex=True)        # collapse whitespace
-    
-        # Pass 1: ISO 
-        dt = pd.to_datetime(s, errors="coerce")
-    
-        # Pass 2: day-first interpretation (for EU-style like 01.02.2050 00:00, 01/02/2050, etc.)
-        dt2 = pd.to_datetime(s, errors="coerce", dayfirst=True)
-    
-        dt = dt.fillna(dt2)
-    
-        # Optional Pass 3: try a few explicit formats you often see
-        for fmt in ("%d.%m.%Y %H:%M", "%d.%m.%Y", "%Y-%m-%d %H:%M", "%Y/%m/%d %H:%M"):
-            still = dt.isna()
-            if not still.any():
-                break
-            dt.loc[still] = pd.to_datetime(s.loc[still], format=fmt, errors="coerce")
-    
-        return dt
-    
-    def __correctUnit(self,timeResolution,unit):
-        annual_factors = {'twh':1,'gwh':1/1000, 'mwh':1/1e6,'gj':1/3.6,'mtco2':1,'gtco2':1000,'gw':1,'mw':1/1000,'bchf':1,'mchf':1/1000,'chf/tco2':1}
-        hourly_factors = {'gw':1,'gwh/h':1, 'mw':1/1000,'mwh/h':1/1000}
-        
-        if timeResolution == 'annual':
-            if unit.lower() in annual_factors.keys():
-                return annual_factors[unit.lower()]
-            else:
-                return np.nan
-        elif timeResolution in(['typical-day', 'hourly']):
-            if unit.lower() in hourly_factors.keys():
-                return hourly_factors[unit.lower()]
-            else: 
-                return np.nan
+
             
     def __getReportedYearsByModel(self):
         years =  {}
@@ -801,7 +820,7 @@ class Plots:
             scenario_groups ignored.
             scenarios optional; if None uses self.sceVariants.
         """
-    
+        
         # ---- guardrails ----
         if group_by not in ("scenario_group", "model"):
             raise ValueError("group_by must be 'scenario_group' or 'model'")
@@ -823,6 +842,7 @@ class Plots:
             
     
         # model labels + colors (fallback to seaborn palette if missing)
+        allowed_by_model = {m: set(self.sceModel.get(m, [])) for m in listModelsid}
         model_label = {}
         for m in listModelsid:
             try:
@@ -838,6 +858,9 @@ class Plots:
             for gname, g_scenarios in scenario_groups.items():
                 for (sce, variant) in g_scenarios:
                     for m in listModelsid:
+                        # skip scenarios not available for this model
+                        if (sce, variant) not in allowed_by_model.get(m, set()):
+                            continue
                         for cat_name, techs in cat_defs:
                             total = 0.0
                             found_any = False
@@ -845,7 +868,7 @@ class Plots:
                                 try:
                                     v = self.allData.loc[(sce, variant, m, varName, tech, "annual", year), "value"]
                                 except KeyError:
-                                    v = 0.0
+                                    continue
                                 # handle scalar or Series
                                 v = float(v.sum()) if hasattr(v, "sum") else float(v)
                                 if not np.isnan(v):
@@ -854,7 +877,9 @@ class Plots:
     
                             # keep NaN if nothing found at all (so box/strip behave nicely)
                             y = total if found_any else np.nan
-    
+                            
+                            if not found_any:
+                                continue  # don't append anything -> nothing to plot
                             rows.append({
                                 "facet": gname,
                                 "category": cat_name,
@@ -865,7 +890,10 @@ class Plots:
         else:  # group_by == "model"
             # facet = model ; hue = scenario ; x = tech category ; y = value
             for m in listModelsid:
-                for (sce, variant) in sce_list:
+                # only scenarios this model actually has
+                sce_list_m = [sv for sv in sce_list if sv in allowed_by_model.get(m, set())]
+
+                for (sce, variant) in sce_list_m:
                     for cat_name, techs in cat_defs:
                         total = 0.0
                         found_any = False
@@ -1704,7 +1732,7 @@ class Plots:
                         s = 0
                         for tech in techs:
                             try:
-                                val = cross_plots.allData.loc[(sce[0], sce[1], m, vname, tech, time_resolution, t), "value"]
+                                val = self.allData.loc[(sce[0], sce[1], m, vname, tech, time_resolution, t), "value"]
                             except KeyError:
                                 val = 0
         

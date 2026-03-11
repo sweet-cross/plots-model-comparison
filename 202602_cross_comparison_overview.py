@@ -20,18 +20,18 @@ model_list =  [
           #{'name': 'Expanse', 'file': 'resultsCross_Expanse','summer':'Jul 02','winter':'Jan 01','color':'#FF7D0D'},
            #{'name': 'Nexus-e+\nEP2050+', 'file': 'resultsCross_Nexuse-EP','summer':'Jul 02','winter':'Feb 08','color':'#BCBD21'},
           {'name': 'EhubX', 'id':'ehub', 'summer':'Week day','summerDay':'01.07.2050','winter':'Week day','winterDay':'01.02.2050','color':'#8B5349'},
-          {'name': 'PowerCheck', 'id': 'powercheck','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#D57CBE'},
           {'name': 'SecMod', 'id': 'secmod','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#9565BD'},
           {'name': 'SES', 'id': 'ses','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#1E75B3'},
           {'name': 'SES-ETH', 'id': 'seseth','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#2A9E2A'},
           {'name': 'STEM', 'id': 'stem','summer':'Week day','summerDay':'01.07.2050','winter':'Week day','winterDay':'01.02.2050','color':'#D52426'},
           {'name': 'ZEN-Garden','id':'zengarden', 'summer':'Week day','summerDay':'01.07.2050','winter':'Week day','winterDay':'01.02.2050','color':'#00BFC4'},
+          {'name': 'PowerCheck', 'id': 'powercheck','summer':'Typical day','summerDay':'01.07.2050','winter':'Typical day','winterDay':'01.02.2050','color':'#D57CBE'},
           #{'name': 'EP2050+\nZero Basis', 'file': 'resultsCross_EP','summer':'avg. Aug. 13-19','winter':'avg. Feb. 7-13','color':'#7F7F7F'}
           ]
 
 # Create the object that produces the plots and processes the data
 # Name of the csv file with the results 
-fileResults = "results/results_cross_2026_03_04"
+fileResults = "results/results_cross_2026_03_08"
 # Scenario names and corresponding colors 
 sce = [
        {'name': 'abroad-res-full', 'id': 'abroad-res-full','color':'#9FBA3D'},
@@ -43,6 +43,9 @@ sce = [
        {'name': 'abroad-nores-lim', 'id': 'domestic-res-full','color':'#F1C40F'},
        {'name': 'domestic-nores-lim', 'id': 'domestic-res-full','color':'#34495E'},
    ]   
+
+
+
 scenario_groups = {
 #    "RES target": [("abroad-res-full","reference"), ("abroad-res-lim","reference"),("domestic-res-full","reference"), ("domestic-res-lim","reference")],
 #    "No-RES target": [("abroad-nores-full","reference"),("abroad-nores-lim","reference"),("domestic-nores-full","reference"),("domestic-nores-lim","reference")],
@@ -50,7 +53,7 @@ scenario_groups = {
 }     
 
 # Folders where the plots will be created
-folder_plots='presentation_latex/figures_2026_03_04'
+folder_plots='presentation_latex/figures_2026_03_08'
 
 
 
@@ -68,6 +71,19 @@ scenarios={
         ('domestic-nores-lim','reference'):'domestic-nores-lim',
     }
 
+scenarios_elec={
+        # ('scenario-id','variant'): 'label'
+        ('abroad-res-full','reference'):'abroad-res-full',
+        ('abroad-res-lim','reference'):'abroad-res-lim',
+        ('domestic-res-full','reference'):'domestic-res-full',
+        ('domestic-res-lim','reference'):'domestic-res-lim',
+        ('abroad-nores-full','reference'):'abroad-nores-full',
+        ('abroad-nores-lim','reference'):'abroad-nores-lim',
+        ('domestic-nores-full','reference'):'domestic-nores-full',
+        ('domestic-nores-lim','reference'):'domestic-nores-lim',
+    }
+
+
 # # Annual electricity supply with total imports and exports
 
 # Scatter plot with net supply
@@ -76,11 +92,11 @@ varName = 'electricity_supply'
 use_technology_fuel = 'total'
 scale = 1
 xlabel = 'Electricity (TWh)'
-xmax = 200
+xmax = 120
 fileName = 'elecSupply'
 cross_plots.plotScatter(
     listModelsid=listModels,
-    listSce=scenarios,
+    listSce=scenarios_elec,
     varName=varName,
     use_technology_fuel=use_technology_fuel,
     year=year,
@@ -105,7 +121,7 @@ cross_plots.plotScatter(
 # color: color to use for this category
 varList_supply_net = [
     {'name':'Hydro','data':['hydro_dam','hydro_ror'],'color':'#0377CA'},
-    {'name':'Nuclear','data':['nuclear'],'color':'#FF007F'},
+#    {'name':'Nuclear','data':['nuclear'],'color':'#FF007F'},
     {'name':'Solar','data':['spv'],'color':'#FAC748'},
     {'name':'Wind','data':['wind'],'color':'#F2960E'},
     {'name':'Geothermal','data':['geothermal_pp'],'color':'#ac79c4'},
@@ -123,13 +139,13 @@ varList_supply_net = [
 varName = 'electricity_supply'
 listModels = cross_plots.modelsid
 xlabel = 'Electricity (TWh)'
-xmax = 200
+xmax = 120
 fileName = 'elecSupply_tech_net'
 cross_plots.plotBarHorizontal(
 #cross_plots.plotBarVertical(
 
     listModelsid=listModels, 
-    listSce=scenarios,
+    listSce=scenarios_elec,
     varName = varName, 
     varList=varList_supply_net, 
     year=year, 
@@ -170,7 +186,7 @@ order=["Hydro","Solar","Wind","Nuc.","Waste","Methane","Wood","Geo.","H2",'Liqui
 varName = 'electricity_supply'
 listModels = cross_plots.modelsid
 ylabel = 'Electricity (TWh)'
-ymax = 120
+ymax = 50
 fileName = 'elecDist_tech'
 cross_plots.plotTechDistGrouped(
     listModelsid=cross_plots.modelsid,
@@ -221,7 +237,7 @@ cross_plots.plotBarHorizontal(
 #cross_plots.plotBarVertical(
 
     listModelsid=listModels, 
-    listSce=scenarios,
+    listSce=scenarios_elec,
     varName = varName, 
     varList=varList_use_net, 
     year=year, 
@@ -252,14 +268,16 @@ varList_use_dist = [
     {'name':'Freight','data':['truck','ldv'],'color':'#09c5c9'},
     {'name':'Space\nheating','data':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'],'color':'#F2960E'},
     {'name':'Process\nheat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
-    {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'}
+    {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
+    {'name':'Net-\nexports','data':['net_exports'],'color':'#CCCCCC'},
+    {'name':'Losses','data':['grid_losses','storage_losses'],'color':'#8B5A2B'}
   ]
 
-order = ["Base",'Passenger','Freight','Space\nheating','Process\nheat','Electrolysis']
+order = ["Base",'Passenger','Freight','Space\nheating','Process\nheat','Electrolysis','Net-\nexports','Losses']
 varName = 'electricity_consumption'
 listModels = cross_plots.modelsid
 ylabel = 'Electricity (TWh)'
-ymax = 60
+ymax = 50
 fileName = 'elecUseDist_use'
 cross_plots.plotTechDistGrouped(
     listModelsid=cross_plots.modelsid,
@@ -270,7 +288,7 @@ cross_plots.plotTechDistGrouped(
     ylabel=ylabel,
     ymax=ymax,
     fileName=fileName,
-    width=12, height=12,
+    width=15, height=12,
     legend=False,
     group_by="scenario_group",   #scenario_group or "model"
     scenario_groups=scenario_groups,
@@ -283,31 +301,26 @@ cross_plots.plotTechDistGrouped(
 # Hourly plots
 listModels = cross_plots.modelsid
 signedVarList_supply_use = [
-    {'name':'Hydro', "varName":"electricity_supply_typical_day",'techs':['hydro_dam','hydro_ror'], "sign": +1,'color':'#0377CA'},
-    {'name':'Nuclear', "varName":"electricity_supply_typical_day",'techs':['nuclear'], "sign": +1,'color':'#FF007F'},
-    {'name':'Solar', "varName":"electricity_supply_typical_day",'techs':['spv'], "sign": +1,'color':'#FAC748'},
-    {'name':'Wind', "varName":"electricity_supply_typical_day",'techs':['wind'], "sign": +1,'color':'#F2960E'},
-    {'name':'Geothermal', "varName":"electricity_supply_typical_day",'techs':['geothermal_pp'], "sign": +1,'color':'#ac79c4'},
-    {'name':'Methane', "varName":"electricity_supply_typical_day",'techs':["methane_pp",'fuel_cell_methane'], "sign": +1,'color':'#1f6228'},
-    {'name':'Hydrogen', "varName":"electricity_supply_typical_day",'techs':['hydrogen_pp','fuel_cell_h2'], "sign": +1,'color':'#03CBA0'},
-    {'name':'Liquids', "varName":"electricity_supply_typical_day",'techs':['liquids_pp'], "sign": +1,'color':'#4B4EFC'},
-    {'name':'Waste', "varName":"electricity_supply_typical_day",'techs':['waste_pp'], "sign": +1,'color':'#b82222'},
+    {'name':'HydroRoR', "varName":"electricity_supply_typical_day",'techs':['hydro_ror'], "sign": +1,'color':'#0377CA'},
+    {'name':'Thermal', "varName":"electricity_supply_typical_day",'techs':['methane_pp','hydrogen_pp','fuel_cell_h2','liquids_pp','waste_pp'], "sign": +1,'color':'#A9312B'},
     {'name':'Wood', "varName":"electricity_supply_typical_day",'techs':['wood_pp'], "sign": +1,'color':'#a9807c'},
+    {'name':'Geothermal', "varName":"electricity_supply_typical_day",'techs':['geothermal_pp'], "sign": +1,'color':'#ac79c4'},
+    {'name':'Wind', "varName":"electricity_supply_typical_day",'techs':['wind'], "sign": +1,'color':'#F2960E'},
+    {'name':'Hydro Dams', "varName":"electricity_supply_typical_day",'techs':['hydro_dam'], "sign": +1,'color':'#B6D7E4'},
+    {'name':'Solar', "varName":"electricity_supply_typical_day",'techs':['spv'], "sign": +1,'color':'#FAC748'},
     {'name':'Storage', "varName":"electricity_supply_typical_day",'techs':['net_storage_out'], "sign": +1,'color':'#939CAC'},
     {'name':'Net-imports', "varName":"electricity_supply_typical_day",'techs':['net_imports'], "sign": +1,'color':'#CCCCCC'},
     {'name':'Base', "varName":"electricity_consumption_typical_day",'techs':['elec_appliances'], "sign": -1,'color':'#097F6D'},
     {'name':'Trains', "varName":"electricity_consumption_typical_day",'techs':['passenger_rail','freight_rail'], "sign": -1,'color':'#066256'},
+    {'name':'Others', "varName":"electricity_consumption_typical_day",'techs':['dac','data_centers','power_to_liquid'], "sign": -1,'color':'#9751CB'},
+    {'name':'Losses', "varName":"electricity_consumption_typical_day",'techs':['grid_losses','storage_losses'], "sign": -1,'color':'#8B5A2B'},
+    {'name':'Electrolysis', "varName":"electricity_consumption_typical_day",'techs':['electrolysis'], "sign": -1,'color':'#F5DD1B'},
     {'name':'Road transport', "varName":"electricity_consumption_typical_day",'techs':['road_public','road_private','truck','ldv'], "sign": -1,'color':'#09c5c9'},
     {'name':'Space heating', "varName":"electricity_consumption_typical_day",'techs':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'], "sign": -1,'color':'#F2960E'},
     {'name':'Process heat', "varName":"electricity_consumption_typical_day",'techs':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'], "sign": -1,'color':'#CF4832'},
-    {'name':'Power to liquids', "varName":"electricity_consumption_typical_day",'techs':['power_to_liquid'], "sign": -1,'color':'#4B4EFC'},
-    {'name':'Electrolysis', "varName":"electricity_consumption_typical_day",'techs':['electrolysis'], "sign": -1,'color':'#F5DD1B'},
-    {'name': 'Data centers', "varName":"electricity_consumption_typical_day" ,'techs': ['data_centers'], "sign": -1, 'color': '#4A90E2'},
-    {'name':'Others', "varName":"electricity_consumption_typical_day",'techs':['dac','data_centers'], "sign": -1,'color':'#9751CB'},
     {'name':'Storage', "varName":"electricity_consumption_typical_day",'techs':['net_storage_in'], "sign": -1,'color':'#939CAC'},
     {'name':'Net-exports', "varName":"electricity_consumption_typical_day",'techs':['net_exports'], "sign": -1,'color':'#CCCCCC'},
-    {'name':'Losses', "varName":"electricity_consumption_typical_day",'techs':['grid_losses','storage_losses'], "sign": -1,'color':'#8B5A2B'}
-]
+    ]
 
 
 seasons = {
@@ -341,7 +354,7 @@ for scenario, name in scenarios.items():
             time_resolution="typical-day",               
             scale=1,
             ylabel="Electricity (GW)",
-            fileName="electricity_hourly_signed"+"_"+name+"_"+season,
+            fileName="electricity_hourly"+"_"+name+"_"+season,
             width=18,
             height=8,
             ymin=-30, ymax=30,                           # <- asymmetric limits
