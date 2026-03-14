@@ -68,38 +68,6 @@ class Plots:
         # The variable '(varName,cat)' will be created and can be used later in the code
         # This guarantees that we can compare even if models report different levels of aggregation 
 
-        subcats = [
-            {'varName':'electricity_supply',
-             'time_resolution':['annual','typical-day'],
-             'data':[
-                 {'cat':'spv','subcats':['spv_rooftop','spv_facade','spv_mountain','spv_agriculture']},
-                 {'cat':'wind','subcats':['wind_on','wind_off']},
-                 {'cat':'methane_pp','subcats':["methane_chp_ccs","methane_chp_woccs","methane_oc_woccs","methane_oc_ccs","methane_cc_woccs","methane_cc_ccs"]},
-                 {'cat':'liquids_pp','subcats':['liquids_chp_woccs','liquids_chp_ccs','liquids_oc_woccs','liquids_oc_ccs','liquids_cc_woccs','liquids_cc_ccs']},
-                 {'cat':'waste_pp','subcats':['waste_chp_woccs','waste_chp_ccs','waste_cc_woccs','waste_cc_ccs']},
-                 {'cat':'wood_pp','subcats':['wood_chp_woccs','wood_chp_ccs','wood_cc_woccs','wood_cc_ccs']},
-                 {'cat':'hydrogen_pp','subcats':['hydrogen_chp','hydrogen_cc']},
-                 ]},
-            {'varName':'space_heat_useful_energy_supply',
-             'time_resolution':['annual'],
-             'data':[
-                 {'cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-                 {'cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']},
-                 ]},
-            {'varName':'district_heat_useful_energy_supply',
-             'time_resolution':['annual'],
-             'data':[
-                 {'cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-                 {'cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']},
-                 ]},
-            {'varName':'process_heat_useful_energy_production',
-             'time_resolution':['annual'],
-             'data':[
-                 {'cat':'heat_pump','subcats':['air_source','ground_source','water_source']}, 
-                 {'cat':'boiler_wood','subcats':['boiler_wood_chips','boiler_wood_pellets']},
-                 ]},
-            ]
-
 
         subcats = [
             {'varName':'electricity_supply',
