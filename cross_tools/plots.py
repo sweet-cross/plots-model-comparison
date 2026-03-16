@@ -125,7 +125,18 @@ class Plots:
                  {'cat':'passenger','subcats':['passenger_road_public','passenger_road_private']}, 
                  {'cat':'freight_road','subcats':['truck','ldv']}, 
                  ]},
+            {'varName':'electricity_consumption',
+             'time_resolution':['annual','typical-day'],
+             'data':[
+                 {'cat':'process_heat','subcats':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump']}, 
+                 {'cat':'space_heating','subcats':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump']}, 
+                 {'cat':'fuel_production','subcats':['electrolysis','power_to_liquid']}, 
+                 {'cat':'rail','subcats':['passenger_rail','freight_rail']}, 
+                 {'cat':'freight_road','subcats':['truck','ldv']}, 
+                 {'cat':'passenger','subcats':['road_public','road_private']}, 
+                 ]},
             ]
+            
         self.__checkSubcategories(subcats)
         
         # For the following variables we do a pre-processing:
@@ -175,22 +186,6 @@ class Plots:
                 print(f"  {name}()")
         print("\n================================\n")
         
-        
-        
-        
-        # # Hourly data
-        # self.seasons = ["summer","winter"]  
-        # self.hourlyData = {}
-        # for season in self.seasons:
-        #     seasondata =[]
-        #     for m in self.modelsid:
-        #         season_m = self.allData.loc[(slice(None),slice(None),slice(None),slice(None),'typical-day',self.typicalDays[season]['value'][m]),'value']
-        #         seasondata.append(season_m)
-            
-        #     self.hourlyData[season]= pd.concat(seasondata, axis=0, ignore_index=False,sort=True)
-                
-        # self.posNegData = {}
-       
     #  Reads the annual data from the csv file from CROSSHub
     #  returns a dataFrame with all the data
     
@@ -333,77 +328,136 @@ class Plots:
         Create category rows by aggregating subcategories:
             value(varName, cat) = sum(value(varName, subcats))
     
-        Works for:
-          - annual: timestamp is a year (e.g., 2050)
-          - typical-day: timestamp is hourly datetimes within a representative day
+        Rules:
+          - If subcategories exist, rebuild `cat` from subcategories
+            and replace any existing `cat` rows.
+          - If subcategories do not exist, keep existing `cat` as-is.
+          - If neither exists, do nothing.
         """
-        
+    
         df = self.allData.copy()
         new_rows = []
-
-        base_keys = ["scenario_name","scenario_variant","model","variable","time_resolution","timestamp"]
-
+    
+        base_keys = [
+            "scenario_name",
+            "scenario_variant",
+            "model",
+            "variable",
+            "time_resolution",
+            "timestamp",
+        ]
+    
         for v in subcats:
             varName = v["varName"]
-            
+    
             for resolution in v["time_resolution"]:
                 suffix = "_typical_day" if resolution in ["typical-day", "hourly"] else ""
                 var = varName + suffix
-                
+    
                 for item in v["data"]:
                     cat = item["cat"]
                     sub_list = item["subcats"]
-                    
-                    # restrict to relevant slice
-                    d = df.loc[
-                        (df["time_resolution"] == resolution) &
-                        (df["variable"] == var) &
-                        (df["use_technology_fuel"].isin(sub_list + [cat])),
-                        :
-                    ]
+    
+                    mask = (
+                        (df["time_resolution"] == resolution)
+                        & (df["variable"] == var)
+                        & (df["use_technology_fuel"].isin(sub_list + [cat]))
+                    )
+    
+                    d = df.loc[mask].copy()
                     if d.empty:
                         continue
-                    
-                    # sum subcategories
+    
+                    sub_rows = d.loc[d["use_technology_fuel"].isin(sub_list)].copy()
+    
+                    # No subcats -> keep existing cat as-is
+                    if sub_rows.empty:
+                        continue
+    
+                    # Aggregate subcategories
                     sub_sum = (
-                        d.loc[d["use_technology_fuel"].isin(sub_list)]
-                         .groupby(base_keys, as_index=False)["value"]
-                         .sum()
+                        sub_rows.groupby(base_keys, as_index=False)["value"]
+                        .sum()
                     )
+    
                     if sub_sum.empty:
                         continue
-                    
-                    # remove keys where category already exists
-                    existing_cat = (
-                        d.loc[d["use_technology_fuel"] == cat, base_keys]
-                         .drop_duplicates()
-                    )
-                    
+    
+                    # Normalize timestamps so matching/removal is consistent
                     if resolution == "annual":
-                        sub_sum["timestamp"] = pd.to_numeric(sub_sum["timestamp"], errors="coerce").astype("Int64")
-                        if not existing_cat.empty:
-                            existing_cat["timestamp"] = pd.to_numeric(existing_cat["timestamp"], errors="coerce").astype("Int64")
+                        sub_sum["timestamp"] = pd.to_numeric(
+                            sub_sum["timestamp"], errors="coerce"
+                        ).astype("Int64")
+    
+                        df.loc[
+                            (df["time_resolution"] == resolution) & (df["variable"] == var),
+                            "timestamp"
+                        ] = pd.to_numeric(
+                            df.loc[
+                                (df["time_resolution"] == resolution) & (df["variable"] == var),
+                                "timestamp"
+                            ],
+                            errors="coerce"
+                        ).astype("Int64")
+    
                     else:
-                        sub_sum["timestamp"] = pd.to_datetime(sub_sum["timestamp"], dayfirst=True, errors="coerce").dt.floor("min")
-                        if not existing_cat.empty:
-                            existing_cat["timestamp"] = pd.to_datetime(existing_cat["timestamp"], dayfirst=True, errors="coerce").dt.floor("min")
-
+                        sub_sum["timestamp"] = pd.to_datetime(
+                            sub_sum["timestamp"], dayfirst=True, errors="coerce"
+                        ).dt.floor("min")
+    
+                        df.loc[
+                            (df["time_resolution"] == resolution) & (df["variable"] == var),
+                            "timestamp"
+                        ] = pd.to_datetime(
+                            df.loc[
+                                (df["time_resolution"] == resolution) & (df["variable"] == var),
+                                "timestamp"
+                            ],
+                            dayfirst=True,
+                            errors="coerce"
+                        ).dt.floor("min")
+    
+                    # Remove existing cat rows for the same keys that will be rebuilt
+                    sub_sum_keys = sub_sum[base_keys].drop_duplicates()
+                    existing_cat_mask = (
+                        (df["time_resolution"] == resolution)
+                        & (df["variable"] == var)
+                        & (df["use_technology_fuel"] == cat)
+                    )
+    
+                    existing_cat = df.loc[existing_cat_mask, base_keys].copy()
+    
                     if not existing_cat.empty:
-                        sub_sum = sub_sum.merge(existing_cat, on=base_keys, how="left", indicator=True)
-                        sub_sum = sub_sum.loc[sub_sum["_merge"] == "left_only"].drop(columns="_merge")
-
-                    
-                    if sub_sum.empty:
-                        continue
-
-                    # build new category rows
+                        to_remove = existing_cat.merge(
+                            sub_sum_keys,
+                            on=base_keys,
+                            how="inner"
+                        )
+    
+                        if not to_remove.empty:
+                            df = df.merge(
+                                to_remove.assign(_drop=True),
+                                on=base_keys,
+                                how="left"
+                            )
+                            df = df.loc[
+                                ~(
+                                    (df["_drop"] == True)
+                                    & (df["time_resolution"] == resolution)
+                                    & (df["variable"] == var)
+                                    & (df["use_technology_fuel"] == cat)
+                                )
+                            ].drop(columns="_drop")
+    
+                    # Add rebuilt cat rows
                     sub_sum["use_technology_fuel"] = cat
                     new_rows.append(sub_sum)
-        if not new_rows:
-            return
-
-        add = pd.concat(new_rows, ignore_index=True)
-        self.allData = pd.concat([self.allData, add], ignore_index=True)
+    
+        if new_rows:
+            add = pd.concat(new_rows, ignore_index=True)
+            self.allData = pd.concat([df, add], ignore_index=True)
+        else:
+            self.allData = df
         
 
                                 
@@ -562,6 +616,9 @@ class Plots:
         height,
         ylim=None,
         extra_values=None, 
+        ncols=1,
+        subplot_titles=None, 
+        show_point_labels=True
     ):
         """
         Line plot of a variable by scenario/variant, with custom x-positions.
@@ -653,14 +710,27 @@ class Plots:
     
         # ---- Figure ----
         cm = 1 / 2.54
-        fig, ax = plt.subplots(1, figsize=(width * cm, height * cm))
+        fig, axes = plt.subplots(
+            1,
+            ncols,
+            figsize=(width * cm, height * cm),
+            sharey=True
+        )
+        
+        # Make sure axes is always iterable
+        if ncols == 1:
+            axes = [axes]
     
         # Simple color mapping for models
         # If you already have self.modelColors, you can replace this.
+        color_cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
         model_colors = {}
         for i, m in enumerate(listModelsid):
-            model_colors[m] = self.models[m]["color"]
-        
+            if hasattr(self, "modelColors") and m in self.modelColors:
+                model_colors[m] = self.modelColors[m]
+            else:
+                model_colors[m] = color_cycle[i % len(color_cycle)]
+    
         # Some markers for different line_ids so they are distinguishable
         marker_cycle = ["o", "s", "^", "D", "v", "P", "X"]
         line_styles = ["-", "--", "-.", ":"]
@@ -670,57 +740,70 @@ class Plots:
         line_handles  = {}
     
         # ---- Plot each model & line ----
-        for im, m in enumerate(listModelsid):
-            for il, line_id in enumerate(line_ids):
-                pts = values[m][line_id]
-                if not pts:
-                    continue
-    
-                # sort by x
-                pts = sorted(pts, key=lambda t: t[0])
-                xs = [p[0] for p in pts]
-                ys = [p[1] for p in pts]
-    
-                color = model_colors[m]
-                marker = marker_cycle[il % len(marker_cycle)]
-                ls = line_styles[il % len(line_styles)]
-    
-                # line + markers
-                h = ax.plot(
-                    xs,
-                    ys,
-                    linestyle=ls,
-                    marker=marker,
-                    color=color,
-                    label=self.models.get(m, m),
-                )[0]
-    
-                # store handles for potential legends
-                model_handles.setdefault(m, h)
-                line_handles.setdefault(line_id, h)
-    
-                # annotate each point: "x: y GW"
-                for x_val, y_val in zip(xs, ys):
-                    text = f"{int(x_val)}: {y_val:.1f} GW"
-                    ax.text(
-                        x_val,
-                        y_val,
-                        text,
-                        fontsize=8,
-                        va="bottom",
-                        ha="center",
-                        bbox=dict(
-                            boxstyle="round,pad=0.2",
-                            edgecolor=color,
-                            facecolor="white",
-                            linewidth=1,
-                        ),
-                    )
+        for col, ax in enumerate(axes):
+        
+            # split line_ids across subplots
+            lines_for_this_subplot = line_ids[col::ncols]
+        
+            for im, m in enumerate(listModelsid):
+                for il, line_id in enumerate(lines_for_this_subplot):
+                    pts = values[m][line_id]
+                    if not pts:
+                        continue
+        
+                    # sort by x
+                    pts = sorted(pts, key=lambda t: t[0])
+                    xs = [p[0] for p in pts]
+                    ys = [p[1] for p in pts]
+        
+                    color = model_colors[m]
+                    marker = marker_cycle[il % len(marker_cycle)]
+                    ls = line_styles[il % len(line_styles)]
+        
+                    # line + markers
+                    h = ax.plot(
+                        xs,
+                        ys,
+                        linestyle=ls,
+                        marker=marker,
+                        color=color,
+                        label=self.models.get(m, m),
+                    )[0]
+        
+                    # store handles for potential legends
+                    model_handles.setdefault(m, h)
+                    line_handles.setdefault(line_id, h)
+        
+                    # annotate each point: "x: y GW"
+                    if show_point_labels:
+                        for x_val, y_val in zip(xs, ys):
+                            text = f"{int(x_val)}: {y_val:.1f} GW"
+                            ax.text(
+                                x_val,
+                                y_val,
+                                text,
+                                fontsize=8,
+                                va="bottom",
+                                ha="center",
+                                bbox=dict(
+                                    boxstyle="round,pad=0.2",
+                                    edgecolor=color,
+                                    facecolor="white",
+                                    linewidth=1,
+                                ),
+                            )
     
         # ---- Axes, grid, labels ----
-        ax.set_xlabel(xlabel)
-        ax.set_ylabel(ylabel)
-        ax.grid(True, linestyle="--", alpha=0.5)
+        for i, ax in enumerate(axes):
+            ax.set_xlabel(xlabel)
+            ax.grid(True, linestyle="--", alpha=0.5)
+            # ---- Titles ----
+            if subplot_titles is not None:
+                if i < len(subplot_titles):
+                    ax.set_title(subplot_titles[i], fontsize=11, pad=8)
+        
+        axes[0].set_ylabel(ylabel)
+    
     
         # Optional: small padding around x
         all_x = [x for m_dict in values.values() for line_pts in m_dict.values() for (x, _) in line_pts]
@@ -756,21 +839,22 @@ class Plots:
                 combined_labels.append(self.models.get(m, m))
         
         # 2. Line-group entries  (black line + marker + linestyle)
-        for il, lid in enumerate(line_ids):
-            marker = marker_cycle[il % len(marker_cycle)]
-            ls     = line_styles[il % len(line_styles)]
-        
-            h = Line2D(
-                [], [],
-                linestyle=ls,
-                color='DARKGREY',
-                marker='None',
-                markersize=8,
-                linewidth=1.5,
-            )
-        
-            combined_handles.append(h)
-            combined_labels.append(lid)
+        if ncols==1:
+            for il, lid in enumerate(line_ids):
+                marker = marker_cycle[il % len(marker_cycle)]
+                ls     = line_styles[il % len(line_styles)]
+            
+                h = Line2D(
+                    [], [],
+                    linestyle=ls,
+                    color='DARKGREY',
+                    marker='None',
+                    markersize=8,
+                    linewidth=1.5,
+                )
+            
+                combined_handles.append(h)
+                combined_labels.append(lid)
         
         # ---- Draw combined legend ----
         ax.legend(
@@ -779,7 +863,10 @@ class Plots:
             loc="upper right",
             frameon=True,
         )
-  
+
+
+
+    
         plt.tight_layout()
         plt.savefig(self.folder_plots + "/" + fileName+ ".pdf", bbox_inches="tight")
         plt.savefig(
