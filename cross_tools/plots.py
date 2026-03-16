@@ -292,78 +292,213 @@ class Plots:
         Create category rows by aggregating subcategories:
             value(varName, cat) = sum(value(varName, subcats))
     
-        Works for:
-          - annual: timestamp is a year (e.g., 2050)
-          - typical-day: timestamp is hourly datetimes within a representative day
+        Rules:
+          - If subcategories exist, rebuild `cat` from subcategories
+            and replace any existing `cat` rows.
+          - If subcategories do not exist, keep existing `cat` as-is.
+          - If neither exists, do nothing.
         """
-        
+    
         df = self.allData.copy()
         new_rows = []
-
-        base_keys = ["scenario_name","scenario_variant","model","variable","time_resolution","timestamp"]
-
+    
+        base_keys = [
+            "scenario_name",
+            "scenario_variant",
+            "model",
+            "variable",
+            "time_resolution",
+            "timestamp",
+        ]
+    
         for v in subcats:
             varName = v["varName"]
-            
+    
             for resolution in v["time_resolution"]:
                 suffix = "_typical_day" if resolution in ["typical-day", "hourly"] else ""
                 var = varName + suffix
-                
+    
                 for item in v["data"]:
                     cat = item["cat"]
                     sub_list = item["subcats"]
-                    
-                    # restrict to relevant slice
-                    d = df.loc[
-                        (df["time_resolution"] == resolution) &
-                        (df["variable"] == var) &
-                        (df["use_technology_fuel"].isin(sub_list + [cat])),
-                        :
-                    ]
+    
+                    mask = (
+                        (df["time_resolution"] == resolution)
+                        & (df["variable"] == var)
+                        & (df["use_technology_fuel"].isin(sub_list + [cat]))
+                    )
+    
+                    d = df.loc[mask].copy()
                     if d.empty:
                         continue
-                    
-                    # sum subcategories
+    
+                    sub_rows = d.loc[d["use_technology_fuel"].isin(sub_list)].copy()
+    
+                    # No subcats -> keep existing cat as-is
+                    if sub_rows.empty:
+                        continue
+    
+                    # Aggregate subcategories
                     sub_sum = (
-                        d.loc[d["use_technology_fuel"].isin(sub_list)]
-                         .groupby(base_keys, as_index=False)["value"]
-                         .sum()
+                        sub_rows.groupby(base_keys, as_index=False)["value"]
+                        .sum()
                     )
+    
                     if sub_sum.empty:
                         continue
-                    
-                    # remove keys where category already exists
-                    existing_cat = (
-                        d.loc[d["use_technology_fuel"] == cat, base_keys]
-                         .drop_duplicates()
-                    )
-                    
+    
+                    # Normalize timestamps so matching/removal is consistent
                     if resolution == "annual":
-                        sub_sum["timestamp"] = pd.to_numeric(sub_sum["timestamp"], errors="coerce").astype("Int64")
-                        if not existing_cat.empty:
-                            existing_cat["timestamp"] = pd.to_numeric(existing_cat["timestamp"], errors="coerce").astype("Int64")
+                        sub_sum["timestamp"] = pd.to_numeric(
+                            sub_sum["timestamp"], errors="coerce"
+                        ).astype("Int64")
+    
+                        df.loc[
+                            (df["time_resolution"] == resolution) & (df["variable"] == var),
+                            "timestamp"
+                        ] = pd.to_numeric(
+                            df.loc[
+                                (df["time_resolution"] == resolution) & (df["variable"] == var),
+                                "timestamp"
+                            ],
+                            errors="coerce"
+                        ).astype("Int64")
+    
                     else:
-                        sub_sum["timestamp"] = pd.to_datetime(sub_sum["timestamp"], dayfirst=True, errors="coerce").dt.floor("min")
-                        if not existing_cat.empty:
-                            existing_cat["timestamp"] = pd.to_datetime(existing_cat["timestamp"], dayfirst=True, errors="coerce").dt.floor("min")
-
+                        sub_sum["timestamp"] = pd.to_datetime(
+                            sub_sum["timestamp"], dayfirst=True, errors="coerce"
+                        ).dt.floor("min")
+    
+                        df.loc[
+                            (df["time_resolution"] == resolution) & (df["variable"] == var),
+                            "timestamp"
+                        ] = pd.to_datetime(
+                            df.loc[
+                                (df["time_resolution"] == resolution) & (df["variable"] == var),
+                                "timestamp"
+                            ],
+                            dayfirst=True,
+                            errors="coerce"
+                        ).dt.floor("min")
+    
+                    # Remove existing cat rows for the same keys that will be rebuilt
+                    sub_sum_keys = sub_sum[base_keys].drop_duplicates()
+                    existing_cat_mask = (
+                        (df["time_resolution"] == resolution)
+                        & (df["variable"] == var)
+                        & (df["use_technology_fuel"] == cat)
+                    )
+    
+                    existing_cat = df.loc[existing_cat_mask, base_keys].copy()
+    
                     if not existing_cat.empty:
-                        sub_sum = sub_sum.merge(existing_cat, on=base_keys, how="left", indicator=True)
-                        sub_sum = sub_sum.loc[sub_sum["_merge"] == "left_only"].drop(columns="_merge")
-
-                    
-                    if sub_sum.empty:
-                        continue
-
-                    # build new category rows
+                        to_remove = existing_cat.merge(
+                            sub_sum_keys,
+                            on=base_keys,
+                            how="inner"
+                        )
+    
+                        if not to_remove.empty:
+                            df = df.merge(
+                                to_remove.assign(_drop=True),
+                                on=base_keys,
+                                how="left"
+                            )
+                            df = df.loc[
+                                ~(
+                                    (df["_drop"] == True)
+                                    & (df["time_resolution"] == resolution)
+                                    & (df["variable"] == var)
+                                    & (df["use_technology_fuel"] == cat)
+                                )
+                            ].drop(columns="_drop")
+    
+                    # Add rebuilt cat rows
                     sub_sum["use_technology_fuel"] = cat
                     new_rows.append(sub_sum)
-        if not new_rows:
-            return
+    
+        if new_rows:
+            add = pd.concat(new_rows, ignore_index=True)
+            self.allData = pd.concat([df, add], ignore_index=True)
+        else:
+            self.allData = df
 
-        add = pd.concat(new_rows, ignore_index=True)
-        self.allData = pd.concat([self.allData, add], ignore_index=True)
+    # def __checkSubcategories(self, subcats):
+    #     """
+    #     Create category rows by aggregating subcategories:
+    #         value(varName, cat) = sum(value(varName, subcats))
+    
+    #     Works for:
+    #       - annual: timestamp is a year (e.g., 2050)
+    #       - typical-day: timestamp is hourly datetimes within a representative day
+    #     """
         
+    #     df = self.allData.copy()
+    #     new_rows = []
+
+    #     base_keys = ["scenario_name","scenario_variant","model","variable","time_resolution","timestamp"]
+
+    #     for v in subcats:
+    #         varName = v["varName"]
+            
+    #         for resolution in v["time_resolution"]:
+    #             suffix = "_typical_day" if resolution in ["typical-day", "hourly"] else ""
+    #             var = varName + suffix
+                
+    #             for item in v["data"]:
+    #                 cat = item["cat"]
+    #                 sub_list = item["subcats"]
+                    
+    #                 # restrict to relevant slice
+    #                 d = df.loc[
+    #                     (df["time_resolution"] == resolution) &
+    #                     (df["variable"] == var) &
+    #                     (df["use_technology_fuel"].isin(sub_list + [cat])),
+    #                     :
+    #                 ]
+    #                 if d.empty:
+    #                     continue
+                    
+    #                 # sum subcategories
+    #                 sub_sum = (
+    #                     d.loc[d["use_technology_fuel"].isin(sub_list)]
+    #                      .groupby(base_keys, as_index=False)["value"]
+    #                      .sum()
+    #                 )
+    #                 if sub_sum.empty:
+    #                     continue
+                    
+    #                 # remove keys where category already exists
+    #                 existing_cat = (
+    #                     d.loc[d["use_technology_fuel"] == cat, base_keys]
+    #                      .drop_duplicates()
+    #                 )
+                    
+    #                 if resolution == "annual":
+    #                     sub_sum["timestamp"] = pd.to_numeric(sub_sum["timestamp"], errors="coerce").astype("Int64")
+    #                     if not existing_cat.empty:
+    #                         existing_cat["timestamp"] = pd.to_numeric(existing_cat["timestamp"], errors="coerce").astype("Int64")
+    #                 else:
+    #                     sub_sum["timestamp"] = pd.to_datetime(sub_sum["timestamp"], dayfirst=True, errors="coerce").dt.floor("min")
+    #                     if not existing_cat.empty:
+    #                         existing_cat["timestamp"] = pd.to_datetime(existing_cat["timestamp"], dayfirst=True, errors="coerce").dt.floor("min")
+
+    #                 if not existing_cat.empty:
+    #                     sub_sum = sub_sum.merge(existing_cat, on=base_keys, how="left", indicator=True)
+    #                     sub_sum = sub_sum.loc[sub_sum["_merge"] == "left_only"].drop(columns="_merge")
+
+                    
+    #                 if sub_sum.empty:
+    #                     continue
+
+    #                 # build new category rows
+    #                 sub_sum["use_technology_fuel"] = cat
+    #                 new_rows.append(sub_sum)
+    #     if not new_rows:
+    #         return
+
+    #     add = pd.concat(new_rows, ignore_index=True)
+    #     self.allData = pd.concat([self.allData, add], ignore_index=True)
 
                                 
     def __checkVariablesNoSub(self,variables):
