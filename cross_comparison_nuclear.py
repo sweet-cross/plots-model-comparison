@@ -275,7 +275,7 @@ for name, scenarios in scenario_list.items():
         label=xlabel, 
         figmax = xmax,
         fileName = fileName+'_'+name,
-        invert=True, legend=True, 
+        invert=False, legend=True, 
         pos_legend={# This puts the legend outside-right for vertical plots
                 "loc": "center left",
                 "bbox_to_anchor": (1.02, 0.5),
