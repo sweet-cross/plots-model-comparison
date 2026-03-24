@@ -1,0 +1,10 @@
+LICENSE
+README.md
+pyproject.toml
+src/cross_plots/__init__.py
+src/cross_plots/plots.py
+src/plots_model_comparison.egg-info/PKG-INFO
+src/plots_model_comparison.egg-info/SOURCES.txt
+src/plots_model_comparison.egg-info/dependency_links.txt
+src/plots_model_comparison.egg-info/requires.txt
+src/plots_model_comparison.egg-info/top_level.txt
