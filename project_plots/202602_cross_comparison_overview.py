@@ -3,7 +3,7 @@
 # Copyright (c) 2025, ETH Zurich, Energy Science Center, Adriana Marcucci
 # Distributed under the terms of the Apache License, Version 2.0.
 
-from cross_tools import plots
+from cross_plots import plots
 
 
 #  List of files with:

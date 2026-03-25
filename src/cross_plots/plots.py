@@ -412,6 +412,9 @@ class Plots:
         )
         data = data.drop(["unit"], axis=1)
 
+        # allow mixed Python objects in timestamp
+        data["timestamp"] = data["timestamp"].astype(object)
+        
         # Make timestamp either an int for annual or a datetime for hourly data
         # annual -> int year
         mask_annual = data["time_resolution"] == "annual"
@@ -2165,7 +2168,7 @@ class Plots:
 
             else:
                 day = pd.to_datetime(day_val, dayfirst=True)
-                ts = pd.date_range(day.normalize(), periods=24, freq="H")
+                ts = pd.date_range(day.normalize(), periods=24, freq="h")
 
                 # collect series per technology/use
                 comp_vals = {}
