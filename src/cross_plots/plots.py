@@ -395,7 +395,7 @@ class Plots:
 
     def __readData(self, fileResults):
 
-        data = pd.read_csv(fileResults + ".csv", index_col=[], header=[0])
+        data = pd.read_csv(fileResults, index_col=[], header=[0])
 
         #  remove columns that are not used
         data.drop(
@@ -578,6 +578,21 @@ class Plots:
 
                     existing_cat = df.loc[existing_cat_mask, base_keys].copy()
 
+                    if resolution == "annual":
+                        existing_cat["timestamp"] = pd.to_numeric(
+                            existing_cat["timestamp"], errors="coerce"
+                        ).astype("Int64")
+                        sub_sum_keys["timestamp"] = pd.to_numeric(
+                            sub_sum_keys["timestamp"], errors="coerce"
+                        ).astype("Int64")
+                    else:
+                        existing_cat["timestamp"] = pd.to_datetime(
+                            existing_cat["timestamp"], dayfirst=True, errors="coerce"
+                        ).dt.floor("min")
+                        sub_sum_keys["timestamp"] = pd.to_datetime(
+                            sub_sum_keys["timestamp"], dayfirst=True, errors="coerce"
+                        ).dt.floor("min")
+
                     if not existing_cat.empty:
                         to_remove = existing_cat.merge(
                             sub_sum_keys, on=base_keys, how="inner"
@@ -589,7 +604,7 @@ class Plots:
                             )
                             df = df.loc[
                                 ~(
-                                    (df["_drop"] == True)
+                                    (df["_drop"])
                                     & (df["time_resolution"] == resolution)
                                     & (df["variable"] == var)
                                     & (df["use_technology_fuel"] == cat)

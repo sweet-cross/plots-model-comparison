@@ -7,6 +7,7 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: matplotlib>=3.10.8
 Requires-Dist: pandas>=2.3.3
+Requires-Dist: pathlib>=1.0.1
 Requires-Dist: seaborn>=0.13.2
 Dynamic: license-file
 

@@ -4,7 +4,7 @@
 # Distributed under the terms of the Apache License, Version 2.0.
 
 from cross_plots import plots
-
+from pathlib import Path
 
 #  List of files with:
 # name: name to be displayed in the plots
@@ -87,7 +87,12 @@ model_list = [
 
 # Create the object that produces the plots and processes the data
 # Name of the csv file with the results
-fileResults = "results/results_cross_2026_03_18"
+
+
+ROOT = Path(__file__).resolve().parents[0]
+RESULTS_DIR = ROOT / "results/"
+
+fileResults = RESULTS_DIR / "results_cross_2026_03_08.csv"
 # Scenario names and corresponding colors
 sce = [
     {"name": "abroad-res-full", "id": "abroad-res-full", "color": "#9FBA3D"},
@@ -117,7 +122,7 @@ scenario_groups = {
 }
 
 # Folders where the plots will be created
-folder_plots = "presentation_latex/figures_2026_03_08"
+folder_plots = "presentation_latex/figures_2026_03_08.csv"
 
 
 cross_plots = plots.Plots(fileResults, model_list, sce, folder_plots)
