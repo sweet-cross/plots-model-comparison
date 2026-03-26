@@ -31,7 +31,7 @@ model_list =  [
 
 # Create the object that produces the plots and processes the data
 # Name of the csv file with the results 
-fileResults = "results/results_nuclear_2026_02_16"
+fileResults = "results/nuclear_2026_03_14"
 # Scenario names and corresponding colors 
 sce = ['abroad-resnuc-high','abroad-resnuc-medium','abroad-resnuc-low','abroad-resnuc-phaseout','abroad-res-high','abroad-res-medium','abroad-res-low','abroad-res-phaseout','abroad-nores-high','abroad-nores-medium','abroad-nores-low','abroad-nores-phaseout']
 sceColors = ['#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E','#9FBA3D','#E9442E','#EC9235','#3F89BD','#8E44AD','#1ABC9C','#F1C40F','#34495E']
@@ -216,13 +216,13 @@ for name, scenarios in scenario_list.items():
 varList_use_net = [
     {'name':'Base','data':['elec_appliances'],'color':'#097F6D'},
     {'name':'Trains','data':['passenger_rail','freight_rail'],'color':'#066256'},
-    {'name':'Road transport','data':['road_public','road_private','truck','ldv'],'color':'#09c5c9'},
-    {'name':'Space heating','data':['space_heating_boiler_electrode','space_heating_heater_elec','space_heating_heat_pump'],'color':'#F2960E'},
-    {'name':'Process heat','data':['process_heat_boiler_electrode','process_heat_heater_elec','process_heat_heat_pump'],'color':'#CF4832'},
+    {'name':'Road transport','data':['passenger','freight_road'],'color':'#09c5c9'},
+    {'name':'Space heating','data':['space_heating'],'color':'#F2960E'},
+    {'name':'Process heat','data':['process_heat'],'color':'#CF4832'},
     {'name':'Power to liquids','data':['power_to_liquid'],'color':'#4B4EFC'},
     {'name':'Electrolysis','data':['electrolysis'],'color':'#F5DD1B'},
     {'name': 'Data centers', 'data': ['data_centers'], 'color': '#4A90E2'},
-    {'name':'Others','data':['dac','data_centers'],'color':'#9751CB'},
+    {'name':'Others','data':['dac'],'color':'#9751CB'},
  #  {'name':'Storage','data':['battery_in','phs_in'],'color':'#939CAC'},
  #  {'name':'Exports','data':['exports'],'color':'#CCCCCC'},
     {'name':'Storage','data':['net_storage_in'],'color':'#939CAC'},
@@ -275,7 +275,7 @@ for name, scenarios in scenario_list.items():
         label=xlabel, 
         figmax = xmax,
         fileName = fileName+'_'+name,
-        invert=True, legend=True, 
+        invert=False, legend=True, 
         pos_legend={# This puts the legend outside-right for vertical plots
                 "loc": "center left",
                 "bbox_to_anchor": (1.02, 0.5),
