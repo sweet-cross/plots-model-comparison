@@ -1,5 +1,5 @@
 [project]
-name = "plots-model-comparison"
+name = "crpssplots"
 version = "0.1.0"
 description = "Plot creation for CROSS model comparison"
 readme = "README.md"
