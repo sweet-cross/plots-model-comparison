@@ -2,9 +2,11 @@ Metadata-Version: 2.4
 Name: plots-model-comparison
 Version: 0.1.0
 Summary: Plot creation for CROSS model comparison
-Requires-Python: >=3.10
+Requires-Python: >=3.12
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Requires-Dist: crosscontract>=0.6.0
+Requires-Dist: dotenv>=0.9.9
 Requires-Dist: matplotlib>=3.10.8
 Requires-Dist: numpy>=2.2.6
 Requires-Dist: pandas>=2.3.3

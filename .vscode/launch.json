@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug cross plots",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "project_plots.cross_comparison_202603",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}

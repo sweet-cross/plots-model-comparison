@@ -3,6 +3,9 @@ README.md
 pyproject.toml
 src/cross_plots/__init__.py
 src/cross_plots/plots.py
+src/cross_plots/plots_old.py
+src/cross_plots/preparation.py
+src/cross_plots/preparation_jan.py
 src/plots_model_comparison.egg-info/PKG-INFO
 src/plots_model_comparison.egg-info/SOURCES.txt
 src/plots_model_comparison.egg-info/dependency_links.txt
